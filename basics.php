@@ -33,9 +33,45 @@ function staticVarFunc(){
 //staticVarFunc(); //Output: 2
 //staticVarFunc(); //Output: 3
 
-//echo VS print
+//echo VS print -----------------------------
 //echo nao faz return; Multiplos argumentos (caso seja necessário)
 //print retorna 1; Usa apenas 1 argumento
 
+//Criar tag html em PHP -----------------------
+function htmlFunc(){
+    $title = "Some title";
+    $text = "some text to put on html";
+    echo "<h2>" . $title . "</h2>";
+    echo "<p>" . $text . "</p>";
+}
+//htmlFunc();
+$int = 1;
+$float = 1.7;
+$string = "abacate";
+//var_dump -> return type and value of the var
+//echo var_dump($int);
+//echo var_dump($float);
+//echo var_dump($string);
+$array = array("um","dois","tres"); //declarar array
+//echo strlen("") Comprimento da uma string
+//echo $array[0];
+
+//Criação de uma classe carro POO
+class Carro{
+    public $cor;
+    public $modelo;
+    public function __construct($cor, $modelo)
+    {
+        $this -> cor = $cor;
+        $this -> modelo = $modelo;
+    }
+    public function msg(){
+        return "Carro: Cor-> " . $this ->cor . " Modelo -> ". $this->modelo;
+    }
+}
+
+//$meuCarro = new Carro("preto", "opel");
+//echo $meuCarro -> msg();
 
 ?>
+
