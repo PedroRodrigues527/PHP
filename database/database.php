@@ -1,4 +1,6 @@
 <?php
+
+//AINDA NAO FUNCIONA!
 $severname = "localhost";
 $username = "username";
 $password = "password";
