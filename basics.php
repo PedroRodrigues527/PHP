@@ -157,6 +157,21 @@ arsort() - sort associative arrays in descending order, according to the value
 krsort() - sort associative arrays in descending order, according to the key
 */
 
+//Time
+$timemk = mktime(11,14,54,8,12,2014); //mktime(hour, minute, second, month, day, year); 
+//echo "created: ". date("Y-m-d h:i:sa", $timemk); //created: 2014-08-12 11:14:54am
+$time = date("h:i:sa");
+//echo "Time: " . date("h:i:sa"); //08:51:34pm
+
+
+//ReadFiles
+//readfile("FILE");
+echo readfile("teste.txt");
+
+
+//Abrir ficheiros 
+//https://www.w3schools.com/php/php_file_open.asp
+
 
 ?>
 
