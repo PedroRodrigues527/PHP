@@ -14,8 +14,8 @@ Returns the filename of the currently exectuing script, same page -->
 -->
 
 <?php //Se nome == "" será enviado uma mensagem ($nameErr)
-$nameErr = $emailErr = $genderErr = $websiteErr = "";
-$name = $email = $gender = $comment = $website = "";
+$nameErr = $emailErr = "";
+$name = $email = "";
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["none"])) {
         $nameErr = "Nome obrigatorio";
@@ -23,6 +23,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = test_input($_POST["nome"]);
     }
 }
+
+function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+  }
+
 ?>
 
 <p>FORM VALIDATION!</p>
