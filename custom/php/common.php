@@ -1,17 +1,14 @@
 <?php
 
-//Liga��o ativa por parte do WordPress � BD
-/*
-function sql_query($parameter)
+//Ligacao ativa por parte do WordPress a BD
+function mysql_searchquery($query)
 {
     $link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
-    $query = $parameter;
     $result = mysqli_query($link,$query);
     return $result;
 }
-*/
 
-//Obter link a certo caminho da p�gina
+//Obter link a certo caminho da pagina
 global $current_page; $current_page = get_site_url().'/'.basename(get_permalink());
 //e no ficheiro .php pretendido, fazer isto:
 /*
@@ -19,20 +16,21 @@ global $current_page; $current_page = get_site_url().'/'.basename(get_permalink(
    echo '<a href="'.$current_page.'?estado=editar&item='.$item_id.'">[editar]</a>';
  */
 
-//Implementa��o do bot�o "Voltar atr�s"
+//Implementacao do botao "Voltar atras"
 function go_back_button()
 {
-    echo "<script type='text/javascript'>document.write(\"<a href='javascript:history.back()' class='backLink' title='Voltar atr&aacute;s'>Voltar atr&aacute;s</a>\");</script>
+    echo "<script type='text/javascript'>document.write(\"<a href='javascript:history.back()' class='backLink' title='Voltar atrás'>Voltar atrás</a>\");</script>
     <noscript>
-    <a href='" . $_SERVER['HTTP_REFERER'] . "� class='backLink' title='Voltar atr�s'>Voltar atr�s</a>
+    <a href='".$_SERVER['HTTP_REFERER']."‘ class='backLink' title='Voltar atrás'>Voltar atrás</a>
     </noscript>";
 }
 
-// Mostrar tabela de valores??
-function get_enum_values($connection, $table, $column )
+// Mostrar array de valores de uma coluna da tabela - '1','kg','altura' (?)
+function get_enum_values($table, $column)
 {
+    $link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
     $query = " SHOW COLUMNS FROM `$table` LIKE '$column' ";
-    $result = mysqli_query($connection, $query );
+    $result = mysqli_query($link, $query );
     $row = mysqli_fetch_array($result , MYSQLI_NUM );
     #extract the values
     #the values are enclosed in single quotes
