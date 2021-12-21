@@ -1,14 +1,17 @@
 <?php
 
-//Ligação ativa por parte do WordPress à BD
-function sql_query($query)
+//Ligaï¿½ï¿½o ativa por parte do WordPress ï¿½ BD
+/*
+function sql_query($parameter)
 {
     $link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+    $query = $parameter;
     $result = mysqli_query($link,$query);
     return $result;
 }
+*/
 
-//Obter link a certo caminho da página
+//Obter link a certo caminho da pï¿½gina
 global $current_page; $current_page = get_site_url().'/'.basename(get_permalink());
 //e no ficheiro .php pretendido, fazer isto:
 /*
@@ -16,12 +19,12 @@ global $current_page; $current_page = get_site_url().'/'.basename(get_permalink(
    echo '<a href="'.$current_page.'?estado=editar&item='.$item_id.'">[editar]</a>';
  */
 
-//Implementação do botão "Voltar atrás"
+//Implementaï¿½ï¿½o do botï¿½o "Voltar atrï¿½s"
 function go_back_button()
 {
     echo "<script type='text/javascript'>document.write(\"<a href='javascript:history.back()' class='backLink' title='Voltar atr&aacute;s'>Voltar atr&aacute;s</a>\");</script>
     <noscript>
-    <a href='" . $_SERVER['HTTP_REFERER'] . "‘ class='backLink' title='Voltar atrás'>Voltar atrás</a>
+    <a href='" . $_SERVER['HTTP_REFERER'] . "ï¿½ class='backLink' title='Voltar atrï¿½s'>Voltar atrï¿½s</a>
     </noscript>";
 }
 

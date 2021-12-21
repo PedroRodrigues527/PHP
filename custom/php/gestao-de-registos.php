@@ -13,9 +13,9 @@ else {
         //tem algum post
     }
     else{
-        $allvalues = sql_query("SELECT name, birth_date, tutor_name, tutor_phone, tutor_email FROM child");
+        //$allvalues = sql_query("SELECT name, birth_date, tutor_name, tutor_phone, tutor_email FROM child");
 
-        if($allvalues == NULL)
+        //if($allvalues == NULL)
     }
 }
 ?>

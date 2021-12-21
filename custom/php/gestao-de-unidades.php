@@ -15,11 +15,16 @@ else {
         }
     }
     else{
-        $query = sql_query("SELECT subitem_unit_type.id as id, subitem_unit_type.name as Unidade , subitem.name as subitem, item.name as item FROM subitem_unit_type,subitem, item WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.item_id = item.id");//Query Desejado
+        //ERRO AO DETETAR QUERY, PENSA QUE É OBJETO E NAO STRING
+        $querystring = 'SELECT subitem_unit_type.id as id, subitem_unit_type.name as Unidade , subitem.name as subitem, item.name as item FROM subitem_unit_type,subitem, item WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.item_id = item.id';
+        //$query = sql_query($querystring);//Query Desejado
+        $conn = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+        $query = mysqli_query($conn,'SELECT subitem_unit_type.id as id, subitem_unit_type.name as Unidade , subitem.name as subitem, item.name as item FROM subitem_unit_type,subitem, item WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.item_id = item.id');
         echo "<h3>Gestão de unidades - introdução</h3>";
 
         //Verifica se não existem tuplos na tabela subitem_unit_type
-        $verifyNotEmpty = sql_query("SELECT id, name FROM subitem_unit_type"); //Tabela subitem type
+        //$verifyNotEmpty = sql_query('SELECT id, name FROM subitem_unit_type'); //Tabela subitem type
+        $verifyNotEmpty = mysqli_query($conn,'SELECT id, name FROM subitem_unit_type');
 
         $row = mysqli_fetch_array($verifyNotEmpty, MYSQLI_NUM);
 
@@ -32,7 +37,8 @@ else {
             //echo "<p>TEM!</p>";
             //criar tabela
 
-            $resultTabelaItem = sql_query($query);
+            //$resultTabelaItem = mysqli_query($conn,$query);
+            $resultTabelaItem = $query;
             echo '<table>
                <tbody>
                   <tr>
