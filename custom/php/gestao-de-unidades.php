@@ -15,23 +15,41 @@ else {
         }
     }
     else{
-        $allvalues = sql_query("SELECT id, unidade, subitem FROM child");//Query Desejado
-
-        $verifyNotEmpty = sql_query("SELECT id, name FROM subitem_unit_type"); //Tabela subitem type
+        $query = sql_query("SELECT subitem_unit_type.id as id, subitem_unit_type.name as Unidade , subitem.name as subitem, item.name as item FROM subitem_unit_type,subitem, item WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.item_id = item.id");//Query Desejado
         echo "<h3>Gestão de unidades - introdução</h3>";
 
         //Verifica se não existem tuplos na tabela subitem_unit_type
-        $result = sql_query($verifyNotEmpty);//conecta à db
-        $row = mysqli_fetch_array($result, MYSQLI_NUM);
-        if(! $row) {
-            echo "<p>Não há tipos de unidades</p>";
-        } else {
-            //Tem conteúdo
-            //echo "<p>TEMMM!</p>";
-            //criar tabela
-            echo " <table> ";
-            echo " <th> id </th>"
+        $verifyNotEmpty = sql_query("SELECT id, name FROM subitem_unit_type"); //Tabela subitem type
 
+        $row = mysqli_fetch_array($verifyNotEmpty, MYSQLI_NUM);
+
+        if(!$row) { //Verifica se linha esta vazia
+            echo "<p>Não há tipos de unidades</p>";
+
+        } else {
+
+            //Tem conteúdo
+            //echo "<p>TEM!</p>";
+            //criar tabela
+
+            $resultTabelaItem = sql_query($query);
+            echo '<table>
+               <tbody>
+                  <tr>
+                     <td><b>id</b></td>
+                     <td><b>Unidade</b></td>
+                     <td><b>Subitem</b></td>
+                     <td><b>Item</b></td>
+                  </tr>';
+            while($rowTabela = mysqli_fetch_assoc($resultTabelaItem)){
+                echo "<tr>";
+                echo "<td>" . $rowTabela['id'] . "</td>";
+                echo "<td>" .$rowTabela['Unidade'] . "</td>";
+                echo "<td>" . $rowTabela['subitem'] . " </td>";
+                echo "<td>" . $rowTabela['item'] . " </td>";
+                echo "</tr>";
+            }
+            echo "</tbody></table>";
         }
     }
 }
