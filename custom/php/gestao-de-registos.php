@@ -22,9 +22,10 @@ else {
     else{
         //Fazer pesquisa de filtragem (query)
         $querystring =
-            'SELECT child.name as c_name, birth_date as c_birthdate , tutor_name as t_name, tutor_phone as t_phone, tutor_email as t_email, value.value as v_value, subitem.name as si_name, item.name as i_name 
-                FROM child, value, subitem, item 
-                WHERE child.id = value.child_id AND value.subitem_id = subitem.id AND subitem.item_id = item.id';
+            'SELECT child.name as c_name, birth_date as c_birthdate , tutor_name as t_name, tutor_phone as t_phone, tutor_email as t_email, value.value as v_value, subitem.name as si_name, item.name as i_name, subitem_unit_type.name as sut_name 
+                FROM child, value, subitem, item, subitem_unit_type
+                WHERE child.id = value.child_id AND value.subitem_id = subitem.id AND subitem.item_id = item.id AND subitem_unit_type.id = subitem.unit_type_id
+                ORDER BY c_name ASC';
         $queryresult = mysql_searchquery($querystring);//Query Desejado
 
         echo "<h3>Dados de registo - introdução</h3>";
@@ -37,17 +38,15 @@ else {
             echo "<p>Não há crianças</p>";
         } else {
             //Tem tuplos
-            echo '<table>
+            echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
                <tbody>
                   <tr>
-                     <td><b>Nome</b></td>
-                     <td><b>Data de nascimento</b></td>
-                     <td><b>Enc. de educação</b></td>
-                     <td><b>Telefone do Enc.</b></td>
-                     <td><b>E-mail</b></td>
-                     <td><b>Valor</b></td>
-                     <td><b>Subitem</b></td>
-                     <td><b>Item</b></td>
+                     <th>Nome</th>
+                     <th>Data de nascimento</th>
+                     <th>Enc. de educação</th>
+                     <th>Telefone do Enc.</th>
+                     <th>E-mail</th>
+                     <th>Registos</th>
                   </tr>';
 
             while($rowTabela = mysqli_fetch_assoc($queryresult)){
@@ -57,9 +56,11 @@ else {
                 echo "<td>" . $rowTabela['t_name'] . " </td>";
                 echo "<td>" . $rowTabela['t_phone'] . " </td>";
                 echo "<td>" . $rowTabela['t_email'] . " </td>";
-                echo "<td>" . $rowTabela['v_value'] . " </td>";
-                echo "<td>" . $rowTabela['si_name'] . " </td>";
-                echo "<td>" . $rowTabela['i_name'] . " </td>";
+                //echo "<td>" . $rowTabela['v_value'] . " </td>";
+                //echo "<td>" . $rowTabela['si_name'] . " </td>";
+                echo "<td>" . strtoupper($rowTabela['i_name']) . " :
+                    <strong> " . $rowTabela['si_name'] . "</strong> (" . $rowTabela['v_value'] .
+                    " " . $rowTabela['sut_name'] . ") ";
                 echo "</tr>";
             }
             echo "</tbody></table>";
