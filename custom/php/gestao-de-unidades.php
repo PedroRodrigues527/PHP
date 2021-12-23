@@ -13,6 +13,15 @@ else {
         //Inserir
         if($_POST == "inserir"){
             echo "<h3>Gestão de unidades - inserção</h3>";
+
+            //Fazer formulário para cada campo,
+            //Se tiver errado ou incompleto informar
+            //Apresentar uma ligação para voltar ao passo anterior, caso contrário executar o que se segue
+            //construir uma string com o comando SQL necessário para inserção dos dados na tabela subitem_unit_type e executá-lo
+            //Apresentar, em caso de sucesso da inserção:
+                //    Inseriu os dados de novo tipo de unidade com sucesso.
+                //    Clique em Continuar para avançar
+                //    em que Continuar é uma ligação para esta mesma página
         }
     }
     else{
@@ -59,6 +68,16 @@ else {
             }
             echo "</tbody></table>";
         }
+        echo "<h3>Gestão de unidades - inserção</h3>";
+
+        //Fazer formulário para cada campo,
+        //Se tiver errado ou incompleto informar
+        //Apresentar uma ligação para voltar ao passo anterior, caso contrário executar o que se segue
+        //construir uma string com o comando SQL necessário para inserção dos dados na tabela subitem_unit_type e executá-lo
+        //Apresentar, em caso de sucesso da inserção:
+        //    Inseriu os dados de novo tipo de unidade com sucesso.
+        //    Clique em Continuar para avançar
+        //    em que Continuar é uma ligação para esta mesma página
     }
 }
 
