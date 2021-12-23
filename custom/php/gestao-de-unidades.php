@@ -11,18 +11,12 @@ else {
     if (!empty($_POST))
     {
         //Inserir
-        if($_POST == "inserir"){
-            echo "<h3>Gestão de unidades - inserção</h3>";
+        /*if (empty($_POST["nome_unidade"])) {
+            $nameErr = "Name is required";
+        } else {
+            $name = test_input($_POST["nome_unidade"]);
+        }*/
 
-            //Fazer formulário para cada campo,
-            //Se tiver errado ou incompleto informar
-            //Apresentar uma ligação para voltar ao passo anterior, caso contrário executar o que se segue
-            //construir uma string com o comando SQL necessário para inserção dos dados na tabela subitem_unit_type e executá-lo
-            //Apresentar, em caso de sucesso da inserção:
-                //    Inseriu os dados de novo tipo de unidade com sucesso.
-                //    Clique em Continuar para avançar
-                //    em que Continuar é uma ligação para esta mesma página
-        }
     }
     else{
         //Fazer pesquisa de filtragem (query)
@@ -68,14 +62,33 @@ else {
         }
         echo "<h3>Gestão de unidades - introdução</h3>";
 
-        echo '<form action="formulario.php" method="POST">
-                    Nome: <input type="text" name="nome"/>
-                    Apelido: <input type="text" name="apelido" />
-                    Telefone: <input type="text" name="telefone" />
-                    Morada: <input type="text" name="morada" />
-                    E-mail: <input type="text" name="email" />
-                    <input type="submit" value="Guardar" />
-                </form>';
+
+        $nameErr = "";
+        $name = "";
+
+        function test_input($data) {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data);
+            return $data;
+        }
+
+
+        echo '<form action="" name="InsertForm" method="POST" onsubmit="return validateform()">
+                Nome da Unidade: <input type="text" name="nome_unidade"  />
+                <span class="error">* <?php echo $nameErr;?></span>
+                <input type="hidden" value="inserir" />
+                <input type="submit" value="Inserir tipo de unidade" />
+                </form>
+                <script>
+                function validateform(){  
+                    var name=document.InsertForm.nome_unidade.value;  
+                    if (name==null || name==""){  
+                      alert("O preenchimento do nome da unidade é obrigatório");  
+                      return false;  
+                    }  
+                }  
+                </script>';
 
         //Fazer formulário para cada campo,
         //Se tiver errado ou incompleto informar
