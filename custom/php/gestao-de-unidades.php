@@ -38,6 +38,20 @@ else {
         if(!$row) { //Verifica se linha esta vazia
             echo "<p>Não há tipos de unidades</p>";
         } else {
+            //Fazer pesquisa de filtragem (query)
+        $querystring = 'SELECT id as sut_id, name as sut_name FROM subitem_unit_type
+                        ORDER BY id ASC';
+        $queryresult = mysql_searchquery($querystring);//Query Desejado
+
+        echo "<h3>Gestão de unidades - introdução</h3>";
+
+        //Verifica se não existem tuplos na tabela subitem_unit_type
+        $verifyNotEmpty = mysql_searchquery('SELECT id, name FROM subitem_unit_type'); //Tabela subitem type
+        $row = mysqli_fetch_array($verifyNotEmpty, MYSQLI_NUM);
+
+        if(!$row) { //Verifica se linha esta vazia
+            echo "<p>Não há tipos de unidades</p>";
+        } else {
             //Tem tuplos
             echo '<table>
                <tbody>
@@ -51,12 +65,15 @@ else {
                 echo "<tr>";
                 echo "<td>" . $rowTabela['sut_id'] . "</td>"; //ID
                 echo "<td>" . $rowTabela['sut_name'] . "</td>"; //Unidade
-                $queryItemSubitem = 'SELECT item.id, item.name, subitem.id, subitem.name, subitem_unit_type.id, subitem_unit_type.name FROM item, subitem, subitem_unit_type WHERE item.id = subitem.item_id AND subitem.unit_type_id = subitem_unit_type.id';
+
+                $queryItemSubitem = 'SELECT subitem.name as si_name, item.name as i_name FROM subitem, item, subitem_unit_type 
+                                     WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.item_id = item.id AND subitem_unit_type.id = ' . $rowTabela['sut_id'];
                 $resultItemSubitem = mysql_searchquery($queryItemSubitem);//Query Desejado
                 $resultValueString = "";
+                echo "<td>";
                 //Procura dados enquanto houver resultado
                 while($rowItemSubitem = mysqli_fetch_array($resultItemSubitem, MYSQLI_NUM)){
-                    $resultValueString .= "<td>" . $rowItemSubitem[3] . " (" . $rowItemSubitem[1] . "), "; //Subitem
+                    $resultValueString .= $rowItemSubitem[0] . " (" . $rowItemSubitem[1] . "), "; //Subitem
                 }
                 echo substr_replace($resultValueString ,"", -2);
                 echo "</td>";
