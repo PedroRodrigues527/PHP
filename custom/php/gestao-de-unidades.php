@@ -26,19 +26,6 @@ else {
     }
     else{
         //Fazer pesquisa de filtragem (query)
-        $querystring = 'SELECT subitem_unit_type.id as sut_id, subitem_unit_type.name as sut_name , subitem.name as si_name, item.name as i_name FROM subitem_unit_type,subitem, item WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.item_id = item.id';
-        $queryresult = mysql_searchquery($querystring);//Query Desejado
-
-        echo "<h3>Gestão de unidades - introdução</h3>";
-
-        //Verifica se não existem tuplos na tabela subitem_unit_type
-        $verifyNotEmpty = mysql_searchquery('SELECT id, name FROM subitem_unit_type'); //Tabela subitem type
-        $row = mysqli_fetch_array($verifyNotEmpty, MYSQLI_NUM);
-
-        if(!$row) { //Verifica se linha esta vazia
-            echo "<p>Não há tipos de unidades</p>";
-        } else {
-            //Fazer pesquisa de filtragem (query)
         $querystring = 'SELECT id as sut_id, name as sut_name FROM subitem_unit_type
                         ORDER BY id ASC';
         $queryresult = mysql_searchquery($querystring);//Query Desejado
