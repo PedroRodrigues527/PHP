@@ -44,10 +44,12 @@ else {
                 echo "<td>" . $rowTabela['sut_name'] . "</td>"; //Unidade
                 $queryItemSubitem = 'SELECT item.id, item.name, subitem.id, subitem.name, subitem_unit_type.id, subitem_unit_type.name FROM item, subitem, subitem_unit_type WHERE item.id = subitem.item_id AND subitem.unit_type_id = subitem_unit_type.id';
                 $resultItemSubitem = mysql_searchquery($queryItemSubitem);//Query Desejado
+                $resultValueString = "";
                 //Procura dados enquanto houver resultado
                 while($rowItemSubitem = mysqli_fetch_array($resultItemSubitem, MYSQLI_NUM)){
-                    echo "<td>" . $rowItemSubitem[3] . " (" . $rowItemSubitem[1] . "), "; //Subitem
+                    $resultValueString .= "<td>" . $rowItemSubitem[3] . " (" . $rowItemSubitem[1] . "), "; //Subitem
                 }
+                echo substr_replace($resultValueString ,"", -2);
                 echo "</td>";
                 echo "</tr>";
             }
