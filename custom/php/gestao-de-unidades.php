@@ -30,8 +30,6 @@ else {
                         ORDER BY id ASC';
         $queryresult = mysql_searchquery($querystring);//Query Desejado
 
-        echo "<h3>Gestão de unidades - introdução</h3>";
-
         //Verifica se não existem tuplos na tabela subitem_unit_type
         $verifyNotEmpty = mysql_searchquery('SELECT id, name FROM subitem_unit_type'); //Tabela subitem type
         $row = mysqli_fetch_array($verifyNotEmpty, MYSQLI_NUM);
@@ -68,7 +66,16 @@ else {
             }
             echo "</tbody></table>";
         }
-        echo "<h3>Gestão de unidades - inserção</h3>";
+        echo "<h3>Gestão de unidades - introdução</h3>";
+
+        echo '<form action="formulario.php" method="POST">
+                    Nome: <input type="text" name="nome"/>
+                    Apelido: <input type="text" name="apelido" />
+                    Telefone: <input type="text" name="telefone" />
+                    Morada: <input type="text" name="morada" />
+                    E-mail: <input type="text" name="email" />
+                    <input type="submit" value="Guardar" />
+                </form>';
 
         //Fazer formulário para cada campo,
         //Se tiver errado ou incompleto informar
