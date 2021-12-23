@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once("custom/php/common.php");
 
 //Verifica se user está login e tem certa capability
@@ -58,9 +58,7 @@ else {
                 echo "<td>" . $rowTabela['t_email'] . " </td>";
                 //echo "<td>" . $rowTabela['v_value'] . " </td>";
                 //echo "<td>" . $rowTabela['si_name'] . " </td>";
-                echo "<td>" . strtoupper($rowTabela['i_name']) . " :
-                    <strong> " . $rowTabela['si_name'] . "</strong> (" . $rowTabela['v_value'] .
-                    " " . $rowTabela['sut_name'] . ") ";
+                echo "<td>" . strtoupper($rowTabela['i_name']) . ": <strong> " . $rowTabela['si_name'] . "</strong> (" . $rowTabela['v_value'] . " " . $rowTabela['sut_name'] . ") ";
                 echo "</tr>";
             }
             echo "</tbody></table>";
