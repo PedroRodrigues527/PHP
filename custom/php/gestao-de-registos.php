@@ -20,21 +20,14 @@ else {
         }
     }
     else{
-        //Fazer pesquisa de filtragem (query)
-        $querystring =
-            'SELECT child.name as c_name, birth_date as c_birthdate , tutor_name as t_name, tutor_phone as t_phone, tutor_email as t_email, value.value as v_value, subitem.name as si_name, item.name as i_name, subitem_unit_type.name as sut_name 
-                FROM child, value, subitem, item, subitem_unit_type
-                WHERE child.id = value.child_id AND value.subitem_id = subitem.id AND subitem.item_id = item.id AND subitem_unit_type.id = subitem.unit_type_id
-                ORDER BY c_name ASC';
-        $queryresult = mysql_searchquery($querystring);//Query Desejado
+        //Fazer pesquisa de filtragem da tabela child (query)
+        $query_child_string =
+            'SELECT * 
+             FROM child 
+             ORDER BY name ASC';
+        $query_child_result = mysql_searchquery($query_child_string);
 
-        echo "<h3>Dados de registo - introdução</h3>";
-
-        //Verifica se não existem tuplos na tabela subitem_unit_type
-        $verifyNotEmpty = mysql_searchquery('SELECT * FROM child'); //Tabela child
-        $row = mysqli_fetch_array($verifyNotEmpty, MYSQLI_NUM);
-
-        if(!$row) { //Verifica se linha esta vazia
+        if(isResultQueryEmpty($query_child_string)) { //Verifica se linha e consequentemente se tabela 'child' esta vazia
             echo "<p>Não há crianças</p>";
         } else {
             //Tem tuplos
@@ -49,20 +42,71 @@ else {
                      <th>Registos</th>
                   </tr>';
 
-            while($rowTabela = mysqli_fetch_assoc($queryresult)){
+            while($rowTabelaChild = mysqli_fetch_assoc($query_child_result)){
                 echo "<tr>";
-                echo "<td>" . $rowTabela['c_name'] . "</td>";
-                echo "<td>" . $rowTabela['c_birthdate'] . "</td>";
-                echo "<td>" . $rowTabela['t_name'] . " </td>";
-                echo "<td>" . $rowTabela['t_phone'] . " </td>";
-                echo "<td>" . $rowTabela['t_email'] . " </td>";
-                //echo "<td>" . $rowTabela['v_value'] . " </td>";
-                //echo "<td>" . $rowTabela['si_name'] . " </td>";
+                echo "<td>" . $rowTabelaChild['name'] . "</td>";
+                echo "<td>" . $rowTabelaChild['birth_date'] . "</td>";
+                echo "<td>" . $rowTabelaChild['tutor_name'] . " </td>";
+                echo "<td>" . $rowTabelaChild['tutor_phone'] . " </td>";
+                echo "<td>" . $rowTabelaChild['tutor_email'] . " </td>";
 
-                echo "<td>" . strtoupper($rowTabela['i_name']) . ": <strong> " . $rowTabela['si_name'] . "</strong> (" . $rowTabela['v_value'] . " " . $rowTabela['sut_name'] . ") ";
+                //ver se tem nomes de items: AUTISMO, MEDIDAS, ...
+                $query_itemname_string = '
+                    SELECT DISTINCT item.name, item.id
+                    FROM item, subitem, value 
+                    WHERE item.id = subitem.item_id AND subitem.id = value.subitem_id AND value.child_id = ' . $rowTabelaChild['id'] .
+                    ' ORDER BY item.name ASC';
+                $query_itemname_result = mysql_searchquery($query_itemname_string);
+                $resultValueString = "";
+                echo "<td>";
+                //Procura dados enquanto houver resultado
+                while($rowTabelaItem = mysqli_fetch_array($query_itemname_result, MYSQLI_NUM)){
+                    $resultValueString .= strtoupper($rowTabelaItem[0]) . ": ";
+
+                    //Ver nomes de subitems e seus valores: altura (104
+                    $query_subitem_string = '
+                        SELECT subitem.name, value.value, subitem.id
+                        FROM subitem, value, item, child
+                        WHERE subitem.id = value.subitem_id AND subitem.item_id = item.id AND item.id = ' . $rowTabelaItem[1] . ' AND value.child_id = child.id AND child.id = ' . $rowTabelaChild['id'];
+                    $query_subitem_result = mysql_searchquery($query_subitem_string);
+
+                    if(isResultQueryEmpty($query_subitem_string))
+                    {
+                        $resultValueString = "Não há valores nem registos desta criança";
+                    }
+                    else
+                    {
+                        while($rowTabelaSubitem = mysqli_fetch_array($query_subitem_result, MYSQLI_NUM)) {
+                            $resultValueString .= "<strong> " . $rowTabelaSubitem[0] . "</strong> (" . $rowTabelaSubitem[1];
+
+                            //Ver tipo de unidade de subitem: cm,kg,...
+                            $query_subitemunitype_string = '
+                                SELECT subitem_unit_type.name, subitem_unit_type.id
+                                FROM subitem_unit_type, subitem
+                                WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.id = ' . $rowTabelaSubitem[2];
+                            $query_subitemunitype_result = mysql_searchquery($query_subitemunitype_string);
+
+                            if(!isResultQueryEmpty($query_subitemunitype_string))
+                            {
+                                while($rowTabelaSubitemUnitType = mysqli_fetch_array($query_subitemunitype_result, MYSQLI_NUM)) {
+                                    $resultValueString .= " " . $rowTabelaSubitemUnitType[0];
+                                }
+                            }
+                            $resultValueString .= "); ";
+                        }
+                        $resultValueString = substr_replace($resultValueString ,"", -2);
+                        $resultValueString .= "\n";
+                    }
+                }
+                echo $resultValueString;
+                echo "</td>";
                 echo "</tr>";
             }
             echo "</tbody></table>";
+
+            echo "<h3>Dados de registo - introdução</h3>";
+
+
         }
     }
 }

@@ -1,11 +1,17 @@
 <?php
 
-//Ligacao ativa por parte do WordPress a BD
-function mysql_searchquery($query)
+//Dá como resultado a pesquisa de uma query
+function mysql_searchquery($querystring)
 {
     $link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
-    $result = mysqli_query($link,$query);
+    $result = mysqli_query($link,$querystring);
     return $result;
+}
+
+//Dá como resultado true/false dependendo do resultado ser vazio ou não
+function isResultQueryEmpty($querystring)
+{
+    return !mysqli_fetch_array(mysql_searchquery($querystring), MYSQLI_NUM);
 }
 
 //Obter link a certo caminho da pagina

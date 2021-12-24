@@ -1,5 +1,6 @@
 <?php
 require_once("custom/php/common.php");
+//require_once("custom/js/script.js");
 
 //Verifica se user está login e tem certa capability
 if(!verify_user('manage_unit_types'))
@@ -32,7 +33,7 @@ else {
             echo "<p>Não há tipos de unidades</p>";
         } else {
             //Tem tuplos
-            echo '<table>
+            echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
                <tbody>
                   <tr>
                      <td><b>Id</b></td>
@@ -62,32 +63,12 @@ else {
         }
         echo "<h3>Gestão de unidades - introdução</h3>";
 
-
-        $nameErr = "";
-        $name = "";
-
-        function test_input($data) {
-            $data = trim($data);
-            $data = stripslashes($data);
-            $data = htmlspecialchars($data);
-            return $data;
-        }
-
-
-        echo '<form action="" name="InsertForm" method="POST" onsubmit="return validateform()">
-                Nome da Unidade: <input type="text" name="nome_unidade"  />
-                <span class="error">* <?php echo $nameErr;?></span>
+        echo '<form action="" name="InsertForm" method="POST" onsubmit="return validateform(document.InsertForm.nome_unidade.value)">
+                Nome da Unidade: <input type="text" name="nome_unidade"/>
                 <input type="hidden" value="inserir" />
                 <input type="submit" value="Inserir tipo de unidade" />
                 </form>
-                <script>
-                function validateform(){  
-                    var name=document.InsertForm.nome_unidade.value;  
-                    if (name==null || name==""){  
-                      alert("O preenchimento do nome da unidade é obrigatório");  
-                      return false;  
-                    }  
-                }  
+                <script type="text/javascript" src="../js/script.js">
                 </script>';
 
         //Fazer formulário para cada campo,
