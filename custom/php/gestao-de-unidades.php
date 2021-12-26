@@ -9,7 +9,7 @@ if(!verify_user('manage_unit_types'))
 }
 else {
     //Verifica se existe algum elemento/valor no POST
-    if (!empty($_POST))
+    if ($_POST["estado"] == "inserir")
     {
         //Validar cada campo e indicar o problema;
         //String SQL inserção de dados na tabela subitem_unit_type FEITO
@@ -18,19 +18,18 @@ else {
         //Apresentar Continuar para a mesma página;
 
 
-        //Inserir
-        if($_POST == "inserir"){
-            echo "<h3>Dados de registo - inserção</h3>";
-        }
+        echo "<h3>Dados de registo - inserção</h3>";
 
         //Verifica se foi submetido string(nome_unidade) vazia;
-        if($_POST['nome_unidade'] != ""){
+        if($_POST['nome_unidade'] == ""){
             //Apresentar mensagem de erro (Nome vazio!)
             $nameErr = "Por favor preencha o nome (Campo Obrigatório)";
+            echo "ERRO";
             //COMO VOLTAR AO FORMULÁRIO?
         }
         else{
             //Inserir nome da unidade na Base de dados
+            echo "SUCESSO";
             $nameForm = $_POST['nome_unidade'];
             $insertQuery = 'INSERT INTO subitem_unit_type (name) 
                     VALUES(' . $nameForm . ')';
@@ -38,15 +37,16 @@ else {
             //Exexutar Query
             $resultInsert = mysql_searchquery($insertQuery);
 
+            $rowinserir = mysqli_fetch_array($resultInsert, MYSQLI_NUM);
+
             //Caso de sucesso
-            if($resultInsert){
+            if($rowinserir){
                 //Validar Resultados
                 //Retornar à mesma página COMO???
             }
         }
     }
     else{
-
         //Fazer pesquisa de filtragem (query)
         $querystring = 'SELECT id as sut_id, name as sut_name FROM subitem_unit_type
                         ORDER BY id ASC';
@@ -90,14 +90,11 @@ else {
         }
         echo "<h3>Gestão de unidades - introdução</h3>";
 
-        echo '<form action="" name="InsertForm" method="POST" onsubmit="return validateform(document.InsertForm.nome_unidade.value)">
-                Nome da Unidade: <input type="text" name="nome_unidade"/>
-                <p> <?php echo $nameErr;?> </p>
-                <input type="hidden" value="inserir" />
+        echo '<form action="" name="InsertForm" method="POST">
+                Nome da Unidade: <input type="text" name="nome_unidade"/> 
+                <input type="hidden" value="inserir" name="estado"/>
                 <input type="submit" value="Inserir tipo de unidade" />
-                </form>
-                <script type="text/javascript" src="../js/script.js">
-                </script>';
+                </form>';
 
         //Fazer formulário para cada campo,
         //Se tiver errado ou incompleto informar
