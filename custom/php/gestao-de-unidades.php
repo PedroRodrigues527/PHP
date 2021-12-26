@@ -1,6 +1,5 @@
 <?php
 require_once("custom/php/common.php");
-//require_once("custom/js/script.js");
 
 //Verifica se user está login e tem certa capability
 if(!verify_user('manage_unit_types'))
@@ -23,26 +22,28 @@ else {
         //Verifica se foi submetido string(nome_unidade) vazia;
         if($_POST['nome_unidade'] == ""){
             //Apresentar mensagem de erro (Nome vazio!)
-            $nameErr = "Por favor preencha o nome (Campo Obrigatório)";
-            echo "ERRO";
-            //COMO VOLTAR AO FORMULÁRIO?
+            echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade está vazia!</p>";
+            go_back_button();
         }
-        else{
+        else if(!preg_match ("/^[a-zA-z]*$/", $_POST['nome_unidade']))
+        {
+            //Apresentar mensagem de erro (Tem números!)
+            echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade só pode ter letras!</p>";
+            go_back_button();
+        }
+        else {
             //Inserir nome da unidade na Base de dados
-            echo "SUCESSO";
-            $nameForm = $_POST['nome_unidade'];
-            $insertQuery = 'INSERT INTO subitem_unit_type (name) 
-                    VALUES(' . $nameForm . ')';
-
-            //Exexutar Query
-            $resultInsert = mysql_searchquery($insertQuery);
-
-            $rowinserir = mysqli_fetch_array($resultInsert, MYSQLI_NUM);
+            $insertQuery = "INSERT INTO subitem_unit_type (name) 
+                    VALUES('" . $_POST['nome_unidade'] . "')";
 
             //Caso de sucesso
-            if($rowinserir){
-                //Validar Resultados
-                //Retornar à mesma página COMO???
+            if (mysql_searchquery($insertQuery)) {
+                echo "<p>Inseriu os dados de novo tipo de unidade com sucesso.</p>";
+                echo "<p>Clique em <strong>Continuar</strong> para avançar</p>";
+                echo '<form action="" name="Continuar" method="POST">
+                <input type="hidden" value="" name="estado"/>
+                <input type="submit" value="Continuar"/>
+                </form>';
             }
         }
     }
@@ -63,9 +64,9 @@ else {
             echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
                <tbody>
                   <tr>
-                     <td><b>Id</b></td>
-                     <td><b>Unidade</b></td>
-                     <td><b>Subitem</b></td>
+                     <th><b>Id</b></th>
+                     <th><b>Unidade</b></th>
+                     <th><b>Subitem</b></th>
                   </tr>';
 
             while($rowTabela = mysqli_fetch_assoc($queryresult)){
