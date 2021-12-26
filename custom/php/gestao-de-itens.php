@@ -20,15 +20,31 @@ else {
 
             //Validar
             if($_POST['nome_item'] == ""){ //Falta as outras condições
-
+                //Apresentar mensagem de erro (Nome vazio!)
+                echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade está vazia!</p>";
+                go_back_button();
             }
 
-            //Formulario
+            //Verifica se foi submetido um dado com números ou carateres especiais além das letras
+            else if(!preg_match ("/^[a-zA-z]*$/", $_POST['nome_unidade']))
+            {
+                //Apresentar mensagem de erro (Tem números!)
+                echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade só pode ter letras!</p>";
+                go_back_button();
+            }
 
-            //Enviar para outra página
+            //Entra aqui se os dados inseridos forem válido
+            else {
+                //Inserir nome da unidade na Base de dados
+                $insertQuery = "INSERT INTO item (name, state ) 
+                    VALUES('" . $_POST['nome_unidade'] . "', '" . $_POST['estado'] . "')";
 
-
-
+                //Caso de sucesso
+                if (mysql_searchquery($insertQuery)) {
+                    echo "<p>Inseriu os dados de novo tipo de item com sucesso.</p>";
+                    continue_button();
+                }
+            }
         }
     }
     else {
@@ -84,16 +100,16 @@ else {
                 <p> <?php echo $nameErr;?> </p>
                 <p>Tipo:</p>
                 <!-- FALTA ALTERAR VALUE/ VALUE PARA ID CORRESPONDENTE!!!! -->
-                <input type="radio" value="ID"><label>dado de criança</label>
-                <input type="radio" value="ID" ><label>diagnóstico</label>
-                <input type="radio" value="ID" ><label>intervenção</label>
-                <input type="radio" value="ID" ><label>avaliação</label>
+                <input type="radio" name= "tipo" value="ID"><label>dado de criança</label>
+                <input type="radio" name= "tipo" value="ID" ><label>diagnóstico</label>
+                <input type="radio" name= "tipo" value="ID" ><label>intervenção</label>
+                <input type="radio" name= "tipo" value="ID" ><label>avaliação</label>
                  <!-- FALTA VERIFICAR SE FALTA MAIS -->
                  
                  <!-- FALTA ALTERAR VALUE/ VALUE PARA O valor do respetivo atributo state que é do tipo ENUM!!!! -->
                 <p>Estado:</p>
-                <input type="radio" value="ENUM" > <label>ativo</label>
-                <input type="radio" value="ENUM" ><label>inativo</label> 
+                <input type="radio" name= "estado" value="ENUM" > <label>ativo</label>
+                <input type="radio" name= "estado" value="ENUM" ><label>inativo</label> 
                 
                 <input type="hidden" value="inserir" />               
                 <input type="submit" value="Inserir item" >
