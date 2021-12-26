@@ -72,7 +72,9 @@ else {
                 }
                 echo "</tr>";
             }
+            echo "</tbody></table>";
         }
+
 
         echo "<h3>Gestão de itens - introdução</h3>";
         //Form
