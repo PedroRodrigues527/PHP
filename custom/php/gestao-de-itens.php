@@ -17,6 +17,18 @@ else {
         //Inserir
         if($_POST == "inserir"){
             echo "<h3>Gestão de itens - inserção</h3>";
+
+            //Validar
+            if($_POST['nome_item'] == ""){ //Falta as outras condições
+
+            }
+
+            //Formulario
+
+            //Enviar para outra página
+
+
+
         }
     }
     else {
@@ -79,6 +91,7 @@ else {
                 <p>Estado:</p>
                 <input type="radio" value="ENUM" > <label>ativo</label>
                 <input type="radio" value="ENUM" ><label>inativo</label> 
+                
                 <input type="hidden" value="inserir" />               
                 <input type="submit" value="Inserir item" >
                 </form>';
