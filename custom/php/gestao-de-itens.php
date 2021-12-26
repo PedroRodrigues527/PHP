@@ -55,16 +55,17 @@ else {
                      <td><b>ação<b></td>
                   </tr>';
 
-            while($rowTabela = mysqli_fetch_assoc($tableQuery)) {
+            while($rowTabela = mysqli_fetch_array($tableQuery, MYSQLI_NUM)) {
                 echo "<tr>";
-                echo "<td>" . $rowTabela['item_type.name'] . "</td>";
-                $previousItemType = $rowTabela['item_type.name'];
+                echo "<td>" . $rowTabela[4] . "</td>";
+                $previousItemType = $rowTabela[4];
                 //FALTA JUNTAR LINHA NO ITEM_TYPE SE TIVER O MESMO NOME;
                 //Verificar se tem o mesmo item type
-                echo "<td>" . $rowTabela['item.id'] . "</td>";
-                echo "<td>" . $rowTabela['item.name'] . "</td>";
-                echo "<td>" . $rowTabela['item.state'] . "</td>";
-                if($rowTabela['item.state'] == "ativado"){
+                //corrigido
+                echo "<td>" . $rowTabela[0] . "</td>";
+                echo "<td>" . $rowTabela[1] . "</td>";
+                echo "<td>" . $rowTabela[2] . "</td>";
+                if($rowTabela[2] == "ativado"){
                     echo "<td> [editar] [desativar] </td>";
                 }
                 else{
