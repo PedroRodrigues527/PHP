@@ -11,15 +11,28 @@ else {
     //Verifica se existe algum elemento/valor no POST
     if (!empty($_POST))
     {
-        //Inserir
-        /*if (empty($_POST["nome_unidade"])) {
-            $nameErr = "Name is required";
-        } else {
-            $name = test_input($_POST["nome_unidade"]);
-        }*/
+        //Validar cada campo e indicar o problema;
+        //String SQL inserção de dados na tabela subitem_unit_type FEITO
+        //Em caso de sucesso;
+            //Apresentar os dados de novo tipo de unidade com sucesso;
+            //Apresentar Continuar para a mesma página;
+
+        //Verifica se foi submetido string vazia;
+        if($_POST['nome_unidade'] != ""){
+            //Apresentar mensagem de erro (Nome vazio!)
+            $nameErr = "Por favor preencha o nome (Campo Obrigatório)";
+        }
+        else{
+            //Inserir nome da unidade na Base de dados
+            $nameForm = $_POST['nome_unidade'];
+            $insertQuery = 'INSERT INTO subitem_unit_type (name) 
+                    VALUES(' . $nameForm . ')';
+        }
+
 
     }
     else{
+
         //Fazer pesquisa de filtragem (query)
         $querystring = 'SELECT id as sut_id, name as sut_name FROM subitem_unit_type
                         ORDER BY id ASC';
@@ -65,6 +78,7 @@ else {
 
         echo '<form action="" name="InsertForm" method="POST" onsubmit="return validateform(document.InsertForm.nome_unidade.value)">
                 Nome da Unidade: <input type="text" name="nome_unidade"/>
+                <p> <?php echo $nameErr;?> </p>
                 <input type="hidden" value="inserir" />
                 <input type="submit" value="Inserir tipo de unidade" />
                 </form>
