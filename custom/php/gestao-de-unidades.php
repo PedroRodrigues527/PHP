@@ -9,7 +9,7 @@ if(!verify_user('manage_unit_types'))
 }
 else {
     //Verifica se existe algum elemento/valor no POST
-    if ($_POST["estado"] == "inserir")
+    while ($_POST["estado"] == "inserir")
     {
         //Validar cada campo e indicar o problema;
         //String SQL inserção de dados na tabela subitem_unit_type FEITO
@@ -17,14 +17,15 @@ else {
         //Apresentar os dados de novo tipo de unidade com sucesso;
         //Apresentar Continuar para a mesma página;
 
-
         echo "<h3>Dados de registo - inserção</h3>";
-
         //Verifica se foi submetido string(nome_unidade) vazia;
         if($_POST['nome_unidade'] == ""){
             //Apresentar mensagem de erro (Nome vazio!)
             $nameErr = "Por favor preencha o nome (Campo Obrigatório)";
             echo "ERRO";
+            echo '<p> Campo Vazio, por favor preencha o nome (Campo Obrigatório) </p>';
+            sleep(2);
+            $_POST["estado"] == "";
             //COMO VOLTAR AO FORMULÁRIO?
         }
         else{
@@ -43,10 +44,11 @@ else {
             if($rowinserir){
                 //Validar Resultados
                 //Retornar à mesma página COMO???
+                $_POST["estado"] == "";
             }
         }
     }
-    else{
+    if($_POST["estado"] != "inserir"){
         //Fazer pesquisa de filtragem (query)
         $querystring = 'SELECT id as sut_id, name as sut_name FROM subitem_unit_type
                         ORDER BY id ASC';
