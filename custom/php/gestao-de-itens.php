@@ -58,11 +58,30 @@ else {
                 else{
                     echo "<td> [editar] [ativar] </td>";
                 }
+                echo "</tr>";
             }
         }
 
         echo "<h3>Gestão de itens - introdução</h3>";
         //Form
+        echo '<form action="" name="InsertForm" method="POST" onsubmit="return validateform(document.InsertForm.nome_unidade.value)">
+                Nome: <input type="text" name="nome_item"/>
+                <p> <?php echo $nameErr;?> </p>
+                <p>Tipo:</p>
+                <!-- FALTA ALTERAR VALUE/ VALUE PARA ID CORRESPONDENTE!!!! -->
+                <input type="radio" value="ID"><label>dado de criança</label>
+                <input type="radio" value="ID" ><label>diagnóstico</label>
+                <input type="radio" value="ID" ><label>intervenção</label>
+                <input type="radio" value="ID" ><label>avaliação</label>
+                 <!-- FALTA VERIFICAR SE FALTA MAIS -->
+                 
+                 <!-- FALTA ALTERAR VALUE/ VALUE PARA O valor do respetivo atributo state que é do tipo ENUM!!!! -->
+                <p>Estado:</p>
+                <input type="radio" value="ENUM" > <label>ativo</label>
+                <input type="radio" value="ENUM" ><label>inativo</label> 
+                <input type="hidden" value="inserir" />               
+                <input type="submit" value="Inserir item" >
+                </form>';
     }
 }
 ?>
