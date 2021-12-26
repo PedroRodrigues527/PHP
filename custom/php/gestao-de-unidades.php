@@ -11,21 +11,23 @@ else {
     //Verifica se existe algum elemento/valor no POST
     if (!empty($_POST))
     {
+        //Validar cada campo e indicar o problema;
+        //String SQL inserção de dados na tabela subitem_unit_type FEITO
+        //Em caso de sucesso;
+        //Apresentar os dados de novo tipo de unidade com sucesso;
+        //Apresentar Continuar para a mesma página;
+
 
         //Inserir
         if($_POST == "inserir"){
             echo "<h3>Dados de registo - inserção</h3>";
         }
-        //Validar cada campo e indicar o problema;
-        //String SQL inserção de dados na tabela subitem_unit_type FEITO
-        //Em caso de sucesso;
-            //Apresentar os dados de novo tipo de unidade com sucesso;
-            //Apresentar Continuar para a mesma página;
 
         //Verifica se foi submetido string(nome_unidade) vazia;
         if($_POST['nome_unidade'] != ""){
             //Apresentar mensagem de erro (Nome vazio!)
             $nameErr = "Por favor preencha o nome (Campo Obrigatório)";
+            //COMO VOLTAR AO FORMULÁRIO?
         }
         else{
             //Inserir nome da unidade na Base de dados
@@ -35,9 +37,11 @@ else {
 
             //Exexutar Query
             $resultInsert = mysql_searchquery($insertQuery);
+
             //Caso de sucesso
             if($resultInsert){
                 //Validar Resultados
+                //Retornar à mesma página COMO???
             }
         }
     }
@@ -98,11 +102,7 @@ else {
         //Fazer formulário para cada campo,
         //Se tiver errado ou incompleto informar
         //Apresentar uma ligação para voltar ao passo anterior, caso contrário executar o que se segue
-        //construir uma string com o comando SQL necessário para inserção dos dados na tabela subitem_unit_type e executá-lo
-        //Apresentar, em caso de sucesso da inserção:
-        //    Inseriu os dados de novo tipo de unidade com sucesso.
-        //    Clique em Continuar para avançar
-        //    em que Continuar é uma ligação para esta mesma página
+
     }
 }
 
