@@ -31,6 +31,16 @@ function go_back_button()
     </noscript>";
 }
 
+//Implementação do botao "Continuar"
+function continue_button()
+{
+    echo "<p>Clique em <strong>Continuar</strong> para avançar</p>";
+    echo '<form action="" name="Continuar" method="POST">
+          <input type="hidden" value="" name="estado"/>
+          <input type="submit" value="Continuar"/>
+          </form>';
+}
+
 // Mostrar array de valores de uma coluna da tabela - '1','kg','altura' (?)
 function get_enum_values($table, $column)
 {
