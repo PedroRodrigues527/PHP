@@ -10,13 +10,6 @@ else {
     //Verifica se existe algum elemento/valor no POST
     if ($_POST["estado"] == "inserir")
     {
-        //Validar cada campo e indicar o problema;
-        //String SQL inserção de dados na tabela subitem_unit_type FEITO
-        //Em caso de sucesso;
-        //Apresentar os dados de novo tipo de unidade com sucesso;
-        //Apresentar Continuar para a mesma página;
-
-
         echo "<h3>Dados de registo - inserção</h3>";
 
         //Verifica se foi submetido string(nome_unidade) vazia;
@@ -25,12 +18,14 @@ else {
             echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade está vazia!</p>";
             go_back_button();
         }
+        //Verifica se foi submetido um dado com números ou carateres especiais além das letras
         else if(!preg_match ("/^[a-zA-z]*$/", $_POST['nome_unidade']))
         {
             //Apresentar mensagem de erro (Tem números!)
             echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade só pode ter letras!</p>";
             go_back_button();
         }
+        //Entra aqui se e só se o 'nome_unidade' inserido seja válido
         else {
             //Inserir nome da unidade na Base de dados
             $insertQuery = "INSERT INTO subitem_unit_type (name) 
@@ -39,11 +34,7 @@ else {
             //Caso de sucesso
             if (mysql_searchquery($insertQuery)) {
                 echo "<p>Inseriu os dados de novo tipo de unidade com sucesso.</p>";
-                echo "<p>Clique em <strong>Continuar</strong> para avançar</p>";
-                echo '<form action="" name="Continuar" method="POST">
-                <input type="hidden" value="" name="estado"/>
-                <input type="submit" value="Continuar"/>
-                </form>';
+                continue_button();
             }
         }
     }
@@ -96,11 +87,6 @@ else {
                 <input type="hidden" value="inserir" name="estado"/>
                 <input type="submit" value="Inserir tipo de unidade" />
                 </form>';
-
-        //Fazer formulário para cada campo,
-        //Se tiver errado ou incompleto informar
-        //Apresentar uma ligação para voltar ao passo anterior, caso contrário executar o que se segue
-
     }
 }
 
