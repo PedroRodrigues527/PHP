@@ -11,13 +11,18 @@ else {
     //Verifica se existe algum elemento/valor no POST
     if (!empty($_POST))
     {
+
+        //Inserir
+        if($_POST == "inserir"){
+            echo "<h3>Dados de registo - inserção</h3>";
+        }
         //Validar cada campo e indicar o problema;
         //String SQL inserção de dados na tabela subitem_unit_type FEITO
         //Em caso de sucesso;
             //Apresentar os dados de novo tipo de unidade com sucesso;
             //Apresentar Continuar para a mesma página;
 
-        //Verifica se foi submetido string vazia;
+        //Verifica se foi submetido string(nome_unidade) vazia;
         if($_POST['nome_unidade'] != ""){
             //Apresentar mensagem de erro (Nome vazio!)
             $nameErr = "Por favor preencha o nome (Campo Obrigatório)";
@@ -27,9 +32,14 @@ else {
             $nameForm = $_POST['nome_unidade'];
             $insertQuery = 'INSERT INTO subitem_unit_type (name) 
                     VALUES(' . $nameForm . ')';
+
+            //Exexutar Query
+            $resultInsert = mysql_searchquery($insertQuery);
+            //Caso de sucesso
+            if($resultInsert){
+                //Validar Resultados
+            }
         }
-
-
     }
     else{
 
