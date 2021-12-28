@@ -47,13 +47,24 @@ else {
                      <th>Estado</th>
                   </tr>';
 
+
             while($rowTabela = mysqli_fetch_assoc($queryresult)) {
                 echo "<tr>";
                 echo "<td>" . $rowTabela['name'] . "</td>"; //ID
 
-                $querystring2 = 'SELECT ';
+                $querystring2 = 'SELECT subitem.id, subitem.name FROM subitem, item WHERE subitem.item_id = item.id AND subitem.value_type ="enum" AND item.id = ' . $rowTabela['id'] . ' ORDER BY id ASC';
+                $queryresult2 = mysql_searchquery($querystring2);//Query Desejado
+                $row = mysqli_fetch_array($queryresult2, MYSQLI_NUM);
+                if(!$row) { //Verifica se linha esta vazia
+                    echo "<p>Não há subitems especificados cujo tipo de valor seja enum. Especificar primeiro novo(s) item(s) e depois voltar a esta opção.</p>";
+                }else {
+                    while($rowTabela = mysqli_fetch_assoc($queryresult2)) {
+                        echo "<td>" . $rowTabela['subitem.id'] . "</td>";
+                        echo "<td>" . $rowTabela['subitem.name'] . "</td>";
 
 
+                    }
+                }
 
 
 
