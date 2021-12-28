@@ -18,11 +18,11 @@ else {
             echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade está vazia!</p>";
             go_back_button();
         }
-        //Verifica se foi submetido um dado com números ou carateres especiais além das letras
-        else if(!preg_match ("/^[a-zA-z]*$/", $_POST['nome_unidade']))
+        //Verifica se foi submetido um dado com números além das letras
+        else if(!preg_match('/^[a-zA-Z \p{L}]+$/ui', $_POST['nome_unidade']))
         {
             //Apresentar mensagem de erro (Tem números!)
-            echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade só pode ter letras!</p>";
+            echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade só pode ter letras, espaços vazios e acentos!</p>";
             go_back_button();
         }
         //Entra aqui se e só se o 'nome_unidade' inserido seja válido
