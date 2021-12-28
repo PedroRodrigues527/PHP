@@ -32,7 +32,12 @@ else {
         //Fazer pesquisa de filtragem (query)
         $querystring = 'SELECT id, name FROM item ORDER BY name ASC';
         $queryresult = mysql_searchquery($querystring);//Query Desejado
-        $row = mysqli_fetch_array($queryresult, MYSQLI_NUM);
+
+        //Query Duplicado para só verificar a primeira linha e se esta está vazia
+        $querystringcopy = 'SELECT id, name FROM item ORDER BY name ASC';
+        $queryresultcopy = mysql_searchquery($querystringcopy);
+
+        $row = mysqli_fetch_array($queryresultcopy, MYSQLI_NUM);
         if(!$row) { //Verifica se linha esta vazia
             echo "<p>Não há itens</p>";
         } else {
@@ -54,13 +59,15 @@ else {
 
                 $querystring2 = 'SELECT subitem.id, subitem.name FROM subitem, item WHERE subitem.item_id = item.id AND subitem.value_type ="enum" AND item.id = ' . $rowTabela['id'] . ' ORDER BY id ASC';
                 $queryresult2 = mysql_searchquery($querystring2);//Query Desejado
-                $row = mysqli_fetch_array($queryresult2, MYSQLI_NUM);
+
+                $queryresult2dup = mysql_searchquery($querystring2);
+                $row = mysqli_fetch_array($queryresult2dup, MYSQLI_NUM);
                 if(!$row) { //Verifica se linha esta vazia
-                    echo "<p>Não há subitems especificados cujo tipo de valor seja enum. Especificar primeiro novo(s) item(s) e depois voltar a esta opção.</p>";
+                    echo "<td>Não há subitems especificados cujo tipo de valor seja enum. Especificar primeiro novo(s) item(s) e depois voltar a esta opção.</td>";
                 }else {
-                    while($rowTabela = mysqli_fetch_assoc($queryresult2)) {
-                        echo "<td>" . $rowTabela['subitem.id'] . "</td>";
-                        echo "<td>" . $rowTabela['subitem.name'] . "</td>";
+                    while($rowTabela2 = mysqli_fetch_array($queryresult2, MYSQLI_NUM)) {
+                        echo "<td>" . $rowTabela2[0] . "</td>";
+                        echo "<td>" . $rowTabela2[1] . "</td>";
 
 
                     }
