@@ -3,7 +3,7 @@ require_once("custom/php/common.php");
 //require_once("custom/js/script.js");
 
 //FALTA:
-    //Adicionar Capability Manage items
+//Adicionar Capability Manage items
 
 //Verifica se user está login e tem certa capability
 if(!verify_user('manage_items'))
