@@ -68,9 +68,37 @@ else {
                     while($rowTabela2 = mysqli_fetch_array($queryresult2, MYSQLI_NUM)) {
                         echo "<td>" . $rowTabela2[0] . "</td>";
                         echo "<td>" . $rowTabela2[1] . "</td>";
+                        $querystring3= 'SELECT subitem.name as subitem, subitem.id as id FROM subitem WHERE subitem.value_type = "enum" ORDER BY name ASC ';
+                        $queryresult3 = mysql_searchquery($querystring3);//Query Desejado
+                        $queryresult3dup = mysql_searchquery($querystring3);
+                        $row = mysqli_fetch_array($queryresult3dup, MYSQLI_NUM);
+
+                        $rowcount = mysqli_num_rows($queryresult3);
+                        if($rowcount == 0)
+                        {
+                            $rowcount = 1;
+                        }
+
+                        echo "<tr>";
+                        echo "<td rowspan='$rowcount'>" . $rowTabela[0] . "</td>";
+
+                        if(!$row) { //Verifica se está vazio
+                            echo "<p>Não há itens</p>";
+                        }else{
+                            while($rowTabela3 = mysqli_fetch_array($queryresult3, MYSQLI_NUM)) {
+                                echo "<td>" . $rowTabela3[0] . "</td>"; //subitem
+                                echo "<td>" . $rowTabela3[1] . "</td>"; //id
+                                echo "<td rowspan=".$rowcount ." colspan='1'>" . $rowTabela[0] . "</td>";
+                            }
+
+                        }
+
 
 
                     }
+
+
+
                 }
 
 
