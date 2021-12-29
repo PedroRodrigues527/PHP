@@ -59,7 +59,7 @@ else {
         else{
             //$tableQuery = mysql_searchquery('SELECT item.id, item.name, item.state, item_type.id, item_type.name FROM item, item_type WHERE item.id = item.item_type_id'); //Query Tabela
             $typeItemQuery = mysql_searchquery('SELECT item_type.id, item_type.name FROM item_type'); //Lista dos tipo de item.
-            $restTableQuery = mysqli_searchquery('SELECT item.id, item.name, item.state, item_type.id FROM item, item_type WHERE item.id = item.item_type_id'); //Lista do resto da tabela
+
             //Construção da tabela
             //Tem tuplos
             echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2" >
@@ -79,6 +79,7 @@ else {
                 echo "<tr>";
                 echo "<td rowspan='$rowCount' colspan='1'>" . $rowType[1] . "</td>"; //Tipo de item
 
+                $restTableQuery = mysql_searchquery('SELECT item.id, item.name, item.state FROM item WHERE item.id = item.$rowType[0]'); //Lista do resto da tabela
                 while ($rowTabela = mysqli_fetch_array($restTableQuery, MYSQLI_NUM)) {
                     echo "<td>" . $rowTabela[0] . "</td>"; //id
                     echo "<td>" . $rowTabela[1] . "</td>"; //nome do item
@@ -89,7 +90,6 @@ else {
                     } else {
                         echo "<td> [editar] [ativar] </td>";
                     }
-
                     echo "</tr>";
                 }
             }
