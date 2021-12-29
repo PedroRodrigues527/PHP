@@ -80,7 +80,7 @@ else {
                 if($rowCount == 0)
                 {
                     $rowCount = 1;
-                }
+                }//teste
                 echo "<tr>";
                 echo "<td rowspan='$rowCount' colspan='1' >" . $rowType[1] . "</td>"; //Tipo de item
 
