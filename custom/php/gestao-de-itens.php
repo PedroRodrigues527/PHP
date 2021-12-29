@@ -65,16 +65,16 @@ else {
             echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2" >
                <tbody>
                   <tr>
-                     <td><b>tipo de item</b></td>
-                     <td><b>id</b></td>
-                     <td><b>nome do item<b></td>
-                     <td><b>estado<b></td>
-                     <td><b>ação<b></td>
+                     <th>tipo de item</th>
+                     <th>id</th>
+                     <th>nome do item</th>
+                     <th>estado</th>
+                     <th>ação</th>
                   </tr>';
 
             while($rowType = mysqli_fetch_array($typeItemQuery, MYSQLI_NUM)) {
 
-                $queryNum = 'SELECT item.* FROM item, item_type WHERE item.item_type_id = item_type.id AND item_type.id = $rowType[0]';//query: items associados a um tipo de item
+                $queryNum = 'SELECT item.* FROM item, item_type WHERE item.item_type_id = item_type.id AND item_type.id = ' . $rowType[0];//query: items associados a um tipo de item
                 $resultsQueryNum = mysql_searchquery($queryNum);
                 $rowCount = mysqli_num_rows($resultsQueryNum); //Quantos items associados a um tipo de item
                 if($rowCount == 0)
@@ -84,18 +84,26 @@ else {
                 echo "<tr>";
                 echo "<td rowspan='$rowCount' colspan='1' >" . $rowType[1] . "</td>"; //Tipo de item
 
-                $restTableQuery = mysql_searchquery('SELECT item.id, item.name, item.state FROM item WHERE item.item_type_id = item_type.id'); //Lista do resto da tabela
-                while ($rowTabela = mysqli_fetch_array($restTableQuery, MYSQLI_NUM)) {
-                    echo "<td>" . $rowTabela[0] . "</td>"; //id
-                    echo "<td>" . $rowTabela[1] . "</td>"; //nome do item
-                    echo "<td>" . $rowTabela[2] . "</td>"; //estado
-
-                    if ($rowTabela[2] == "ativado") { //ação
-                        echo "<td> [editar] [desativar] </td>";
-                    } else {
-                        echo "<td> [editar] [ativar] </td>";
-                    }
+                $restTableQuery = mysql_searchquery('SELECT item.id, item.name, item.state FROM item, item_type WHERE item.item_type_id = item_type.id AND item_type.id = ' . $rowType[0]); //Lista do resto da tabela
+                $restTableQuery2 = mysql_searchquery('SELECT item.id, item.name, item.state FROM item, item_type WHERE item.item_type_id = item_type.id AND item_type.id = ' . $rowType[0]); //Lista do resto da tabela
+                if(!mysqli_fetch_array($restTableQuery2, MYSQLI_NUM))
+                {
+                    echo "<td rowspan='1' colspan='4'>Este tipo de item não tem itens.</td>";//nada
                     echo "</tr>";
+                }
+                else {
+                    while ($rowTabela = mysqli_fetch_array($restTableQuery, MYSQLI_NUM)) {
+                        echo "<td>" . $rowTabela[0] . "</td>"; //id
+                        echo "<td>" . $rowTabela[1] . "</td>"; //nome do item
+                        echo "<td>" . $rowTabela[2] . "</td>"; //estado
+
+                        if ($rowTabela[2] == "ativado") { //ação
+                            echo "<td> [editar] [desativar] </td>";
+                        } else {
+                            echo "<td> [editar] [ativar] </td>";
+                        }
+                        echo "</tr>";
+                    }
                 }
             }
             echo "</tbody></table>";
@@ -104,25 +112,24 @@ else {
 
         echo "<h3>Gestão de itens - introdução</h3>";
         //Form
-        echo '<form action="" name="InsertForm" method="POST" onsubmit="return validateform(document.InsertForm.nome_unidade.value)">
-                Nome: <input type="text" name="nome_item"/>
-                <p> <?php echo $nameErr;?> </p>
-                <p>Tipo:</p>
-                <!-- FALTA ALTERAR VALUE/ VALUE PARA ID CORRESPONDENTE!!!! -->
-                <input type="radio" name= "tipo" value="ID"><label>dado de criança</label>
-                <input type="radio" name= "tipo" value="ID" ><label>diagnóstico</label>
-                <input type="radio" name= "tipo" value="ID" ><label>intervenção</label>
-                <input type="radio" name= "tipo" value="ID" ><label>avaliação</label>
-                 <!-- FALTA VERIFICAR SE FALTA MAIS -->
-                 
-                 <!-- FALTA ALTERAR VALUE/ VALUE PARA O valor do respetivo atributo state que é do tipo ENUM!!!! -->
-                <p>Estado:</p>
-                <input type="radio" name= "estado" value="ENUM" > <label>ativo</label>
-                <input type="radio" name= "estado" value="ENUM" ><label>inativo</label> 
-                
-                <input type="hidden" value="inserir" />               
-                <input type="submit" value="Inserir item" >
-                </form>';
+        echo '<form action="" name="InsertForm" method="POST">
+            Nome: <input type="text" name="nome_item"/>
+            <p>Tipo:</p>
+            <!-- FALTA ALTERAR VALUE/ VALUE PARA ID CORRESPONDENTE!!!! -->
+            <input type="radio" name= "tipo" value="ID"><label>dado de criança</label>
+            <input type="radio" name= "tipo" value="ID" ><label>diagnóstico</label>
+            <input type="radio" name= "tipo" value="ID" ><label>intervenção</label>
+            <input type="radio" name= "tipo" value="ID" ><label>avaliação</label>
+             <!-- FALTA VERIFICAR SE FALTA MAIS -->
+             
+             <!-- FALTA ALTERAR VALUE/ VALUE PARA O valor do respetivo atributo state que é do tipo ENUM!!!! -->
+            <p>Estado:</p>
+            <input type="radio" name= "estado" value="ENUM" > <label>ativo</label>
+            <input type="radio" name= "estado" value="ENUM" ><label>inativo</label> 
+            
+            <input type="hidden" value="inserir" />               
+            <input type="submit" value="Inserir item" >
+            </form>';
     }
 }
 ?>
