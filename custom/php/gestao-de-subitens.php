@@ -136,36 +136,39 @@ else {
 
         echo "<h3>Gestão de subitens - introdução</h3>";
         //Form
+        $allvaluetypes = get_enum_values("subitem", "value_type");
+        $allitemnames = get_enum_values("item", "name");
+        $allformfieldtype = get_enum_values("subitem", "form_field_type");
+        $allsut = get_enum_values("subitem_unit_type", "name");
+
         echo '<form action="" name="InsertForm" method="POST">
             Nome do subitem: <input type="text" name="nome_item"/>
-            <p>Tipo de valor:</p>
-            <!-- Todos os tipo de valores presentes no atributo value_type! -->
-            <!-- Usar função php no ficheiro common.php get_enum_values ^ -->
-            <input type="radio" name= "tipo" value="ID"><label>text</label>
-            <input type="radio" name= "tipo" value="ID" ><label>int</label>
-            <input type="radio" name= "tipo" value="ID" ><label>...</label>
-                            
-             <!-- Select box (Item) -->
-             <!-- Nomes todos os itens presentes na tabela item -->
-             
-             <!-- Lista com todos os tipos de campos em form_field_type -->
-            <p>Tipo do campo de formulário:</p>
-            <input type="radio" name= "estado" value="ENUM" > <label>text</label>
-            <input type="radio" name= "estado" value="ENUM" ><label>text box</label>
-            <input type="radio" name= "estado" value="ENUM" ><label>...</label>  
-            
-            <!-- Select box (subitem_unit_type) (OPCIONAL) -->
-            <!-- Nomes todos os tipos de unidades presentes na tabela subitem_unit_type -->
-            
-            Ordem do campo no fomulário: <input type="text" name="nome_item"/>
-            
-            <p>Obrigatório:</p>
-            <input type="radio" name= "estado" value="1" > <label>sim</label>
-            <input type="radio" name= "estado" value="0" ><label>não</label> 
-            
-            <input type="hidden" value="inserir" />               
-            <input type="submit" value="Inserir item" >
-            </form>';
+            <p>Tipo de valor:</p>';
+        foreach($allvaluetypes as $value)
+        {
+            echo '<input type="radio" value= "' . $value . '" name="value_type"><label>' . $value . '</label><br>';
+        }
+        echo '<p>Item:</p>';
+        echo '<select name="item.name" id="item.name">';
+        $itemQuery = mysql_searchquery('SELECT * FROM item'); //Tabela item
+        while($row = mysqli_fetch_array($itemQuery, MYSQLI_NUM))
+        {
+            echo '<option value="' . $row[1] . '">' . $row[1] . '</option>';
+        }
+        echo '</select>';
+        echo '<p>Tipo do campo do formulário:</p>';
+        foreach($allformfieldtype as $value)
+        {
+            echo '<input type="radio" value= "' . $value . '" name="form_field_type"><label>' . $value . '</label><br>';
+        }
+        echo '<p>Ordem do campo no fomulário:</p>';
+        echo '<input type="text" name="form_field_order"/>';
+        echo '<p>Obrigatório:</p>
+              <input type="radio" name="mandatory" value="1" ><label>sim</label>
+              <input type="radio" name="mandatory" value="0" ><label>não</label>
+              <input type="hidden" value="inserir"/>               
+              <input type="submit" value="Inserir item">
+              </form>';
     }
 }
 ?>
