@@ -57,11 +57,12 @@ else {
             echo "<p>Não há itens</p>";
         }
         else{
-            $tableQuery = mysql_searchquery('SELECT item.id, item.name, item.state, item_type.id, item_type.name FROM item, item_type WHERE item.id = item.item_type_id'); //Query Tabela
-
+            //$tableQuery = mysql_searchquery('SELECT item.id, item.name, item.state, item_type.id, item_type.name FROM item, item_type WHERE item.id = item.item_type_id'); //Query Tabela
+            $typeItemQuery = mysql_searchquery('SELECT item_type.id, item_type.name FROM item_type'); //Lista dos tipo de item.
+            $restTableQuery = mysqli_searchquery('SELECT item.id, item.name, item.state, item_type.id FROM item, item_type WHERE item.id = item.item_type_id'); //Lista do resto da tabela
             //Construção da tabela
             //Tem tuplos
-            echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+            echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2" >
                <tbody>
                   <tr>
                      <td><b>tipo de item</b></td>
@@ -71,23 +72,26 @@ else {
                      <td><b>ação<b></td>
                   </tr>';
 
-            while($rowTabela = mysqli_fetch_array($tableQuery, MYSQLI_NUM)) {
+            while($rowType = mysqli_fetch_array($typeItemQuery, MYSQLI_NUM)) {
+
+                $queryNum = 'SELECT item_type.id, item_type.name FROM item_type WHERE item_type = $$rowType[1] ';//query: items associados a um tipo de item
+                $rowCount = mysqli_num_rows(mysql_searchquery($queryNum)); //Quantos items associados a um tipo de item
                 echo "<tr>";
-                echo "<td>" . $rowTabela[4] . "</td>";
-                $previousItemType = $rowTabela[4];
-                //FALTA JUNTAR LINHA NO ITEM_TYPE SE TIVER O MESMO NOME;
-                //Verificar se tem o mesmo item type
-                //corrigido
-                echo "<td>" . $rowTabela[0] . "</td>";
-                echo "<td>" . $rowTabela[1] . "</td>";
-                echo "<td>" . $rowTabela[2] . "</td>";
-                if($rowTabela[2] == "ativado"){
-                    echo "<td> [editar] [desativar] </td>";
+                echo "<td rowspan='$rowCount' colspan='1'>" . $rowType[1] . "</td>"; //Tipo de item
+
+                while ($rowTabela = mysqli_fetch_array($restTableQuery, MYSQLI_NUM)) {
+                    echo "<td>" . $rowTabela[0] . "</td>"; //id
+                    echo "<td>" . $rowTabela[1] . "</td>"; //nome do item
+                    echo "<td>" . $rowTabela[2] . "</td>"; //estado
+
+                    if ($rowTabela[2] == "ativado") { //ação
+                        echo "<td> [editar] [desativar] </td>";
+                    } else {
+                        echo "<td> [editar] [ativar] </td>";
+                    }
+
+                    echo "</tr>";
                 }
-                else{
-                    echo "<td> [editar] [ativar] </td>";
-                }
-                echo "</tr>";
             }
             echo "</tbody></table>";
         }
