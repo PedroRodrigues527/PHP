@@ -41,7 +41,7 @@ function continue_button()
           </form>';
 }
 
-// Mostrar array de valores de uma coluna da tabela - '1','kg','altura' (?)
+// Mostrar array de valores de uma coluna da tabela - ['text','bool',...]
 function get_enum_values($table, $column)
 {
     $link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
