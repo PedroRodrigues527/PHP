@@ -74,12 +74,12 @@ else {
 
             while($rowType = mysqli_fetch_array($typeItemQuery, MYSQLI_NUM)) {
 
-                $queryNum = 'SELECT item_type.id, item_type.name FROM item_type WHERE item_type = $$rowType[1] ';//query: items associados a um tipo de item
+                $queryNum = 'SELECT item.* FROM item, item_type WHERE item.item_type_id = item_type.id AND item_type.id = $rowType[0]';//query: items associados a um tipo de item
                 $rowCount = mysqli_num_rows(mysql_searchquery($queryNum)); //Quantos items associados a um tipo de item
                 echo "<tr>";
                 echo "<td rowspan='$rowCount' colspan='1'>" . $rowType[1] . "</td>"; //Tipo de item
 
-                $restTableQuery = mysql_searchquery('SELECT item.id, item.name, item.state FROM item WHERE item.id = item.$rowType[0]'); //Lista do resto da tabela
+                $restTableQuery = mysql_searchquery('SELECT item.id, item.name, item.state FROM item WHERE item.item_type_id = item_type.id'); //Lista do resto da tabela
                 while ($rowTabela = mysqli_fetch_array($restTableQuery, MYSQLI_NUM)) {
                     echo "<td>" . $rowTabela[0] . "</td>"; //id
                     echo "<td>" . $rowTabela[1] . "</td>"; //nome do item
