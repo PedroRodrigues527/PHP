@@ -124,7 +124,7 @@ else {
              
              <!-- FALTA ALTERAR VALUE/ VALUE PARA O valor do respetivo atributo state que é do tipo ENUM!!!! -->
             <p>Estado:</p>
-            <input type="radio" name= "estado" value="ENUM" > <label>ativo</label>
+            <input type="radio" name= "estado" value="ENUM" ><label>ativo</label>
             <input type="radio" name= "estado" value="ENUM" ><label>inativo</label> 
             
             <input type="hidden" value="inserir" />               
