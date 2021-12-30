@@ -196,9 +196,7 @@ else {
         echo "<h3>Gestão de subitens - introdução</h3>";
         //Form
         $allvaluetypes = get_enum_values("subitem", "value_type");
-        $allitemnames = get_enum_values("item", "name");
         $allformfieldtype = get_enum_values("subitem", "form_field_type");
-        $allsut = get_enum_values("subitem_unit_type", "name");
 
         echo '<form action="" name="InsertForm" method="POST">
             Nome do subitem: <input type="text" name="nome_subitem"/>
@@ -236,7 +234,7 @@ else {
               <input type="radio" name="mandatory" value="1" ><label>sim</label>
               <input type="radio" name="mandatory" value="0" ><label>não</label>
               <input type="hidden" value="inserir" name="estado"/>              
-              <input type="submit" value="Inserir item">
+              <input type="submit" value="Inserir subitem">
               </form>';
     }
 }

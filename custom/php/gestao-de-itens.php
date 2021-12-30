@@ -1,9 +1,5 @@
 <?php
 require_once("custom/php/common.php");
-//require_once("custom/js/script.js");
-
-//FALTA:
-//Adicionar Capability Manage items
 
 //Verifica se user está login e tem certa capability
 if(!verify_user('manage_items'))
@@ -12,39 +8,49 @@ if(!verify_user('manage_items'))
 }
 else {
     //Verifica se existe algum elemento/valor no POST
-    if (!empty($_POST))
+    if ($_POST["estado"] == "inserir")
     {
-        //Inserir
-        if($_POST == "inserir"){
-            echo "<h3>Gestão de itens - inserção</h3>";
+        echo "<h3>Gestão de itens - inserção</h3>";
+        $noerrors = true;
+        //Validar
+        if($_POST['nome_item'] == "" || ctype_space($_POST['nome_item'])){
+            //Apresentar mensagem de erro (Nome vazio!)
+            echo "<p>ERRO: O dado inserido no formulário do Nome do Item está vazia!</p>";
+            $noerrors = false;
+        }
+        //Verifica se foi submetido um dado com números ou carateres especiais além das letras
+        else if(!preg_match ('/^[a-zA-Z0-9 \p{L}]+$/ui', $_POST['nome_item']))
+        {
+            //Apresentar mensagem de erro (Tem números!)
+            echo "<p>ERRO: O dado inserido no formulário do Nome da Item só pode ter letras, acentos e espaços vazios!</p>";
+            $noerrors = false;
+        }
+        if ($_POST['tipo_de_item'] == "" || ctype_space($_POST['tipo_de_item'])) {
+            //Apresentar mensagem de erro (Nome vazio!)
+            echo "<p>ERRO: Não foi escolhido nenhuma opção do dado Tipo de Item!</p>";
+            $noerrors = false;
+        }
+        if ($_POST['state'] == "" || ctype_space($_POST['state'])) {
+            //Apresentar mensagem de erro (Nome vazio!)
+            echo "<p>ERRO: Não foi escolhido nenhuma opção do dado Estado!</p>";
+            $noerrors = false;
+        }
 
-            //Validar
-            if($_POST['nome_item'] == ""){ //Falta as outras condições
-                //Apresentar mensagem de erro (Nome vazio!)
-                echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade está vazia!</p>";
-                go_back_button();
+        //Entra aqui se os dados inseridos forem válido
+        if($noerrors){
+            //Inserir nome da unidade na Base de dados
+            $insertQuery = "INSERT INTO item (name, item_type_id, state ) 
+                VALUES('" . $_POST['nome_item'] . "', '" . $_POST['tipo_de_item'] . "', '" . $_POST['state'] . "')";
+
+            //Caso de sucesso
+            if (mysql_searchquery($insertQuery)) {
+                echo "<p>Inseriu os dados de novo tipo de item com sucesso.</p>";
+                continue_button();
             }
-
-            //Verifica se foi submetido um dado com números ou carateres especiais além das letras
-            else if(!preg_match ("/^[a-zA-z]*$/", $_POST['nome_unidade']))
-            {
-                //Apresentar mensagem de erro (Tem números!)
-                echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade só pode ter letras!</p>";
-                go_back_button();
-            }
-
-            //Entra aqui se os dados inseridos forem válido
-            else {
-                //Inserir nome da unidade na Base de dados
-                $insertQuery = "INSERT INTO item (name, state ) 
-                    VALUES('" . $_POST['nome_unidade'] . "', '" . $_POST['estado'] . "')";
-
-                //Caso de sucesso
-                if (mysql_searchquery($insertQuery)) {
-                    echo "<p>Inseriu os dados de novo tipo de item com sucesso.</p>";
-                    continue_button();
-                }
-            }
+        }
+        else
+        {
+            go_back_button();
         }
     }
     else {
@@ -112,23 +118,21 @@ else {
 
         echo "<h3>Gestão de itens - introdução</h3>";
         //Form
+        $allactivetypes = get_enum_values("item", "state");
         echo '<form action="" name="InsertForm" method="POST">
             Nome: <input type="text" name="nome_item"/>
-            <p>Tipo:</p>
-            <!-- FALTA ALTERAR VALUE/ VALUE PARA ID CORRESPONDENTE!!!! -->
-            <input type="radio" name= "tipo" value="ID"><label>dado de criança</label>
-            <input type="radio" name= "tipo" value="ID" ><label>diagnóstico</label>
-            <input type="radio" name= "tipo" value="ID" ><label>intervenção</label>
-            <input type="radio" name= "tipo" value="ID" ><label>avaliação</label>
-             <!-- FALTA VERIFICAR SE FALTA MAIS -->
-             
-             <!-- FALTA ALTERAR VALUE/ VALUE PARA O valor do respetivo atributo state que é do tipo ENUM!!!! -->
-            <p>Estado:</p>
-            <input type="radio" name= "estado" value="ENUM" ><label>ativo</label>
-            <input type="radio" name= "estado" value="ENUM" ><label>inativo</label> 
+            <p>Tipo:</p>';
+        $itemQuery = mysql_searchquery('SELECT * FROM item_type'); //Tabela item_type
+        while($row = mysqli_fetch_array($itemQuery, MYSQLI_NUM))
+        {
+            echo '<input type="radio" name="tipo_de_item" value="' . $row[0] . '"><label>' . $row[1] . '</label><br>';
+        }
+        echo '<p>Estado:</p>
+            <input type="radio" name="state" value="' . $allactivetypes[0] . '" ><label>ativo</label>
+            <input type="radio" name="state" value="' . $allactivetypes[1] . '" ><label>inativo</label>
             
-            <input type="hidden" value="inserir" />               
-            <input type="submit" value="Inserir item" >
+            <input type="hidden" value="inserir" name="estado"/>               
+            <input type="submit" value="Inserir item">
             </form>';
     }
 }
