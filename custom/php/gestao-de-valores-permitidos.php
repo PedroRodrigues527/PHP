@@ -44,17 +44,21 @@ else {
             echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
                <tbody>
                   <tr>
-                     <th><b>Item</b></th>
-                     <th>Id</th>
-                     <th><b>Subitem</b></th>
-                     <th>Id</th>
-                     <th>>Valores Permitidos</th>
-                     <th>Estado</th>
+                     <th><b>item</b></th>
+                     <th>id</th>
+                     <th><b>subitem</b></th>
+                     <th>id</th>
+                     <th>>valores permitidos</th>
+                     <th>estado</th>
+                     <th>ação</th>
                   </tr>';
 
 
             while($rowTabela = mysqli_fetch_assoc($queryresult)) {
-                $queryNum = 'SELECT subitem_allowed_value.* FROM subitem_allowed_value, subitem, item WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.item_id = item.id AND item.id = ' . $rowTabela['id'];
+                $queryNum = 'SELECT subitem.* 
+                                FROM subitem 
+                                LEFT JOIN subitem_allowed_value ON subitem_allowed_value.subitem_id = subitem.id AND subitem.value_type = "enum"
+                                INNER JOIN item ON subitem.value_type = "enum" AND subitem.item_id = item.id AND item.id = ' . $rowTabela['id'];
                 $resultsQueryNum = mysql_searchquery($queryNum);
                 $rowCount = mysqli_num_rows($resultsQueryNum); //Quantos items associados a um tipo de item
                 if($rowCount == 0)
@@ -63,7 +67,7 @@ else {
                 }
 
                 echo "<tr>";
-                echo "<td>" . $rowTabela['name'] . "</td>"; //ID
+                echo "<td rowspan='".$rowCount . "' >" . $rowTabela['name'] . "</td>"; //ID
 
                 $querystring2 = 'SELECT subitem.id, subitem.name FROM subitem, item WHERE subitem.item_id = item.id AND subitem.value_type ="enum" AND item.id = ' . $rowTabela['id'] . ' ORDER BY id ASC';
                 $queryresult2 = mysql_searchquery($querystring2);//Query Desejado
@@ -71,15 +75,24 @@ else {
                 $queryresult2dup = mysql_searchquery($querystring2);
                 $row = mysqli_fetch_array($queryresult2dup, MYSQLI_NUM);
                 if(!$row) { //Verifica se linha esta vazia
-                    echo "<td>Não há subitems especificados cujo tipo de valor seja enum. Especificar primeiro novo(s) item(s) e depois voltar a esta opção.</td>";
+                    echo "<td colspan = '4' rowspan = '1'> Não há subitems especificados cujo tipo de valor seja enum. Especificar primeiro novo(s) item(s) e depois voltar a esta opção.</td>";
                 }else {
                     while($rowTabela2 = mysqli_fetch_array($queryresult2, MYSQLI_NUM)) {
-                        echo "<td>" . $rowTabela2[0] . "</td>";
-                        echo "<td>" . $rowTabela2[1] . "</td>";
-                        $querystring3= 'SELECT subitem.name as subitem, subitem.id as id FROM subitem WHERE subitem.value_type = "enum" ORDER BY name ASC ';
+                        $queryNum= 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = '. $rowTabela2[0] .  ' ORDER BY subitem_allowed_value.id ASC ';
+                        $resultsQueryNum = mysql_searchquery($queryNum);
+                        $rowCount = mysqli_num_rows($resultsQueryNum); //Quantos items associados a um tipo de item
+                        if($rowCount == 0)
+                        {
+                            $rowCount = 1;
+                        }
+
+                        echo "<td rowspan ='".$rowCount ."'>" . $rowTabela2[0] . "</td>";
+                        echo "<td rowspan ='".$rowCount ."'>". $rowTabela2[1] . "</td>";
+                        $querystring3= 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = '. $rowTabela2[0] .  ' ORDER BY subitem_allowed_value.id ASC ';
                         $queryresult3 = mysql_searchquery($querystring3);//Query Desejado
                         $queryresult3dup = mysql_searchquery($querystring3);
                         $row = mysqli_fetch_array($queryresult3dup, MYSQLI_NUM);
+
 
                         $rowcount = mysqli_num_rows($queryresult3);
                         if($rowcount == 0)
@@ -87,51 +100,33 @@ else {
                             $rowcount = 1;
                         }
 
-
-
                         if(!$row) { //Verifica se está vazio
-                            echo "<p>Não há itens</p>";
+                            echo "<p>Não há valores permitidos definidos</p>";
                         }else{
                             while($rowTabela3 = mysqli_fetch_array($queryresult3, MYSQLI_NUM)) {
                                 echo "<tr>";
-                                echo "<td>" . $rowTabela3[0] . "</td>"; //subitem
-                                echo "<td>" . $rowTabela3[1] . "</td>"; //id
-                                echo "<td rowspan=".$rowcount ." colspan='1'>" . $rowTabela3[0] . "</td>";
-                                echo "<td rowspan=".$rowcount ." colspan='1'>" . $rowTabela3[1] . "</td>";
-
-
+                                echo "<td>" . $rowTabela3[0] . "</td>"; //id do subitem_allowed_value
+                                echo "<td>" . $rowTabela3[1] . "</td>"; //valor permitido
+                                echo "<td>" . $rowTabela3[2] . "</td>"; //Estado do subitem_allowed_value
+                                //echo "<td rowspan=".$rowcount ." colspan='1'>" . $rowTabela3[0] . "</td>";
+                                //echo "<td rowspan=".$rowcount ." colspan='1'>" . $rowTabela3[1] . "</td>";
+                                if ($rowTabela3[2] == "active") {
+                                    echo "<td> [editar] [desativar] </td>";
+                                } else {
+                                    echo "<td> [editar] [ativar] </td>";
+                                }
+                                echo "</tr>";
 
                             }
-
                         }
-
-
-
                     }
-
-
-
                 }
-
-
-
-
-
             }
-
-
-
-
-
+            echo "</tbody></table>";
 
 
 
         }
-        //$querystring2 ='SELECT Subitem.id AND Subitem.name WHERE Subitem.item_id == item.id AND item.id = $querystring(id)';
-
-
-
-
     }
 
 }
