@@ -15,7 +15,8 @@ function isResultQueryEmpty($querystring)
 }
 
 //Obter link a certo caminho da pagina
-global $current_page; $current_page = get_site_url().'/'.basename(get_permalink());
+global $current_page;
+$current_page = get_site_url().'/'.basename(get_permalink());
 //e no ficheiro .php pretendido, fazer isto:
 /*
  * echo '<form method="post" action="'.$current_page.'">';

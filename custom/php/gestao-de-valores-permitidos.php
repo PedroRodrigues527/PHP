@@ -7,25 +7,35 @@ if(!verify_user('manage_allowed_values'))
     echo "<p>Não tem autorização para aceder a esta página</p>";
 }
 else {
-
     //Verifica se o valor do estado é "validar"
     if ($_REQUEST["estado"] == "introducao") {
-
+        //VARIAVEL DE SESSAO
+        $_SESSION['subitem_id'] = $_REQUEST["subitem"];
+        echo "<h3>Dados de registo - introdução</h3>";
+        echo '<form action="" name="InsertForm" method="POST">
+                Valor: <input type="text" name="valor_permitido"/> 
+                <input type="hidden" value="inserir" name="estado"/>
+                <input type="submit" value="Inserir valor permitido" />
+                </form>';
     }
     else if ($_REQUEST["estado"] == "inserir") {
         echo "<h3>Dados de registo - inserção</h3>";
-        //Inserção dos valores permitidos na Base de dados
-        $insertQuery = "INSERT INTO subitem_allowed_value (name) 
-                    VALUES('" . $_POST['Gestão de valores permitidos'] . "')";
-
-        //Caso de sucesso
-        if (mysql_searchquery($insertQuery)) {
-            echo "<p>Inseriu os dados de novo tipo de unidade com sucesso.</p>";
-            continue_button();
-
-
+        if($_REQUEST['valor_permitido'] == "" || ctype_space($_REQUEST['valor_permitido'])){
+            //Apresentar mensagem de erro (Nome vazio!)
+            echo "<p>ERRO: O dado inserido no formulário do Nome do Valor Permitido está vazia!</p>";
+            go_back_button();
         }
+        else {
+            //Inserção dos valores permitidos na Base de dados
+            $insertQuery = "INSERT INTO subitem_allowed_value (subitem_id, value, state) 
+                    VALUES('" . $_SESSION['subitem_id'] . "', '" . $_REQUEST["valor_permitido"] . "', 'active')";
 
+            //Caso de sucesso
+            if (mysql_searchquery($insertQuery)) {
+                echo "<p>Inseriu os dados de novo valor permitido com sucesso.</p>";
+                continue_button();
+            }
+        }
     }
     else//fazes no else o query e seu resultado e depois verificar cada caso
     {
@@ -48,7 +58,7 @@ else {
                      <th>id</th>
                      <th><b>subitem</b></th>
                      <th>id</th>
-                     <th>>valores permitidos</th>
+                     <th>valores permitidos</th>
                      <th>estado</th>
                      <th>ação</th>
                   </tr>';
@@ -75,7 +85,8 @@ else {
                 $queryresult2dup = mysql_searchquery($querystring2);
                 $row = mysqli_fetch_array($queryresult2dup, MYSQLI_NUM);
                 if(!$row) { //Verifica se linha esta vazia
-                    echo "<td colspan = '4' rowspan = '1'> Não há subitems especificados cujo tipo de valor seja enum. Especificar primeiro novo(s) item(s) e depois voltar a esta opção.</td>";
+                    echo "<td colspan = '6' rowspan = '1'> Não há subitems especificados cujo tipo de valor seja enum. Especificar primeiro novo(s) item(s) e depois voltar a esta opção.</td>";
+                    echo "</tr>";
                 }else {
                     while($rowTabela2 = mysqli_fetch_array($queryresult2, MYSQLI_NUM)) {
                         $queryNum= 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = '. $rowTabela2[0] .  ' ORDER BY subitem_allowed_value.id ASC ';
@@ -87,7 +98,9 @@ else {
                         }
 
                         echo "<td rowspan ='".$rowCount ."'>" . $rowTabela2[0] . "</td>";
-                        echo "<td rowspan ='".$rowCount ."'>". $rowTabela2[1] . "</td>";
+                        $word= '[' . $rowTabela2[1] . ']';
+                        echo "<form method='POST' action='".$current_page."'>";
+                        echo "<td rowspan ='".$rowCount ."'><a href='" . $current_page . "?estado=introducao&subitem=" . $rowTabela2[0] . "'>". $word . "</a></td>";
                         $querystring3= 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = '. $rowTabela2[0] .  ' ORDER BY subitem_allowed_value.id ASC ';
                         $queryresult3 = mysql_searchquery($querystring3);//Query Desejado
                         $queryresult3dup = mysql_searchquery($querystring3);
@@ -101,10 +114,10 @@ else {
                         }
 
                         if(!$row) { //Verifica se está vazio
-                            echo "<p>Não há valores permitidos definidos</p>";
+                            echo "<td colspan = '4' rowspan = '1'>Não há valores permitidos definidos</td>";
+                            echo "</tr>";
                         }else{
                             while($rowTabela3 = mysqli_fetch_array($queryresult3, MYSQLI_NUM)) {
-                                echo "<tr>";
                                 echo "<td>" . $rowTabela3[0] . "</td>"; //id do subitem_allowed_value
                                 echo "<td>" . $rowTabela3[1] . "</td>"; //valor permitido
                                 echo "<td>" . $rowTabela3[2] . "</td>"; //Estado do subitem_allowed_value
@@ -116,17 +129,12 @@ else {
                                     echo "<td> [editar] [ativar] </td>";
                                 }
                                 echo "</tr>";
-
                             }
                         }
                     }
                 }
             }
             echo "</tbody></table>";
-
-
-
         }
     }
-
 }
