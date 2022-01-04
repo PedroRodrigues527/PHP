@@ -79,16 +79,20 @@ else {
                             $rowcount = 1;
                         }
 
-                        echo "<tr>";
-                        echo "<td rowspan='$rowcount'>" . $rowTabela[0] . "</td>";
+
 
                         if(!$row) { //Verifica se está vazio
                             echo "<p>Não há itens</p>";
                         }else{
                             while($rowTabela3 = mysqli_fetch_array($queryresult3, MYSQLI_NUM)) {
+                                echo "<tr>";
                                 echo "<td>" . $rowTabela3[0] . "</td>"; //subitem
                                 echo "<td>" . $rowTabela3[1] . "</td>"; //id
-                                echo "<td rowspan=".$rowcount ." colspan='1'>" . $rowTabela[0] . "</td>";
+                                echo "<td rowspan=".$rowcount ." colspan='1'>" . $rowTabela3[0] . "</td>";
+                                echo "<td rowspan=".$rowcount ." colspan='1'>" . $rowTabela3[1] . "</td>";
+
+
+
                             }
 
                         }
