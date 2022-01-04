@@ -8,31 +8,90 @@ if(!verify_user('manage_subitems'))
 }
 else {
     //Verifica se existe algum elemento/valor no POST
-    if ($_POST == "inserir") {
+    if ($_POST["estado"] == "inserir") {
         //Inserir
         echo "<h3>Gestão de subitens - inserção</h3>";
-
+        $noerrors = true;
         //Validar
-        if ($_POST['nome_item'] == "") { //Falta as outras condições
+        if ($_POST['nome_subitem'] == "" || ctype_space($_POST['nome_subitem'])) {
             //Apresentar mensagem de erro (Nome vazio!)
-            echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade está vazia!</p>";
-            go_back_button();
+            echo "<p>ERRO: O dado inserido no formulário do Nome do Subitem está vazia!</p>";
+            $noerrors = false;
         } //Verifica se foi submetido um dado com números ou carateres especiais além das letras
-        else if (!preg_match("/^[a-zA-z]*$/", $_POST['nome_unidade'])) {
-            //Apresentar mensagem de erro (Tem números!)
-            echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade só pode ter letras!</p>";
-            go_back_button();
-        } //Entra aqui se os dados inseridos forem válido
-        else {
-            //Inserir nome da unidade na Base de dados
-            $insertQuery = "INSERT INTO item (name, state )
-                VALUES('" . $_POST['nome_unidade'] . "', '" . $_POST['estado'] . "')";
-
-            //Caso de sucesso
-            if (mysql_searchquery($insertQuery)) {
-                echo "<p>Inseriu os dados de novo tipo de item com sucesso.</p>";
-                continue_button();
+        else if (!preg_match('/^[a-zA-Z0-9 \p{L}]+$/ui', $_POST['nome_subitem'])) {
+            //Apresentar mensagem de erro (Tem carateres especiais!)
+            echo "<p>ERRO: O dado inserido no formulário do Nome do Subitem só pode ter letras, acentos e espaços vazios!</p>";
+            $noerrors = false;
+        }
+        if ($_POST['value_type'] == "" || ctype_space($_POST['value_type'])) {
+            //Apresentar mensagem de erro (Nome vazio!)
+            echo "<p>ERRO: Não foi escolhido nenhuma opção do dado Tipo de Valor!</p>";
+            $noerrors = false;
+        }
+        if ($_POST['item_name'] == "" || ctype_space($_POST['item_name'])) {
+            //Apresentar mensagem de erro (Nome vazio!)
+            echo "<p>ERRO: Não foi escolhido nenhuma opção do dado Item!</p>";
+            $noerrors = false;
+        }
+        if ($_POST['form_field_type'] == "" || ctype_space($_POST['form_field_type'])) {
+            //Apresentar mensagem de erro (Nome vazio!)
+            echo "<p>ERRO: Não foi escolhido nenhuma opção do dado Tipo do Campo do Formulário!</p>";
+            $noerrors = false;
+        }
+        //não tem condição no subitem_unit_type_name
+        if ($_POST['form_field_order'] == "" || ctype_space($_POST['form_field_order'])) {
+            //Apresentar mensagem de erro (Nome vazio!)
+            echo "<p>ERRO: O dado inserido no formulário da Ordem do campo no formulário está vazia!</p>";
+            $noerrors = false;
+        }
+        else if(!preg_match('/^[1-9]\d*$/', $_POST['form_field_order']))
+        {
+            echo "<p>ERRO: O dado inserido no formulário da Ordem do campo no formulário só pode ser um número positivo maior que 0!</p>";
+            $noerrors = false;
+        }
+        if ($_POST['mandatory'] == "" || ctype_space($_POST['mandatory'])) {
+            //Apresentar mensagem de erro (Nome vazio!)
+            echo "<p>ERRO: Não foi escolhido nenhuma opção do dado Obrigatório!</p>";
+            $noerrors = false;
+        }
+        //Entra aqui se os dados inseridos forem válido
+        if($noerrors)
+        {
+            if($_POST['subitem_unit_type_name'] == "")
+            {
+                $insertQuery = "INSERT INTO subitem (name, item_id, value_type, form_field_name, form_field_type, unit_type_id, form_field_order, mandatory, state)
+                VALUES('" . $_POST['nome_subitem'] . "', '" . $_POST['item_name'] . "', '" . $_POST['value_type'] . "', '', '" . $_POST['form_field_type'] . "', NULL, '" . $_POST['form_field_order'] . "', '" . $_POST['mandatory'] . "', 'active')";
             }
+            else {
+                $insertQuery = "INSERT INTO subitem (name, item_id, value_type, form_field_name, form_field_type, unit_type_id, form_field_order, mandatory, state)
+                VALUES('" . $_POST['nome_subitem'] . "', '" . $_POST['item_name'] . "', '" . $_POST['value_type'] . "', '', '" . $_POST['form_field_type'] . "', '" . $_POST['subitem_unit_type_name'] . "', '" . $_POST['form_field_order'] . "', '" . $_POST['mandatory'] . "', 'active')";
+            }
+            $link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+            //Caso de sucesso
+            if (mysqli_query($link,$insertQuery)) {
+                $idobtido = mysqli_insert_id($link); //id do subitem
+                $queryNomeItem = "SELECT name FROM item WHERE id = '" . $_POST['item_name'] . "'";
+                $resultNomeItem = mysql_searchquery($queryNomeItem);
+                $rowTabelaNomeItem = mysqli_fetch_array($resultNomeItem, MYSQLI_NUM);
+                $NomeItem = $rowTabelaNomeItem[0];
+                $NomeItemconcat = substr($NomeItem, 0, 3); //med, aut, ...
+
+                $stringNomeSubitem = preg_replace('/[^a-z0-9_ ]/i', '', $_POST['nome_subitem']); //altura, cr, ...
+                $stringNomeSubitem = str_replace(' ', '_', $stringNomeSubitem); //peso_h_2_anos
+
+                $resultadoFINAL = $NomeItemconcat . '-' . $idobtido . '-' . $stringNomeSubitem;
+
+                $updateQuery = "UPDATE subitem SET subitem.form_field_name = '" . $resultadoFINAL . "' WHERE subitem.id = '" . $idobtido . "'";
+                //Caso de sucesso
+                if (mysql_searchquery($updateQuery)) {
+                    echo "<p>Inseriu os dados de novo subitem com sucesso.</p>";
+                    continue_button();
+                }
+            }
+        }
+        else
+        {
+            go_back_button();
         }
     } else {
         //Tabela
@@ -137,23 +196,22 @@ else {
         echo "<h3>Gestão de subitens - introdução</h3>";
         //Form
         $allvaluetypes = get_enum_values("subitem", "value_type");
-        $allitemnames = get_enum_values("item", "name");
         $allformfieldtype = get_enum_values("subitem", "form_field_type");
-        $allsut = get_enum_values("subitem_unit_type", "name");
 
         echo '<form action="" name="InsertForm" method="POST">
-            Nome do subitem: <input type="text" name="nome_item"/>
+            Nome do subitem: <input type="text" name="nome_subitem"/>
             <p>Tipo de valor:</p>';
         foreach($allvaluetypes as $value)
         {
             echo '<input type="radio" value= "' . $value . '" name="value_type"><label>' . $value . '</label><br>';
         }
         echo '<p>Item:</p>';
-        echo '<select name="item.name" id="item.name">';
+        echo '<select name="item_name">';
+        echo '<option value=""></option>';
         $itemQuery = mysql_searchquery('SELECT * FROM item'); //Tabela item
         while($row = mysqli_fetch_array($itemQuery, MYSQLI_NUM))
         {
-            echo '<option value="' . $row[1] . '">' . $row[1] . '</option>';
+            echo '<option value="' . $row[0] . '">' . $row[1] . '</option>';
         }
         echo '</select>';
         echo '<p>Tipo do campo do formulário:</p>';
@@ -161,13 +219,22 @@ else {
         {
             echo '<input type="radio" value= "' . $value . '" name="form_field_type"><label>' . $value . '</label><br>';
         }
+        echo '<p>Tipo de unidade:</p>';
+        echo '<select name="subitem_unit_type_name">';
+        echo '<option value=""></option>';
+        $itemQuery2 = mysql_searchquery('SELECT * FROM subitem_unit_type'); //Tabela subitem_unit_type
+        while($row2 = mysqli_fetch_array($itemQuery2, MYSQLI_NUM))
+        {
+            echo '<option value="' . $row2[0] . '">' . $row2[1] . '</option>';
+        }
+        echo '</select>';
         echo '<p>Ordem do campo no fomulário:</p>';
         echo '<input type="text" name="form_field_order"/>';
         echo '<p>Obrigatório:</p>
               <input type="radio" name="mandatory" value="1" ><label>sim</label>
               <input type="radio" name="mandatory" value="0" ><label>não</label>
-              <input type="hidden" value="inserir"/>               
-              <input type="submit" value="Inserir item">
+              <input type="hidden" value="inserir" name="estado"/>              
+              <input type="submit" value="Inserir subitem">
               </form>';
     }
 }

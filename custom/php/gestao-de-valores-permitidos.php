@@ -54,6 +54,14 @@ else {
 
 
             while($rowTabela = mysqli_fetch_assoc($queryresult)) {
+                $queryNum = 'SELECT subitem_allowed_value.* FROM subitem_allowed_value, subitem, item WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.item_id = item.id AND item.id = ' . $rowTabela['id'];
+                $resultsQueryNum = mysql_searchquery($queryNum);
+                $rowCount = mysqli_num_rows($resultsQueryNum); //Quantos items associados a um tipo de item
+                if($rowCount == 0)
+                {
+                    $rowCount = 1;
+                }
+
                 echo "<tr>";
                 echo "<td>" . $rowTabela['name'] . "</td>"; //ID
 

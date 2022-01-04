@@ -13,7 +13,7 @@ else {
         echo "<h3>Dados de registo - validação</h3>";
         $noerrors = true;
         //NOME COMPLETO DA CRIANCA
-        if($_POST['nc_crianca'] == "")
+        if($_POST['nc_crianca'] == "" || ctype_space($_POST['nc_crianca']))
         {
             echo "<p>ERRO: O dado inserido no formulário do Nome Completo está vazia!</p>";
             $noerrors = false;
@@ -24,7 +24,7 @@ else {
             $noerrors = false;
         }
         //DATA NASCIMENTO DA CRIANCA
-        if($_POST['dn_crianca'] == "")
+        if($_POST['dn_crianca'] == "" || ctype_space($_POST['dn_crianca']))
         {
             echo "<p>ERRO: O dado inserido no formulário da Data de nascimento está vazia!</p>";
             $noerrors = false;
@@ -34,7 +34,7 @@ else {
             $noerrors = false;
         }
         //NOME COMPLETO DO ENC DE EDUCACAO
-        if($_POST['nc_tutor'] == "")
+        if($_POST['nc_tutor'] == "" || ctype_space($_POST['nc_tutor']))
         {
             echo "<p>ERRO: O dado inserido no formulário do Nome Completo do Encarregado de Educação está vazia!</p>";
             $noerrors = false;
@@ -45,7 +45,7 @@ else {
             $noerrors = false;
         }
         //TELEFONE DO ENC DE EDUCACAO
-        if($_POST['tf_tutor'] == "")
+        if($_POST['tf_tutor'] == "" || ctype_space($_POST['tf_tutor']))
         {
             echo "<p>ERRO: O dado inserido no formulário do Telefone do encarregado de educação está vazia!</p>";
             $noerrors = false;

@@ -13,13 +13,13 @@ else {
         echo "<h3>Dados de registo - inserção</h3>";
 
         //Verifica se foi submetido string(nome_unidade) vazia;
-        if($_POST['nome_unidade'] == ""){
+        if($_POST['nome_unidade'] == "" || ctype_space($_POST['nome_unidade'])){
             //Apresentar mensagem de erro (Nome vazio!)
             echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade está vazia!</p>";
             go_back_button();
         }
         //Verifica se foi submetido um dado com números além das letras
-        else if(!preg_match('/^[a-zA-Z \p{L}]+$/ui', $_POST['nome_unidade']))
+        else if(!preg_match('/^[a-zA-Z/\p{L}]+$/ui', $_POST['nome_unidade']))
         {
             //Apresentar mensagem de erro (Tem números!)
             echo "<p>ERRO: O dado inserido no formulário do Nome da Unidade só pode ter letras, espaços vazios e acentos!</p>";
