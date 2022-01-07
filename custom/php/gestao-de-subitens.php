@@ -207,7 +207,6 @@ else {
         }
         echo '<p>Item:</p>';
         echo '<select name="item_name">';
-        echo '<option value=""></option>';
         $itemQuery = mysql_searchquery('SELECT * FROM item'); //Tabela item
         while($row = mysqli_fetch_array($itemQuery, MYSQLI_NUM))
         {

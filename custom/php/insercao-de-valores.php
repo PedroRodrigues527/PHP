@@ -107,12 +107,14 @@ else {
                     switch ($rowTabelaSubitemActive[5])
                     {
                         case "radio":
+                            echo '<input type="radio" style="display: none;" value="" name="' . $rowTabelaSubitemActive[4] . '" checked>';
                             while($rowTabelaValues = mysqli_fetch_array($queryResultValues, MYSQLI_NUM))
                             {
                                 echo '<input type="radio" value= "' . $rowTabelaValues[0] . '" name="' . $rowTabelaSubitemActive[4] . '"><label>' . $rowTabelaValues[0] . '</label><br>';
                             }
                             break;
                         case "checkbox":
+                            echo '<input type="checkbox" style="display: none;" value="" name="' . $rowTabelaSubitemActive[4] . '" checked>';
                             while($rowTabelaValues = mysqli_fetch_array($queryResultValues, MYSQLI_NUM))
                             {
                                 echo '<input type="checkbox" value= "' . $rowTabelaValues[0] . '" name="' . $rowTabelaSubitemActive[4] . '"><label>' . $rowTabelaValues[0] . '</label><br>';
@@ -151,18 +153,20 @@ else {
     else if ($_REQUEST["estado"] == "validar") {
         echo "<h3>Inserção de valores - " . $_SESSION['item_name'] . " - validar</h3>";
         //HÁ UM ERRO NA DETEÇÃO/VERIFICAÇÃO DOS DADOS INSERIDOS DO TIPO RADIO, CHECKBOX E SELECTBOX!!
-        $SubItemName = NULL;
+        $SubItemFormName = NULL;
         foreach ($_POST as $key => $value) {
-            echo $key . ' -> ' . $value;
             if($value == "" || ctype_space($value))
             {
-                $SubItemName = $key;
+                $SubItemFormName = $key;
                 break;
             }
         }
-        if($SubItemName != NULL)
+        if($SubItemFormName != NULL)
         {
-            echo "<p>ERRO: Há um formulário no campo do subitem " . substr($SubItemName,6) . " que ainda não foi preenchido!</p>";
+            $queryStringSubitemName = 'SELECT name FROM subitem WHERE form_field_name = "'.$SubItemFormName.'"';
+            $queryResultSubitemName = mysql_searchquery($queryStringSubitemName);
+            $rowSubitemName = mysqli_fetch_array($queryResultSubitemName, MYSQLI_NUM);
+            echo "<p>ERRO: Há um formulário no campo do subitem " . $rowSubitemName[0] . " que ainda não foi preenchido!</p>";
             go_back_button();
         }
         else
@@ -170,8 +174,13 @@ else {
             echo "<p>Estamos prestes a inserir os dados abaixo na base de dados. Confirma que os dados estão correctos e pretende submeter os mesmos?</p>";
 
             echo '<ul>';
-            foreach ($_REQUEST as $key => $value) {
-                echo '<li>' . $key . ': ' . $value . '</li>';
+            foreach ($_POST as $key => $value) {
+                if($key != "estado") {
+                    $queryStringSubitemName = 'SELECT name FROM subitem WHERE form_field_name = "'.$key.'"';
+                    $queryResultSubitemName = mysql_searchquery($queryStringSubitemName);
+                    $rowSubitemName = mysqli_fetch_array($queryResultSubitemName, MYSQLI_NUM);
+                    echo '<li>' . $rowSubitemName[0] . ': ' . $value . '</li>';
+                }
             }
             echo '</ul>';
             //inserir hiddens dos valores e submeter
@@ -186,26 +195,29 @@ else {
     }
     else if ($_REQUEST["estado"] == "inserir") {
         echo "<h3>Inserção de valores - " . $_SESSION['item_name'] . " - inserção</h3>";
-        foreach ($_REQUEST as $key => $value) {
-            $queryStringGetSubItemID = 'SELECT id FROM subitem WHERE form_field_name = ' . $key;
-            $queryResultGetSubItemID = mysql_searchquery($queryStringGetSubItemID);
-            while($rowTabelaIDSubitem = mysqli_fetch_array($queryResultGetSubItemID, MYSQLI_NUM))
-            {
-                $insertQuery = "INSERT INTO value (child_id, subitem_id, value, date, time, producer)
-                                VALUES('" . $_SESSION['child_id'] . "','" . $rowTabelaIDSubitem[0] . "','" . $value . "','" . date("Y-m-d") . "','" . date("H:i:s") . "','" . DB_USER . "')";
-
-                //Caso de sucesso
-                if (mysql_searchquery($insertQuery)) {
-                    echo "<p>Inseriu o(s) valor(es) com sucesso.</p>";
-                    echo "<p>Clique em Voltar para voltar ao início da inserção de valores ou em Escolher item se quiser continuar a inserir valores associados a esta criança</p>";
-                    echo '<form action="" name="Voltar" method="POST">
-                          <input type="submit" value="Voltar"/>
-                          </form>';
-                    echo '<form action="'.$current_page.'?estado=escolher_item&crianca=' . $_SESSION['child_id'] . '" name="EscolherItem" method="POST">
-                          <input type="submit" value="Escolher item"/>
-                          </form>';
+        $insertQuery = "";
+        foreach ($_POST as $key => $value) {
+            if ($key != "estado" && $key != "item") {
+                $insertQuery .= "INSERT INTO value (child_id, subitem_id, value, date, time, producer)
+                                VALUES ";
+                $queryStringGetSubItemID = 'SELECT id FROM subitem WHERE form_field_name = "'.$key.'"';
+                $queryResultGetSubItemID = mysql_searchquery($queryStringGetSubItemID);
+                while($rowTabelaIDSubitem = mysqli_fetch_array($queryResultGetSubItemID, MYSQLI_NUM)) {
+                    $current_user = wp_get_current_user();
+                    $insertQuery .= "('" . $_SESSION['child_id'] . "','" . $rowTabelaIDSubitem[0] . "','" . $value . "','" . date("Y-m-d") . "','" . date("H:i:s") . "','" . $current_user->display_name . "'); 
+                    ";
                 }
             }
+        }
+        if (mysql_searchseveralquery($insertQuery)) {
+            echo "<p>Inseriu o(s) valor(es) com sucesso.</p>";
+            echo "<p>Clique em Voltar para voltar ao início da inserção de valores ou em Escolher item se quiser continuar a inserir valores associados a esta criança</p>";
+            echo '<form action="' . $current_page . '" name="Voltar" method="POST">
+                  <input type="submit" value="Voltar"/>
+                  </form>';
+            echo '<form action="' . $current_page . '?estado=escolher_item&crianca=' . $_SESSION['child_id'] . '" name="EscolherItem" method="POST">
+                  <input type="submit" value="Escolher item"/>
+                  </form>';
         }
     }
     else

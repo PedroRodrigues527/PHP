@@ -4,7 +4,25 @@
 function mysql_searchquery($querystring)
 {
     $link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+    // Check connection
+    if (!$link) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
     $result = mysqli_query($link,$querystring);
+    mysqli_close($link);
+    return $result;
+}
+
+//Dá como resultado a pesquisa de várias queries
+function mysql_searchseveralquery($querystring)
+{
+    $link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+    // Check connection
+    if (!$link) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    $result = mysqli_multi_query($link,$querystring);
+    mysqli_close($link);
     return $result;
 }
 
