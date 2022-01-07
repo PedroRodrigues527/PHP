@@ -209,6 +209,7 @@ else {
                 }
             }
         }
+        //para inserir vários tuplos
         if (mysql_searchseveralquery($insertQuery)) {
             echo "<p>Inseriu o(s) valor(es) com sucesso.</p>";
             echo "<p>Clique em Voltar para voltar ao início da inserção de valores ou em Escolher item se quiser continuar a inserir valores associados a esta criança</p>";
