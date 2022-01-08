@@ -12,7 +12,7 @@ html {
 .header{
 	min-height: 30vh; /*enables one full image on webpage*/
 	width: 100%;
-	background-image: linear-gradient(rgba(6, 30, 4, 0.4), rgba(6, 30, 4, 0.7)), url("banner.png");
+	background-image: linear-gradient(rgba(6, 30, 4, 0.4), rgba(6, 30, 4, 0.7)), url("img/banner.png");
 	background-position: center;
 	background-size: cover;
 	position: relative;
@@ -468,7 +468,7 @@ h3{
 .cta{
 	margin: 100px auto; /* 100px -> top distance */
 	width: 80%;
-	background-image: linear-gradient(rgba(00,0,0,0.7),rgba(00,0,0,0.7)), url("contact.jpg");
+	background-image: linear-gradient(rgba(00,0,0,0.7),rgba(00,0,0,0.7)), url("img/contact.jpg");
 	background-position: center;
 	background-size: cover;
 	border-radius: 10px;
