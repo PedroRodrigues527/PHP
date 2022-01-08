@@ -93,23 +93,16 @@ else {
             if($filtroatr != "id" && $filtroatr != "birth_date" && $filtroatr != "tutor_phone")
             {
                 //text attributes
-                echo '<option value="="> = </option>';
+                echo '<option value="&#61;">&#61;</option>';
                 echo '<option value="!="> != </option>';
                 echo '<option value="LIKE"> LIKE </option>';
             }
             else
             {
                 //number attributes
-                //echo '<option value=">">'.">".'</option>';
-                //echo '<option value=">'.">".'</option>';
-                //este
-                echo '<option value=">">&gt;</option>';
-                //echo '<option value=">=">'.">=".'</option>';
-                //echo '<option value=">='.">=".'</option>';
-                //echo '<option value=">='.">" . "=".'</option>';
-                echo '<option value = " >= ">'. ">" . "=" .'</option>';
-                echo '<option value="=">'."=".'</option>';
-                //echo '<option value="='."=".'</option>';
+                echo '<option value="&#62;">&#62;</option>';
+                echo '<option value="&#62;&#61;">&#62;&#61;</option>';
+                echo '<option value="&#61;">'."&#61;".'</option>';
                 echo '<option value="<">'."<".'</option>';
                 echo '<option value="<=">'."<=".'</option>';
                 echo '<option value="!=">'."!=".'</option>';
