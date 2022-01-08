@@ -83,4 +83,32 @@ function verify_user($capability)
     return is_user_logged_in() && current_user_can($capability);
 }
 
+//Reutilização de código acerca da listagem de items e tipos de itens: em insercao-de-valores.php e pesquisa.php
+function listItemsAndItemTypes($url)
+{
+    $queryStringTabelaItemType = 'SELECT id, name FROM item_type ORDER BY id ASC';
+    $queryresultTabelaItemType = mysql_searchquery($queryStringTabelaItemType);
+    echo '<ul>';
+    while($rowTabelaItemType = mysqli_fetch_array($queryresultTabelaItemType, MYSQLI_NUM)) {
+        echo '<li>' . $rowTabelaItemType[1];
+        echo '<ul>';
+        $queryStringTabelaItem = 'SELECT item.id, item.name FROM item INNER JOIN item_type ON item.item_type_id = item_type.id AND item_type.id = ' . $rowTabelaItemType[0] . ' ORDER BY id ASC';
+        $queryresultTabelaItem = mysql_searchquery($queryStringTabelaItem);
+        while($rowTabelaItem = mysqli_fetch_array($queryresultTabelaItem, MYSQLI_NUM)) {
+            $queryVerifyItem = 'SELECT subitem.id FROM subitem INNER JOIN item ON subitem.item_id = item.id AND item.id = ' . $rowTabelaItem[0] . ' ORDER BY subitem.id ASC';
+            $queryresultTabelaVerifyItem = mysql_searchquery($queryVerifyItem);
+            $SubitensCount = mysqli_num_rows($queryresultTabelaVerifyItem);
+            if($SubitensCount > 0)
+            {
+                echo '<form method="post" action="'.$current_page.'">';
+                echo '<li><a href="'.$current_page.'?'.$url.''.$rowTabelaItem[0].'">';
+                echo '['.$rowTabelaItem[1].']';
+                echo '</a></li>';
+            }
+        }
+        echo '</ul>';
+        echo '</li>';
+    }
+    echo '</ul>';
+}
 ?>

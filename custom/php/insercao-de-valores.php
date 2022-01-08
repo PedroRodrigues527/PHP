@@ -42,32 +42,7 @@ else {
     else if ($_REQUEST["estado"] == "escolher_item") {
         echo "<h3>Inserção de valores - escolher item</h3>";
         $_SESSION['child_id'] = $_REQUEST["crianca"];
-        $queryStringTabelaItemType = 'SELECT id, name FROM item_type ORDER BY id ASC';
-        $queryresultTabelaItemType = mysql_searchquery($queryStringTabelaItemType);
-        echo '<ul>';
-        while($rowTabelaItemType = mysqli_fetch_array($queryresultTabelaItemType, MYSQLI_NUM)) {
-            echo '<li>' . $rowTabelaItemType[1];
-            echo '<ul>';
-            $queryStringTabelaItem = 'SELECT item.id, item.name FROM item INNER JOIN item_type ON item.item_type_id = item_type.id AND item_type.id = ' . $rowTabelaItemType[0] . ' ORDER BY id ASC';
-            $queryresultTabelaItem = mysql_searchquery($queryStringTabelaItem);
-            while($rowTabelaItem = mysqli_fetch_array($queryresultTabelaItem, MYSQLI_NUM)) {
-                $queryVerifyItem = 'SELECT subitem.id FROM subitem INNER JOIN item ON subitem.item_id = item.id AND item.id = ' . $rowTabelaItem[0] . ' ORDER BY subitem.id ASC';
-                $queryresultTabelaVerifyItem = mysql_searchquery($queryVerifyItem);
-                $SubitensCount = mysqli_num_rows($queryresultTabelaVerifyItem);
-                if($SubitensCount > 0)
-                {
-                    //echo '<ul>';
-                    echo '<form method="post" action="'.$current_page.'">';
-                    echo '<li><a href="'.$current_page.'?estado=introducao&item='.$rowTabelaItem[0].'">';
-                    echo '['.$rowTabelaItem[1].']';
-                    echo '</a></li>';
-                    //echo '</ul>';
-                }
-            }
-            echo '</ul>';
-            echo '</li>';
-        }
-        echo '</ul>';
+        listItemsAndItemTypes('estado=introducao&item=');
     }
     else if ($_REQUEST["estado"] == "introducao") {
         $_SESSION['item_id'] = $_REQUEST["item"];
