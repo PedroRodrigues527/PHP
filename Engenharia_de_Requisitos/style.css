@@ -223,6 +223,7 @@ nav .fa{
 	margin-top: 5%;
 	display: flex;
 	justify-content: space-between;
+
 }
 
 .course-col{
@@ -456,6 +457,12 @@ h3{
 	margin-top: 16px;
 	text-align: left;
 }
+
+.prices{
+	text-align: justify;
+	text-align-last: center;
+	margin: auto;
+}
 /*
 @media(max-width: 700px){
 	.testimonial-col  img{
@@ -505,7 +512,7 @@ h3{
 }
 
 .icons .fa{
-	color: #604ff5;
+	/*color: #1c00ff;*/
 	margin: 0 13px;
 	cursor: pointer;
 	padding: 18px 0;
