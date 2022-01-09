@@ -51,7 +51,7 @@ else {
         if(!$row) { //Verifica se linha esta vazia
             echo "<p>Não há itens</p>";
         } else {
-            echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+            echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2"> 
                <tbody>
                   <tr>
                      <th><b>item</b></th>
@@ -82,7 +82,7 @@ else {
                 $querystring2 = 'SELECT subitem.id, subitem.name FROM subitem, item WHERE subitem.item_id = item.id AND subitem.value_type ="enum" AND item.id = ' . $rowTabela['id'] . ' ORDER BY id ASC';
                 $queryresult2 = mysql_searchquery($querystring2);//Query Desejado
 
-                $queryresult2dup = mysql_searchquery($querystring2);
+                $queryresult2dup = mysql_searchquery($querystring2); //Criação de uma query duplicada para só verificar a primeira linha e se esta está vazia
                 $row = mysqli_fetch_array($queryresult2dup, MYSQLI_NUM);
                 if(!$row) { //Verifica se linha esta vazia
                     echo "<td colspan = '6' rowspan = '1'> Não há subitems especificados cujo tipo de valor seja enum. Especificar primeiro novo(s) item(s) e depois voltar a esta opção.</td>";
@@ -107,8 +107,8 @@ else {
                         $row = mysqli_fetch_array($queryresult3dup, MYSQLI_NUM);
 
 
-                        $rowcount = mysqli_num_rows($queryresult3);
-                        if($rowcount == 0)
+                        $rowcount = mysqli_num_rows($queryresult3);//Quantos items associados a um tipo de item
+                        if($rowcount == 0) //se está a 0 passa para 1 a variavel contador
                         {
                             $rowcount = 1;
                         }
@@ -117,13 +117,11 @@ else {
                             echo "<td colspan = '4' rowspan = '1'>Não há valores permitidos definidos</td>";
                             echo "</tr>";
                         }else{
-                            while($rowTabela3 = mysqli_fetch_array($queryresult3, MYSQLI_NUM)) {
+                            while($rowTabela3 = mysqli_fetch_array($queryresult3, MYSQLI_NUM)) { //Implementação da tabela conforme pedido no enunciado
                                 echo "<td>" . $rowTabela3[0] . "</td>"; //id do subitem_allowed_value
                                 echo "<td>" . $rowTabela3[1] . "</td>"; //valor permitido
                                 echo "<td>" . $rowTabela3[2] . "</td>"; //Estado do subitem_allowed_value
-                                //echo "<td rowspan=".$rowcount ." colspan='1'>" . $rowTabela3[0] . "</td>";
-                                //echo "<td rowspan=".$rowcount ." colspan='1'>" . $rowTabela3[1] . "</td>";
-                                if ($rowTabela3[2] == "active") {
+                                if ($rowTabela3[2] == "active") {// Verifica se o estado é active ou não
                                     echo "<td> [editar] [desativar] </td>";
                                 } else {
                                     echo "<td> [editar] [ativar] </td>";
