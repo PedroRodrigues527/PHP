@@ -100,14 +100,26 @@ else {
                 //Query do resto da tabela desejada (tabela item - id, name, state)
                 $restTableQuery = mysql_searchquery('SELECT item.id, item.name, item.state FROM item, item_type WHERE item.item_type_id = item_type.id AND item_type.id = ' . $rowType[0]); //Lista do resto da tabela
                 $restTableQuery2 = mysql_searchquery('SELECT item.id, item.name, item.state FROM item, item_type WHERE item.item_type_id = item_type.id AND item_type.id = ' . $rowType[0]); //Lista do resto da tabela
+                /*
+                 * Como é necessário ler as linhas todas (1º ao ultimo)
+                 * o uso de apenas uma variável iria ser verificado no *1
+                 * e depois no *2 comecava a ler da 2º linha
+                 * resultando a não leitura da 1º linha.
+                 *
+                 * Solução: Implementar 2 arrays identicos com a mesma query
+                 * um para usar no *1 e outro para preencher a tabela
+                 *
+                */
+
 
                 //Se não existir resultado da query
+                //*1
                 if(!mysqli_fetch_array($restTableQuery2, MYSQLI_NUM))
                 {
                     echo "<td rowspan='1' colspan='4'>Este tipo de item não tem itens.</td>";
                     echo "</tr>";
                 }
-                else {
+                else { //*2
                     //Enquanto houver output da query
                     while ($rowTabela = mysqli_fetch_array($restTableQuery, MYSQLI_NUM)) {
                         //Preenchimento da tabela
