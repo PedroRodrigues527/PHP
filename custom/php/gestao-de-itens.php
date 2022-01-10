@@ -107,7 +107,7 @@ else {
                  * resultando a não leitura da 1º linha.
                  *
                  * Solução: Implementar 2 arrays identicos com a mesma query
-                 * um para usar no *1 e outro para preencher a tabela
+                 * um para usar no *1 e outro para preencher a tabela *2
                  *
                 */
 
