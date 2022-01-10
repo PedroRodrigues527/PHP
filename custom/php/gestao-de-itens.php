@@ -22,7 +22,7 @@ else {
         //Verifica se foi submetido um dado com números ou carateres especiais além das letras ou espaço entre eles
         else if(!preg_match ('/^[a-zA-Z0-9 \p{L}]+$/ui', $_POST['nome_item'])) //1 se conter char especiais, 0 caso contrario
         {
-            //Apresentar mensagem de erro (Tem caracteres especiais!)
+            //Apresentar mensagem de erro (Tem caracteres especiais ou contém espaço!)
             echo "<p>ERRO: O dado inserido no formulário do Nome da Item só pode ter letras, acentos e espaços vazios!</p>";
             $noerrors = false;
         }
@@ -46,15 +46,16 @@ else {
             //Caso de sucesso de inserçao na Base de Dados
             if (mysql_searchquery($insertQuery)) {
                 echo "<p>Inseriu os dados de novo tipo de item com sucesso.</p>";
-                continue_button();
+                continue_button(); //Botão para continuar
             }
         }
         else
         {
+            //Botão para voltar à trás
             go_back_button();
         }
     }
-    else {
+    else { //Caso de não inserção
         //Tabela
         //Verifica se não existem tuplos na tabela subitem_unit_type
         $itemQuery = mysql_searchquery('SELECT id, name FROM item'); //Tabela item
