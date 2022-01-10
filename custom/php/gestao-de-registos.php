@@ -137,7 +137,6 @@ else {
             echo "<p>Não há crianças</p>";
         } else { //Linha não vazia, Tem tuplos
             //Preenchimento dos cabeçalhos
-            //Preenchimento dos cabeçalhos
             echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
                <tbody>
                   <tr>
@@ -164,53 +163,67 @@ else {
                     FROM item, subitem, value 
                     WHERE item.id = subitem.item_id AND subitem.id = value.subitem_id AND value.child_id = ' . $rowTabelaChild['id'] .
                     ' ORDER BY item.name ASC';
+
                 $query_itemname_result = mysql_searchquery($query_itemname_string); //Executar query
                 $resultValueString = "";
-                echo "<td>";
+
+                echo "<td>";//Inicio linha
+
                 //Procura dados enquanto houver resultado
                 while($rowTabelaItem = mysqli_fetch_array($query_itemname_result, MYSQLI_NUM)){
-                    $resultValueString .= strtoupper($rowTabelaItem[0]) . ": ";
+
+                    //strtoupper: chars in uppercase ;
+                    $resultValueString .= strtoupper($rowTabelaItem[0]) . ": "; //FORMATO: NOME DO ITEM: ...
 
                     //Ver nomes de subitems e seus valores: altura (104
                     $query_subitem_string = '
                         SELECT subitem.name, value.value, subitem.id
                         FROM subitem, value, item, child
                         WHERE subitem.id = value.subitem_id AND subitem.item_id = item.id AND item.id = ' . $rowTabelaItem[1] . ' AND value.child_id = child.id AND child.id = ' . $rowTabelaChild['id'];
-                    $query_subitem_result = mysql_searchquery($query_subitem_string);
 
-                    if(isResultQueryEmpty($query_subitem_string))
+                    $query_subitem_result = mysql_searchquery($query_subitem_string);//Executar query
+
+                    if(isResultQueryEmpty($query_subitem_string)) //Query com output vazio
                     {
                         $resultValueString = "Não há valores nem registos desta criança";
+                        //Caso finalize aqui o formato é: NOME_DO_ITEM: Não há valores nem registos desta criança
                     }
-                    else
+                    else //Output da query não vazio
                     {
+                        //Caso houver resultados da query
                         while($rowTabelaSubitem = mysqli_fetch_array($query_subitem_result, MYSQLI_NUM)) {
+                            //Concatenua a string com informações dos subitens
+                            //subitem.nome [em negrito] ( value.value
                             $resultValueString .= "<strong> " . $rowTabelaSubitem[0] . "</strong> (" . $rowTabelaSubitem[1];
 
-                            //Ver tipo de unidade de subitem: cm,kg,...
+                            //Query: Ver tipo de unidade de subitem: cm,kg,...
                             $query_subitemunitype_string = '
                                 SELECT subitem_unit_type.name, subitem_unit_type.id
                                 FROM subitem_unit_type, subitem
-                                WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.id = ' . $rowTabelaSubitem[2];
-                            $query_subitemunitype_result = mysql_searchquery($query_subitemunitype_string);
+                                WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.id = ' . $rowTabelaSubitem[2]; //subitem.id atual
+                            $query_subitemunitype_result = mysql_searchquery($query_subitemunitype_string);//Executar query
 
-                            if(!isResultQueryEmpty($query_subitemunitype_string))
+                            if(!isResultQueryEmpty($query_subitemunitype_string)) //Caso o output da query não seja vazio
                             {
+                                //Percorrer array
                                 while($rowTabelaSubitemUnitType = mysqli_fetch_array($query_subitemunitype_result, MYSQLI_NUM)) {
+                                    //Adiciona à string o subitem_unit_type.name -> unidade
                                     $resultValueString .= " " . $rowTabelaSubitemUnitType[0];
                                 }
                             }
-                            $resultValueString .= "); ";
+                            $resultValueString .= "); "; //Fecha parenteses
                         }
+                        //Eliminha as duas ultimas posições para poder apagar a ultima virgula
                         $resultValueString = substr_replace($resultValueString ,"", -2);
-                        $resultValueString .= "\n";
+                        $resultValueString .= "\n"; //Breakline
                     }
                 }
                 echo $resultValueString;
+                //fecha linha
                 echo "</td>";
                 echo "</tr>";
             }
-            echo "</tbody></table>";
+            echo "</tbody></table>";//Fecha tabela
 
             echo "<h3>Dados de registo - introdução</h3>";
 
