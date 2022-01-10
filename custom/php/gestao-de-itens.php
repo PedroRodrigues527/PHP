@@ -11,8 +11,8 @@ else {
     if ($_POST["estado"] == "inserir")
     {
         echo "<h3>Gestão de itens - inserção</h3>";
-        $noerrors = true;
-        //Validar
+        $noerrors = true; //Verifica a não existencia de erros
+        //Verifica se foi submetido string(nome_unidade) vazia;
         if($_POST['nome_item'] == "" || ctype_space($_POST['nome_item'])){
 
             //Apresentar mensagem de erro Nome vazio ou todos os char sao vazios
@@ -26,18 +26,20 @@ else {
             echo "<p>ERRO: O dado inserido no formulário do Nome da Item só pode ter letras, acentos e espaços vazios!</p>";
             $noerrors = false;
         }
+        //Verifica se foi submetido string(nome_unidade) vazia;
         if ($_POST['tipo_de_item'] == "" || ctype_space($_POST['tipo_de_item'])) {
             //Apresentar mensagem de erro Nome vazio ou todos os char sao vazios
             echo "<p>ERRO: Não foi escolhido nenhuma opção do dado Tipo de Item!</p>";
             $noerrors = false;
         }
+        //Verifica se foi submetido string(nome_unidade) vazia;
         if ($_POST['state'] == "" || ctype_space($_POST['state'])) {
             //Apresentar mensagem de erro Nome vazio ou todos os char sao vazios
             echo "<p>ERRO: Não foi escolhido nenhuma opção do dado Estado!</p>";
             $noerrors = false;
         }
 
-        //Entra aqui se os dados inseridos forem válido
+        //Entra aqui se os dados inseridos forem válido e não ocurreram erros
         if($noerrors){
             //Query para inserir nome da unidade, tipo e estado na Base de dados
             $insertQuery = "INSERT INTO item (name, item_type_id, state ) 
@@ -49,7 +51,7 @@ else {
                 continue_button(); //Botão para continuar
             }
         }
-        else
+        else //Caso de erros
         {
             //Botão para voltar à trás
             go_back_button();
