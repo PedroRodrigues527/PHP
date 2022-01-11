@@ -252,7 +252,7 @@ else { //Verifica se existe algum elemento/valor no POST
         $itemQuery2 = mysql_searchquery('SELECT * FROM subitem_unit_type');
         while($row2 = mysqli_fetch_array($itemQuery2, MYSQLI_NUM))
         {
-            echo '<option value="' . $row2[0] . '">' . $row2[1] . '</option>'; //Formato id, name
+            echo '<option value="' . $row2[0] . '">' . $row2[1] . '</option>'; //Formato id, name da unidade
         }
 
         //Formulário
