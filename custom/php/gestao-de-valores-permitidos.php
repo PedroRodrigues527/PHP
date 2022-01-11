@@ -69,7 +69,7 @@ else {
                   </tr>';
 
             //Enquanto houver dados
-            while($rowTabela = mysqli_fetch_assoc($queryresult)) {
+            while ($rowTabela = mysqli_fetch_assoc($queryresult)) {
 
                 //Query: selecionar todos os atributos do subitem, usando left-join EXPLICAR MELHOR...
                 $queryNum = 'SELECT subitem.* 
@@ -78,13 +78,13 @@ else {
                                 INNER JOIN item ON subitem.value_type = "enum" AND subitem.item_id = item.id AND item.id = ' . $rowTabela['id'];
                 $resultsQueryNum = mysql_searchquery($queryNum);//Executa query
                 $rowCount = mysqli_num_rows($resultsQueryNum); //Quantos items associados a um tipo de item||Quantas linhas no output da query
-                if($rowCount == 0) //Sem linhas
+                if ($rowCount == 0) //Sem linhas
                 {
                     $rowCount = 1;
                 }
 
                 echo "<tr>";
-                echo "<td rowspan='".$rowCount . "' >" . $rowTabela['name'] . "</td>"; //id
+                echo "<td rowspan='" . $rowCount . "' >" . $rowTabela['name'] . "</td>"; //id
 
                 //Query: subitem associado corretamente ao item em questão
                 $querystring2 = 'SELECT subitem.id, subitem.name FROM subitem, item WHERE subitem.item_id = item.id AND subitem.value_type ="enum" AND item.id = ' . $rowTabela['id'] . ' ORDER BY id ASC';
@@ -93,40 +93,62 @@ else {
                 $queryresult2dup = mysql_searchquery($querystring2); //Criação de uma query duplicada para só verificar a primeira linha e se esta está vazia
                 $row = mysqli_fetch_array($queryresult2dup, MYSQLI_NUM); //Guardar output da query no array
 
-                if(!$row) { //Verifica se linha esta vazia
+                if (!$row) { //Verifica se linha esta vazia
                     echo "<td colspan = '6' rowspan = '1'> Não há subitems especificados cujo tipo de valor seja enum. Especificar primeiro novo(s) item(s) e depois voltar a esta opção.</td>";
                     echo "</tr>";
-                }else { //Caso nao esteja vazio
-                    while($rowTabela2 = mysqli_fetch_array($queryresult2, MYSQLI_NUM)) {
-                        $queryNum= 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = '. $rowTabela2[0] .  ' ORDER BY subitem_allowed_value.id ASC ';
-                        $resultsQueryNum = mysql_searchquery($queryNum);
+                } else { //Caso nao esteja vazio
+                    //Enquanto houver dados da query
+                    while ($rowTabela2 = mysqli_fetch_array($queryresult2, MYSQLI_NUM)) {
+                        //Query: selcionar todos os atributos da tabela subitem_allowed_value; comparando com o subitem atual, ordenado por id
+                        //Selecionar valores permitidos com o respetivo subitem! **a
+                        $queryNum = 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = ' . $rowTabela2[0] . ' ORDER BY subitem_allowed_value.id ASC ';
+                        $resultsQueryNum = mysql_searchquery($queryNum);//Executar a query
                         $rowCount = mysqli_num_rows($resultsQueryNum); //Quantos items associados a um tipo de item
-                        if($rowCount == 0)
+
+                        if ($rowCount == 0)//Caso nao exista resultado
                         {
                             $rowCount = 1;
                         }
 
-                        echo "<td rowspan ='".$rowCount ."'>" . $rowTabela2[0] . "</td>";
-                        $word= '[' . $rowTabela2[1] . ']';
-                        echo "<form method='POST' action='".$current_page."'>";
-                        echo "<td rowspan ='".$rowCount ."'><a href='" . $current_page . "?estado=introducao&subitem=" . $rowTabela2[0] . "'>". $word . "</a></td>";
-                        $querystring3= 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = '. $rowTabela2[0] .  ' ORDER BY subitem_allowed_value.id ASC ';
-                        $queryresult3 = mysql_searchquery($querystring3);//Query Desejado
-                        $queryresult3dup = mysql_searchquery($querystring3);
-                        $row = mysqli_fetch_array($queryresult3dup, MYSQLI_NUM);
+                        //Formatação da linha
+                        echo "<td rowspan ='" . $rowCount . "'>" . $rowTabela2[0] . "</td>"; //Subitem.id
+                        $word = '[' . $rowTabela2[1] . ']'; //[subitem.name]
+
+                        //Formulario para poder acessar os hrefs
+                        echo "<form method='POST' action='" . $current_page . "'>";
+                        /*
+                         * A variavel $current_page é uma variavel global
+                         * definida no ficheiro common.php
+                         * Mas o interpretador de php não deteta
+                         * como variavel global.
+                         * Ao executar esta variável é reconhecida.
+                         */
 
 
-                        $rowcount = mysqli_num_rows($queryresult3);//Quantos items associados a um tipo de item
-                        if($rowcount == 0) //se está a 0 passa para 1 a variavel contador
+                        //linha: [subitem.name] -> atual
+                        // hyperlink para à mesma página mas com estado de execução diferente e guardar o id do subitem, num quadrado da tabela
+                        echo "<td rowspan ='" . $rowCount . "'><a href='" . $current_page . "?estado=introducao&subitem=" . $rowTabela2[0] . "'>" . $word . "</a></td>";
+
+                        //Query **a
+                        $querystring3 = 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = ' . $rowTabela2[0] . ' ORDER BY subitem_allowed_value.id ASC ';
+                        $queryresult3 = mysql_searchquery($querystring3); //Executar query
+                        $queryresult3dup = mysql_searchquery($querystring3); //Executar query duplicado
+                        //Explicado no gestao-de-itens.php linha 106
+
+                        $row = mysqli_fetch_array($queryresult3dup, MYSQLI_NUM); //Guardar resultado num array
+                        $rowcount = mysqli_num_rows($queryresult3);//Quantas colunas tem o output?
+
+                        if ($rowcount == 0) //se está a 0(output da query vazio) passa para 1 a variavel contador
                         {
                             $rowcount = 1;
                         }
 
-                        if(!$row) { //Verifica se está vazio
+                        if (!$row) { //Verifica se está vazio
                             echo "<td colspan = '4' rowspan = '1'>Não há valores permitidos definidos</td>";
                             echo "</tr>";
-                        }else{
-                            while($rowTabela3 = mysqli_fetch_array($queryresult3, MYSQLI_NUM)) { //Implementação da tabela conforme pedido no enunciado
+                        } else { //Caso exista resultado
+                            //Caso exista resultado
+                            while ($rowTabela3 = mysqli_fetch_array($queryresult3, MYSQLI_NUM)) { //Implementação da tabela conforme pedido no enunciado
                                 echo "<td>" . $rowTabela3[0] . "</td>"; //id do subitem_allowed_value
                                 echo "<td>" . $rowTabela3[1] . "</td>"; //valor permitido
                                 echo "<td>" . $rowTabela3[2] . "</td>"; //Estado do subitem_allowed_value
@@ -135,7 +157,7 @@ else {
                                 } else {
                                     echo "<td> [editar] [ativar] </td>";
                                 }
-                                echo "</tr>";
+                                echo "</tr>";//Fim da linha
                             }
                         }
                     }
