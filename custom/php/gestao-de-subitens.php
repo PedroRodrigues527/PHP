@@ -176,7 +176,7 @@ else { //Verifica se existe algum elemento/valor no POST
                         //Preencher a tabela com os respetivos campos
                         echo "<td>" . $rowTabela2[0] . "</td>"; //subitem.id
                         echo "<td>" . $rowTabela2[1] . "</td>"; //subitem.name
-                        echo "<td>" . $rowTabela2[3] . "</td>"; //subitem.item_id???
+                        echo "<td>" . $rowTabela2[3] . "</td>"; //subitem.value_type
                         echo "<td>" . $rowTabela2[5] . "</td>"; //subitem.form_field_type
                         echo "<td>" . $rowTabela2[4] . "</td>"; //subitem.form_field_name
 
@@ -219,37 +219,43 @@ else { //Verifica se existe algum elemento/valor no POST
 
         echo "<h3>Gestão de subitens - introdução</h3>";
         //Form
+        //Get all enum values
         $allvaluetypes = get_enum_values("subitem", "value_type");
         $allformfieldtype = get_enum_values("subitem", "form_field_type");
 
+        //Formulario
         echo '<form action="" name="InsertForm" method="POST">
             Nome do subitem: <input type="text" name="nome_subitem"/>
             <p>Tipo de valor:</p>';
-        foreach($allvaluetypes as $value)
+        foreach($allvaluetypes as $value) //Para cada tipo enum
         {
             echo '<input type="radio" value= "' . $value . '" name="value_type"><label>' . $value . '</label><br>';
         }
         echo '<p>Item:</p>';
         echo '<select name="item_name">';
-        $itemQuery = mysql_searchquery('SELECT * FROM item'); //Tabela item
-        while($row = mysqli_fetch_array($itemQuery, MYSQLI_NUM))
+        $itemQuery = mysql_searchquery('SELECT * FROM item'); //Todos os atributos da tabela item
+        while($row = mysqli_fetch_array($itemQuery, MYSQLI_NUM)) //Enquanto houver dados
         {
-            echo '<option value="' . $row[0] . '">' . $row[1] . '</option>';
+            echo '<option value="' . $row[0] . '">' . $row[1] . '</option>';//Cria uma tag <option> Formato <value = item.id> item.name
         }
         echo '</select>';
         echo '<p>Tipo do campo do formulário:</p>';
-        foreach($allformfieldtype as $value)
+        foreach($allformfieldtype as $value) //Para cada form_field_type enum
         {
             echo '<input type="radio" value= "' . $value . '" name="form_field_type"><label>' . $value . '</label><br>';
         }
         echo '<p>Tipo de unidade:</p>';
         echo '<select name="subitem_unit_type_name">';
         echo '<option value=""></option>';
-        $itemQuery2 = mysql_searchquery('SELECT * FROM subitem_unit_type'); //Tabela subitem_unit_type
+
+        //Todos os atributos da tabela subitem_unit_type
+        $itemQuery2 = mysql_searchquery('SELECT * FROM subitem_unit_type');
         while($row2 = mysqli_fetch_array($itemQuery2, MYSQLI_NUM))
         {
-            echo '<option value="' . $row2[0] . '">' . $row2[1] . '</option>';
+            echo '<option value="' . $row2[0] . '">' . $row2[1] . '</option>'; //Formato id, name
         }
+
+        //Formulário
         echo '</select>';
         echo '<p>Ordem do campo no fomulário:</p>';
         echo '<input type="text" name="form_field_order"/>';
