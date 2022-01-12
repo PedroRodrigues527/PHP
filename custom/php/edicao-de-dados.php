@@ -33,9 +33,9 @@ else {
 
         if ($_GET["estado"] == "editar") {
             echo "<h3>Edição de dados - editar</h3>";
+            echo '<form action="'.$current_page.'?estado=inserir" method="POST">';
             if ($_GET["comp"] == 'gestao-de-registos')
             {
-                echo '<form action="'.$current_page.'?estado=inserir" method="POST">';
                 while($rowTabelaSubitemActive = mysqli_fetch_array($resultQuery, MYSQLI_NUM))
                 {
                     echo '<p>' . $rowTabelaSubitemActive[1] . ':</p>';
@@ -43,21 +43,30 @@ else {
                     {
                         case "text":
                             //text or textbox
-                            echo '<input type="' . $rowTabelaSubitemActive[5] . '" name="' . $rowTabelaSubitemActive[4] . '" value="'.$rowTabelaSubitemActive[10].'"';
-                            echo '/>';
+                            echo '<input type="' . $rowTabelaSubitemActive[5] . '" name="' . $rowTabelaSubitemActive[4] . '" value="'.$rowTabelaSubitemActive[10].'"/>';
                             break;
                         case "bool":
                             //radio
-                            echo '<input type="radio" name="' . $rowTabelaSubitemActive[4] . '" value="1" checked>
+                            echo '<input type="radio" name="' . $rowTabelaSubitemActive[4] . '" value="1" ';
+                            if ($rowTabelaSubitemActive[10] == 1)
+                            {
+                                echo 'checked';
+                            }
+                            echo '>
                             <label>sim</label><br>
-                            <input type="radio" name="' . $rowTabelaSubitemActive[4] . '" value="0">
+                            <input type="radio" name="' . $rowTabelaSubitemActive[4] . '" value="0" ';
+                            if ($rowTabelaSubitemActive[10] == 0)
+                            {
+                                echo 'checked';
+                            }
+                            echo '>
                             <label>não</label><br>';
                             break;
                         case "int":
                             //text
                         case "double":
                             //text
-                            echo '<input type="' . $rowTabelaSubitemActive[5] . '" name="' . $rowTabelaSubitemActive[4] . '"/>';
+                            echo '<input type="' . $rowTabelaSubitemActive[5] . '" name="' . $rowTabelaSubitemActive[4] . '" value="'.$rowTabelaSubitemActive[10].'"/>';
                             break;
                         case "enum":
                             //radio, checkbox or selectbox
@@ -70,7 +79,10 @@ else {
                                     while($rowTabelaValues = mysqli_fetch_array($queryResultValues, MYSQLI_NUM))
                                     {
                                         echo '<input type="radio" value= "' . $rowTabelaValues[0] . '" name="' . $rowTabelaSubitemActive[4] . '" ';
-
+                                        if ($rowTabelaSubitemActive[10] == $rowTabelaValues[0])
+                                        {
+                                            echo 'checked';
+                                        }
                                         echo '><label>' . $rowTabelaValues[0] . '</label><br>';
                                     }
                                     break;
@@ -78,14 +90,24 @@ else {
                                     echo '<input type="checkbox" style="display: none;" value="" name="' . $rowTabelaSubitemActive[4] . '" checked>';
                                     while($rowTabelaValues = mysqli_fetch_array($queryResultValues, MYSQLI_NUM))
                                     {
-                                        echo '<input type="checkbox" value= "' . $rowTabelaValues[0] . '" name="' . $rowTabelaSubitemActive[4] . '"><label>' . $rowTabelaValues[0] . '</label><br>';
+                                        echo '<input type="checkbox" value= "' . $rowTabelaValues[0] . '" name="' . $rowTabelaSubitemActive[4] . '" ';
+                                        if ($rowTabelaSubitemActive[10] == $rowTabelaValues[0])
+                                        {
+                                            echo 'checked';
+                                        }
+                                        echo '><label>' . $rowTabelaValues[0] . '</label><br>';
                                     }
                                     break;
-                                case "selectbox":
+                                case "selectbox": //ERRO DEFAULT
                                     echo '<select name="' . $rowTabelaSubitemActive[4] . '">';
                                     while($rowTabelaValues = mysqli_fetch_array($queryResultValues, MYSQLI_NUM))
                                     {
-                                        echo '<option value="' . $rowTabelaValues[0] . '">' . $rowTabelaValues[0] . '</option>';
+                                        echo '<option value="' . $rowTabelaValues[0] . '" ';
+                                        if ($rowTabelaSubitemActive[10] == $rowTabelaValues[0])
+                                        {
+                                            echo 'selected';
+                                        }
+                                        echo '>' . $rowTabelaValues[0] . '</option>';
                                     }
                                     echo '</select>';
                                     break;
@@ -107,16 +129,23 @@ else {
                         }
                     }
                 }
-                echo '</form>';
             }
             else
             {
+                while($rowRegistos = mysqli_fetch_array($resultQuery, MYSQLI_NUM))
+                {
 
+                }
             }
+            echo '<input type="hidden" value="inserir" name="estado"/>';
+            echo '<input type="submit" value="Editar" />';
+            echo '</form>';
         } else if ($_GET["estado"] == "desativar") {
             echo "<h3>Edição de dados - desativar</h3>";
         } else if ($_GET["estado"] == "ativar") {
             echo "<h3>Edição de dados - ativar</h3>";
+        } else if ($_GET['estado'] == "inserir") {
+            echo "<h3>Edição de dados - inserir</h3>";
         }
     }
     else
