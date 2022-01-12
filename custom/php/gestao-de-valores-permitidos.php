@@ -152,11 +152,7 @@ else {
                                 echo "<td>" . $rowTabela3[0] . "</td>"; //id do subitem_allowed_value
                                 echo "<td>" . $rowTabela3[1] . "</td>"; //valor permitido
                                 echo "<td>" . $rowTabela3[2] . "</td>"; //Estado do subitem_allowed_value
-                                if ($rowTabela3[2] == "active") {// Verifica se o estado é active ou não
-                                    echo "<td> [editar] [desativar] </td>";
-                                } else {
-                                    echo "<td> [editar] [ativar] </td>";
-                                }
+                                colunaAcao($rowTabela3[2], $rowTabela3[0]); //Verifica se o estado é active ou não
                                 echo "</tr>";//Fim da linha
                             }
                         }

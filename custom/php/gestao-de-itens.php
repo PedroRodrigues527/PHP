@@ -130,11 +130,8 @@ else {
                         echo "<td>" . $rowTabela[1] . "</td>"; //nome do item
                         echo "<td>" . $rowTabela[2] . "</td>"; //estado
 
-                        if ($rowTabela[2] == "ative") { //ação
-                            echo "<td> [editar] [desativar] </td>";
-                        } else {
-                            echo "<td> [editar] [ativar] </td>";
-                        }
+                        colunaAcao($rowTabela[2], $rowTabela[0]); //Verifica se o estado é active ou não
+
                         echo "</tr>";
                     }
                 }

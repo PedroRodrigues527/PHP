@@ -204,11 +204,7 @@ else { //Verifica se existe algum elemento/valor no POST
                             echo "<td>sim</td>";
                         }
                         echo "<td>" . $rowTabela2[9] . "</td>"; //subitem.state
-                        if ($rowTabela2[9] == "active") {
-                            echo "<td> [editar] [desativar] </td>";
-                        } else {
-                            echo "<td> [editar] [ativar] </td>";
-                        }
+                        colunaAcao($rowTabela2[9], $rowTabela2[0]); //Verifica se o estado é active ou não
                         echo "</tr>";//Fim da linha
                     }
                 }

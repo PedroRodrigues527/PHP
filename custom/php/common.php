@@ -111,4 +111,20 @@ function listItemsAndItemTypes($url)
     }
     echo '</ul>';
 }
+
+//Reutilização das colunas "ação" em componentes
+function colunaAcao($ifative, $id)
+{
+    echo '<form method="GET" action="'.get_site_url().'/edicao-de-dados">';
+    echo "<td>";
+    echo '<a href="'.get_site_url().'/edicao-de-dados?estado=editar&comp='.basename(get_permalink()).'&id='.$id.'">[editar] </a>';
+    if ($ifative == "active") { //ação
+        echo '<a href="'.get_site_url().'/edicao-de-dados?estado=desativar&comp='.basename(get_permalink()).'&id='.$id.'">[desativar]</a>';
+    } else {
+        echo '<a href="'.get_site_url().'/edicao-de-dados?estado=ativar&comp='.basename(get_permalink()).'&id='.$id.'">[ativar]</a>';
+    }
+    echo "</td>";
+    echo '</form>';
+}
+
 ?>

@@ -173,7 +173,11 @@ else {
                 while($rowTabelaItem = mysqli_fetch_array($query_itemname_result, MYSQLI_NUM)){
 
                     //strtoupper: chars in uppercase ;
+                    echo '<form method="GET" action="'.get_site_url().'/edicao-de-dados">';
+                    $resultValueString .= '<form method="GET" action="'.get_site_url().'/edicao-de-dados">';
+                    $resultValueString .= '<a href="'.get_site_url().'/edicao-de-dados?estado=editar&comp='.basename(get_permalink()).'&childid='.$rowTabelaChild['id'].'&itemid='.$rowTabelaItem[1].'">';
                     $resultValueString .= strtoupper($rowTabelaItem[0]) . ": "; //FORMATO: NOME DO ITEM: ...
+                    $resultValueString .= '</a>';
 
                     //Ver nomes de subitems e seus valores: altura (104
                     $query_subitem_string = '
@@ -183,12 +187,7 @@ else {
 
                     $query_subitem_result = mysql_searchquery($query_subitem_string);//Executar query
 
-                    if(isResultQueryEmpty($query_subitem_string)) //Query com output vazio
-                    {
-                        $resultValueString = "Não há valores nem registos desta criança";
-                        //Caso finalize aqui o formato é: NOME_DO_ITEM: Não há valores nem registos desta criança
-                    }
-                    else //Output da query não vazio
+                    if(!isResultQueryEmpty($query_subitem_string)) //Output da query não vazio
                     {
                         //Caso houver resultados da query
                         while($rowTabelaSubitem = mysqli_fetch_array($query_subitem_result, MYSQLI_NUM)) {
@@ -218,7 +217,7 @@ else {
                         $resultValueString .= "\n"; //Breakline
                     }
                 }
-                echo $resultValueString;
+                echo $resultValueString.'</form>';
                 //fecha linha
                 echo "</td>";
                 echo "</tr>";
