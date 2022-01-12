@@ -219,30 +219,37 @@ else {
             //$dinamicQueryString .= ' GROUP BY child.id HAVING count(*) = '.count($_SESSION['filtrosub_name']);
             $dinamicQueryString .= ' GROUP BY child.id ';
             if (!empty($_SESSION['filtrosub_name'])) {
-                $dinamicQueryString .= 'HAVING count(*) = ' . count($filtrosub);
+                $dinamicQueryString .= 'HAVING count(*) = ' . count($_SESSION['filtrosub_name']);
             }
             //echo $dinamicQueryString;//TESTE
             $queryResultFilters = mysql_searchquery($dinamicQueryString);
             if (mysqli_num_rows($queryResultFilters) > 0) {
                 //adicionar frase
-                $fraseQuery = '<p>Foi executado com sucesso a pesquisa do(s) registo(s) selecionando a(s) coluna(s) ';
-                foreach ($_SESSION['obteratr_name'] as $obteratr) {
-                    $fraseQuery .= $obteratr.', ';
+                $fraseQuery = '<p>Foi executado com sucesso a pesquisa do(s) registo(s) selecionando a(s) coluna(s)';
+                if(!empty($_SESSION['obteratr_name'])) {
+                    foreach ($_SESSION['obteratr_name'] as $obteratr) {
+                        $fraseQuery .= ' '.$obteratr.',';
+                    }
+                    $fraseQuery = substr_replace($fraseQuery, "", -1);
                 }
-                $fraseQuery = substr_replace($fraseQuery, "", -2);
-                $fraseQuery .= ' da tabela child e uma coluna que contém a listagem de subitem(ns) ';
-                foreach ($_SESSION['obtersub_name'] as $obtersub) {
-                    $fraseQuery .= $obtersub.', ';
+                $fraseQuery .= ' da tabela child e uma coluna que contém a listagem de subitem(ns)';
+                if(!empty($_SESSION['obtersub_name'])) {
+                    foreach ($_SESSION['obtersub_name'] as $obtersub) {
+                        $fraseQuery .= ' '.$obtersub . ',';
+                    }
+                    $fraseQuery = substr_replace($fraseQuery, "", -1);
                 }
-                $fraseQuery = substr_replace($fraseQuery, "", -2);
-                $fraseQuery .= ' pertencente(s) ao item '.$_SESSION['item_name'].' usando o(s) filtro(s): ';
-                foreach ($_SESSION['filtroatr_name'] as $filtroatr) {
-                    $fraseQuery .= 'atributo '.$filtroatr.' que tem como operador de condição '.$_REQUEST['operadoratr_'.$filtroatr].' e o valor a verificar ('.$_REQUEST[$filtroatr].'); ';
+                $fraseQuery .= ' pertencente(s) ao item '.$_SESSION['item_name'].'';
+                if(!empty($_SESSION['filtroatr_name']) || !empty($_SESSION['filtrosub_name'])) {
+                    $fraseQuery .= ' usando o(s) filtro(s):';
+                    foreach ($_SESSION['filtroatr_name'] as $filtroatr) {
+                        $fraseQuery .= ' atributo ' . $filtroatr . ', que tem como operador de condição ' . $_REQUEST['operadoratr_' . $filtroatr] . ' e o valor a verificar (' . $_REQUEST[$filtroatr] . '); ';
+                    }
+                    foreach ($_SESSION['filtrosub_name'] as $filtrosub) {
+                        $fraseQuery .= ' subitem ' . $filtrosub . ', que tem como operador de condição ' . $_REQUEST['operadorsub_' . $filtrosub] . ' e o valor a verificar (' . $_REQUEST[$filtrosub] . '); ';
+                    }
+                    $fraseQuery = substr_replace($fraseQuery, "", -2);
                 }
-                foreach ($_SESSION['filtrosub_name'] as $filtrosub) {
-                    $fraseQuery .= 'subitem '.$filtrosub.' que tem como operador de condição '.$_REQUEST['operadorsub_'.$filtrosub].' e o valor a verificar ('.$_REQUEST[$filtrosub].'); ';
-                }
-                $fraseQuery = substr_replace($fraseQuery, "", -2);
                 $fraseQuery .= '</p>';
                 echo $fraseQuery;
 
@@ -250,11 +257,17 @@ else {
                 echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
                 <tbody>
                   <tr>';
+                $htmlString = '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+                <tbody>
+                  <tr>';
                 foreach ($_SESSION['obteratr_name'] as $obteratr) {
                     echo '<th>' . $obteratr . '</th>';
+                    $htmlString .= '<th>' . $obteratr . '</th>';
                 }
                 echo '<th>Subitens e seus valores</th>';
+                $htmlString .= '<th>Subitens e seus valores</th>';
                 echo '</tr>';
+                $htmlString .= '</tr>';
 
                 while ($row = mysqli_fetch_assoc($queryResultFilters)) {
                     $queryStringSubitemsValues = 'SELECT ';
@@ -278,27 +291,44 @@ else {
 
                     if (mysqli_num_rows($queryResultSubitemsValues) > 0) {
                         echo '<tr>';
+                        $htmlString .= '<tr>';
                         foreach ($_SESSION['obteratr_name'] as $obteratr) {
                             echo '<td>' . $row[$obteratr] . '</td>';
+                            $htmlString .= '<td>' . $row[$obteratr] . '</td>';
                         }
                         echo '<td>';
+                        $htmlString .= '<td>';
                         while ($row2 = mysqli_fetch_assoc($queryResultSubitemsValues)) {
                             echo $row2['name'] . ': ' . $row2['value'] . '<br>';
+                            $htmlString .= $row2['name'] . ': ' . $row2['value'] . '<br>';
                         }
                         echo '</td>';
                         echo '</tr>';
+                        $htmlString .= '</td></tr>';
                     }
                 }
                 echo "</tbody></table>";
+                $htmlString .= "</tbody></table>";
 
                 //EXCEL - FALTA
 
                 $spreadsheet = new Spreadsheet();
+
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
+                //echo $htmlString; //TESTE
+                $spreadsheet = $reader->loadFromString($htmlString);
+
                 $sheet = $spreadsheet->getActiveSheet();
-                $sheet->setCellValue('A1', 'Hello World !');
+                $sheet->insertNewRowBefore(1);
+                $sheet->setCellValue('A1', substr($fraseQuery,3,-4));
 
                 $writer = new Xlsx($spreadsheet);
-                $writer->save('hello world.xlsx');
+                $stringFileName = 'exceltable.xlsx';
+                $writer->save($stringFileName);
+
+                echo '<a href="../../'.$stringFileName.'" download>';
+                echo 'TRANSFERIR EXCEL';
+                echo '</a>';
             }
         }
     }
