@@ -1,6 +1,64 @@
-.mytable td, .mytable th {
-    margin: 0  !important;
-    border: 1px solid !important;
-    padding: 1px !important;
-    font-size: 11px  !important;
+table {
+    border-collapse:separate;
+    border:solid black 1px;
+    border-radius:5px;
 }
+
+
+th {
+    color: white;
+    background-color: #1a1a1a;
+    border-top: none;
+}
+
+/*
+tr:nth-child(even) {background: #CCC}
+tr:nth-child(even) {background: #CCC}
+*/
+
+tr:nth-child(even) td:nth-last-child(n)
+{
+    background-color: #e6e6e6;
+}
+tr:nth-child(odd) td:nth-last-child(n)
+{
+    background-color: #FFF;
+}
+/*
+tr:nth-child(even) td:nth-last-child(1)
+{
+    background-color: orange;
+}
+tr:nth-child(odd) td:nth-last-child(1)
+{
+    background-color: purple;
+}
+
+tr:nth-child(even) td:nth-last-child(n)
+{
+    background-color: red;
+}
+tr:nth-child(odd) td:nth-last-child(n)
+{
+    background-color: blue;
+}
+
+tr:nth-child(even) td:nth-last-child(n)
+{
+    background-color: grey;
+}
+tr:nth-child(odd) td:nth-last-child(n)
+{
+    background-color: brown;
+}*/
+
+/*
+tr:nth-child(even) td:nth-last-child(5)
+{
+    background-color: grey;
+}
+tr:nth-child(odd) td:nth-last-child(5)
+{
+    background-color: brown;
+}*/
+
