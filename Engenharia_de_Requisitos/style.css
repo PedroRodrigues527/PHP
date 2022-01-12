@@ -12,7 +12,9 @@ html {
 .header{
 	min-height: 30vh; /*enables one full image on webpage*/
 	width: 100%;
-	background-image: linear-gradient(rgba(6, 30, 4, 0.4), rgba(6, 30, 4, 0.7)), url("img/banner.png");
+	background-image: linear-gradient(rgba(6, 30, 4, 0.4), rgba(6, 30, 4, 0.47)), url("img/banner.png");
+	/*background-image: linear-gradient(rgba(6, 30, 4, 0.4), rgba(6, 30, 4, 0.7)), url("img/eleBikes.jpg");
+	background-image: linear-gradient(rgba(6, 30, 4, 0.4), rgba(6, 30, 4, 0.7)), url("img/eleBikes2.jpg");*/
 	background-position: center;
 	background-size: cover;
 	position: relative;
