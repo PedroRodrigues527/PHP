@@ -18,6 +18,40 @@ html {
 	position: relative;
 }
 
+/* Customization of login button */
+
+.btn-login{
+	padding-left: 25px;
+}
+
+button {
+	background-color: #04AA6D;
+	color: white;
+	padding: 10px 15px;
+	margin: 1px 0;
+	border: none;
+	cursor: pointer;
+	width: 20%;
+}
+
+button:hover {
+	opacity: 0.8;
+}
+
+input[type=text], input[type=password], input[type=email] {
+	width: 25%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+}
+
+input[type=email]{
+	margin-right: -25px;
+}
+
+
 
 nav{
 	display: flex; /* enables the options being in the same line of site logo*/
