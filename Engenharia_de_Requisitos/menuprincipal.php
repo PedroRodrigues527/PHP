@@ -20,7 +20,7 @@ else
         mysqli_close($conn);
         if(!mysqli_num_rows($queryResult))
         {
-            echo 'nope3';
+            echo 'nope3';//teste
         }
         else
         {
