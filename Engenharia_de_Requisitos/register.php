@@ -24,7 +24,7 @@ if(empty($_REQUEST)){
                 <i class="fa fa-window-close"></i>
                 <ul>
                     <!-- <li> <a href="#">HOME</a></li> -->
-                    <li> <a href="index.html">MAIN PAGE</a></li>
+                    <li> <a href="index.html">INÍCIO</a></li>
                     <li> <a href="">AJUDA</a></li>
                 </ul>
             </div>
@@ -80,11 +80,11 @@ if(empty($_REQUEST)){
     </body>
     </html>';
 }else{
-    if(preg_match('/^[a-zA-Z0-9_.-]*$/',$_POST['username']) && preg_match('/^[a-zA-Z0-9_.-]*$/',$_POST['password']) && filter_var($_POST['e-mail'], FILTER_VALIDATE_EMAIL)) //Inserção válida no formulário
+    if(preg_match('/^[a-zA-Z0-9_-]*$/',$_POST['username']) && preg_match('/^[a-zA-Z0-9_-]*$/',$_POST['password']) && filter_var($_POST['e-mail'], FILTER_VALIDATE_EMAIL)) //Inserção válida no formulário
     {
         echo'<p>'.$_POST['username'] . ' - ' . $_POST['password'] . ' - ' . $_POST['e-mail']. '</p>';
         //Ligação a base de dados;
-        /*$queryString = 'INSERT INTO user (username, password, email) VALUES ("'.$_POST['username'].'", "'.$_POST['password'].'", "'.$_POST['e-mail'].'");';
+        $queryString = 'INSERT INTO user (username, password, email) VALUES ("'.$_POST['username'].'", "'.$_POST['password'].'", "'.$_POST['e-mail'].'");';
         $servername = "localhost";
         $username = "root";
         $password = "";
@@ -97,18 +97,33 @@ if(empty($_REQUEST)){
         mysqli_close($conn);
         if($queryResult)
         {
-            echo '<script>alert("Foi registado com sucesso!");</script>';
-            header("Location: http://localhost/Engenharia_de_Requisitos/login.php");
+            echo '<script>if(confirm("Foi registado com sucesso!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/login.php");
+              }
+              else
+                  {
+                      window.location.replace("http://localhost/Engenharia_de_Requisitos/login.php");
+                  }</script>';
         }
         else
         {
-            echo '<script>alert("Erro ao registar a conta!");</script>';
-        }*/
+            echo '<script>if(confirm("Erro ao registar a conta!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/register.php");
+              }
+              else
+                  {
+                      window.location.replace("http://localhost/Engenharia_de_Requisitos/register.php");
+                  }</script>';
+        }
     }else{
 
-        echo '<script>if(confirm("Erro ao registar a conta!")){'.
-    header("Location: http://localhost/Engenharia_de_Requisitos/register.php").'};</script>';
-
+        echo '<script>if(confirm("Os dados inseridos só podem aceitar números, letras e os carateres _ e -")){
+                window.location.replace("http://localhost/Engenharia_de_Requisitos/register.php");
+              }
+              else
+              {
+                window.location.replace("http://localhost/Engenharia_de_Requisitos/register.php");
+              }</script>';
     }
 }
 ?>

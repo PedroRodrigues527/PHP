@@ -25,7 +25,7 @@ if(empty($_REQUEST)) {
                 <i class="fa fa-window-close"></i>
                 <ul>
                     <!-- <li> <a href="#">HOME</a></li> -->
-                    <li> <a href="index.html">MAIN PAGE</a></li>
+                    <li> <a href="index.html">INÍCIO</a></li>
                     <li> <a href="">AJUDA</a></li>
                 </ul>
             </div>
@@ -98,9 +98,45 @@ if(empty($_REQUEST)) {
 }
 else
 {
-    session_start();
-    $_SESSION['username'] = $_POST['username'];
-    $_SESSION['password'] = $_POST['password'];
-    header("Location: http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+    if(preg_match('/^[a-zA-Z0-9_.-]*$/',$_POST['username']) && preg_match('/^[a-zA-Z0-9_.-]*$/',$_POST['password']))
+    {
+        $queryString = 'SELECT * FROM user WHERE username = "'.$_POST['username'].'" AND password = "'.$_POST['password'].'"';
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $db = "er_db";
+        $conn = mysqli_connect($servername, $username, $password, $db);
+        if (!$conn) {
+            die("Connection failed: " . mysqli_connect_error());
+        }
+        $queryResult = mysqli_query($conn, $queryString);
+        mysqli_close($conn);
+        if(mysqli_num_rows($queryResult) > 0)
+        {
+            session_start();
+            $_SESSION['username'] = $_POST['username'];
+            echo '<script>window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php")</script>';
+        }
+        else
+        {
+            echo '<script>if(confirm("Não foi encontrado a sua conta na base de dados! Verifique se já registou a conta primeiro.")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/login.php");
+              }
+              else
+                  {
+                      window.location.replace("http://localhost/Engenharia_de_Requisitos/login.php");
+                  }</script>';
+        }
+    }
+    else
+    {
+        echo '<script>if(confirm("Os dados inseridos só podem aceitar números, letras e os carateres _ e -")){
+                window.location.replace("http://localhost/Engenharia_de_Requisitos/login.php");
+              }
+              else
+              {
+                window.location.replace("http://localhost/Engenharia_de_Requisitos/login.php");
+              }</script>';
+    }
 }
 
