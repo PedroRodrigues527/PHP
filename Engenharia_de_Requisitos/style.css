@@ -404,11 +404,29 @@ h3{
 
 /* Bicicleta eletrica descrição */
 
-
 .row-bike{
 	margin-top: 5%;
 	display: flex;
 	justify-content: center;
+}
+
+.facilities-col-bike{
+display: inline-flex;
+}
+
+
+
+.info-bike{
+	padding-top: 15px;
+	padding-left: 25px;
+}
+
+.info-bike h1{
+	font-size: 20px;
+}
+
+#bikeh{
+	font-size: 25px;
 }
 
 .facilities-col{
@@ -420,8 +438,10 @@ h3{
 
 /* Image format dimension */
 .facilities-col img{
+	width: 90px;/* -> */
+	height: 150px; /* ^ */
 	width: 100%;
-	border-radius: 10px;
+	border-radius: 5px;
 }
 
 .facilities-col p{
@@ -431,33 +451,10 @@ h3{
 .facilities-col h3{
 	margin-top: 16px;
 	margin-bottom: 15px;
-	text-align: left;
+	/*display:flex;*/
+	text-align: center;
 }
 
-/* ---- */
-
-.facilities-col{
-	flex-basis: 31%; /* Image  */
-	border-radius: 10px;
-	margin-bottom: 5%;
-	text-align: left;
-}
-
-/* Image format dimension */
-.facilities-col img{
-	width: 100%;
-	border-radius: 10px;
-}
-
-.facilities-col p{
-	padding: 0;
-}
-
-.facilities-col h3{
-	margin-top: 16px;
-	margin-bottom: 15px;
-	text-align: left;
-}
 
 /*Testimonials -------------------------------------------------------------------------------------------------------*/
 .testimonials{
