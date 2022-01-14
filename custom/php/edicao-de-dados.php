@@ -231,12 +231,14 @@ else {
                 $queryUpdate = 'UPDATE ' . $_POST['nometabela'] . ' SET ';
                 foreach ($_POST as $key => $value) {
                     if ($key != 'nometabela' && $key != 'estado') {
-                        $queryUpdate .= $key . ' = "' . $value . '", ';
+                        $length = strlen($_POST['nometabela']);
+                        $par = $_POST['nometabela'].'.'.substr($key,$length+1);
+                        $queryUpdate .= $par . ' = "' . $value . '", ';
                     }
                 }
                 $queryUpdate = substr_replace($queryUpdate ,"", -2);
                 $queryUpdate .= ' WHERE id = ' . $_SESSION['idbefore'];
-                //echo $queryUpdate; //TESTE
+                echo $queryUpdate; //TESTE
                 if(mysql_searchquery($queryUpdate))
                 {
                     echo "<p>Editou os dados do formulário com sucesso.</p>";
