@@ -21,6 +21,9 @@ html {
 }
 
 /* Customization of login button */
+body{
+	background-color: rgba(147, 183, 255, 0.24);
+}
 
 .btn-login{
 	padding-left: 25px;
@@ -377,7 +380,7 @@ h3{
 .layer h3{
 	width: 100%;
 	font-weight: 500;
-	color: #85ff00;;
+	color: #85ff00;
 	font-size: 0px;
 	bottom: 0;
 	left: 50%;
@@ -471,7 +474,6 @@ display: inline-flex;
 	text-align: left;
 	background: #dbffd9; /* Background color */
 	padding: 25px; /*box size */
-	cursor: pointer;
 	display: flex;
 }
 
@@ -547,7 +549,6 @@ display: inline-flex;
 .icons .fa{
 	/*color: #1c00ff;*/
 	margin: 0 13px;
-	cursor: pointer;
 	padding: 18px 0;
 }
 
