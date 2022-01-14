@@ -112,15 +112,15 @@ else { //Verifica se existe algum elemento/valor no POST
         //Tabela
 
         //Verifica se não existem tuplos na tabela subitem_unit_type
-        $itemQuery = mysql_searchquery('SELECT * FROM subitem'); //Todos os atrbitos da tabela subitem
-        $row = mysqli_fetch_array($itemQuery, MYSQLI_NUM); //Guardar no array
+        $itemQuery = mysql_searchquery('SELECT * FROM subitem ORDER BY name ASC'); //Todos os atrbitos da tabela subitem
+        //$row = mysqli_fetch_array($itemQuery, MYSQLI_NUM); //Guardar no array
 
-        if (!$row) { //Verifica se linha esta vazia
+        if (isResultQueryEmpty($itemQuery)) { //Verifica se linha esta vazia
             echo "<p>Não há subitens especificados</p>";
         }
         else {
             //Query da tabela item
-            $tableQuery = mysql_searchquery('SELECT name as item, id FROM item ORDER BY id ASC');
+            $tableQuery = mysql_searchquery('SELECT name as item, id FROM item ORDER BY name ASC');
 
             //Construção da tabela (cabeçalhos)
             //Tem tuplos
@@ -147,14 +147,14 @@ else { //Verifica se existe algum elemento/valor no POST
                 $QueryStringSubitem = 'SELECT subitem.*
                     FROM subitem, item
                     WHERE subitem.item_id = item.id AND  item.id = ' . $rowTabela[1] . '
-                    ORDER BY subitem.form_field_order ASC';
+                    ORDER BY subitem.name ASC';
 
                 //Executar query
                 $resultQuery = mysql_searchquery($QueryStringSubitem);
-                $resultQuery2 = mysql_searchquery($QueryStringSubitem);
-                $resultQuery3 = mysql_searchquery($QueryStringSubitem);
+                //$resultQuery2 = mysql_searchquery($QueryStringSubitem);
+                //$resultQuery3 = mysql_searchquery($QueryStringSubitem);
 
-                $rowcount = mysqli_num_rows($resultQuery3); //Número de linhas do output
+                $rowcount = mysqli_num_rows($resultQuery); //Número de linhas do output
 
                 if($rowcount == 0) //Sem resultado
                 {
@@ -164,7 +164,7 @@ else { //Verifica se existe algum elemento/valor no POST
                 echo "<tr>"; //Inicio da linha
                 echo "<td rowspan='$rowcount'>" . $rowTabela[0] . "</td>"; //item.name
 
-                if(!mysqli_fetch_array($resultQuery2, MYSQLI_NUM)) //Caso não exista resultado
+                if(isResultQueryEmpty($resultQuery)) //Caso não exista resultado
                 {
                     echo "<td rowspan='1' colspan='10'>Este item não tem subitens.</td>";
                     echo "</tr>"; //Fim da linha
@@ -184,7 +184,7 @@ else { //Verifica se existe algum elemento/valor no POST
                                             FROM subitem, subitem_unit_type
                                             WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.id = ' . $rowTabela2[0];
                         $query_subitemunitype_result = mysql_searchquery($queryStringsut);
-                        if(!isResultQueryEmpty($queryStringsut))
+                        if(!isResultQueryEmpty($query_subitemunitype_result))
                         {
                             while($rowTabelaSubitemUnitType = mysqli_fetch_array($query_subitemunitype_result, MYSQLI_NUM)) {
                                 echo "<td>" . $rowTabelaSubitemUnitType[0] . "</td>"; //subitem_unit_type.name

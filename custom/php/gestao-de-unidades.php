@@ -46,21 +46,21 @@ else {
         //Fazer pesquisa de filtragem (query)
         //Selecionar id e nome da tabela subitem_unit_type
         $querystring = 'SELECT id as sut_id, name as sut_name FROM subitem_unit_type
-                        ORDER BY id ASC';
+                        ORDER BY name ASC';
         $queryresult = mysql_searchquery($querystring);//Executar Query
 
         //Verifica se não existem tuplos na tabela subitem_unit_type
         //Seleciona id e name da tabela subitem_unit_type
-        $verifyNotEmpty = mysql_searchquery('SELECT id, name FROM subitem_unit_type');
+        //$verifyNotEmpty = mysql_searchquery('SELECT id, name FROM subitem_unit_type');
         /*
          * verifyNotEmpty = queryresult
          * Mesma explicação que no ficheiro gestao-de-itens.php
          */
 
         //Guarda output da query num array
-        $row = mysqli_fetch_array($verifyNotEmpty, MYSQLI_NUM);
+        //$row = mysqli_fetch_array($verifyNotEmpty, MYSQLI_NUM);
 
-        if(!$row) { //Caso array esteja vazio não há unidades
+        if(isResultQueryEmpty($queryresult)) { //Caso array esteja vazio não há unidades
             //Mensagem de aviso
             echo "<p>Não há tipos de unidades</p>";
         }

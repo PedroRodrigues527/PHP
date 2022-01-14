@@ -47,12 +47,12 @@ else {
         $queryresult = mysql_searchquery($querystring);//Query Desejado
 
         //Query Duplicado para só verificar a primeira linha e se esta está vazia -> caso explicado no gestao-de-itens linha 106
-        $querystringcopy = 'SELECT id, name FROM item ORDER BY name ASC';
-        $queryresultcopy = mysql_searchquery($querystringcopy);
+        //$querystringcopy = 'SELECT id, name FROM item ORDER BY name ASC';
+        //$queryresultcopy = mysql_searchquery($querystringcopy);
 
         //Guarda no array o output do query
-        $row = mysqli_fetch_array($queryresultcopy, MYSQLI_NUM);
-        if(!$row) { //Verifica se linha esta vazia
+        //$row = mysqli_fetch_array($queryresultcopy, MYSQLI_NUM);
+        if(isResultQueryEmpty($queryresult)) { //Verifica se linha esta vazia
             echo "<p>Não há itens</p>";
         } else { //caso não esteja
             //Criar tabela, cabeçalhos
@@ -84,16 +84,16 @@ else {
                 }
 
                 echo "<tr>";
-                echo "<td rowspan='" . $rowCount . "' >" . $rowTabela['name'] . "</td>"; //id
+                echo "<td rowspan='" . $rowCount . "' >" . $rowTabela['name'] . "</td>"; //nome do item
 
                 //Query: subitem associado corretamente ao item em questão
-                $querystring2 = 'SELECT subitem.id, subitem.name FROM subitem, item WHERE subitem.item_id = item.id AND subitem.value_type ="enum" AND item.id = ' . $rowTabela['id'] . ' ORDER BY id ASC';
+                $querystring2 = 'SELECT subitem.id, subitem.name FROM subitem, item WHERE subitem.item_id = item.id AND subitem.value_type ="enum" AND item.id = ' . $rowTabela['id'] . ' ORDER BY subitem.name ASC';
                 $queryresult2 = mysql_searchquery($querystring2);//Executar query
 
-                $queryresult2dup = mysql_searchquery($querystring2); //Criação de uma query duplicada para só verificar a primeira linha e se esta está vazia
-                $row = mysqli_fetch_array($queryresult2dup, MYSQLI_NUM); //Guardar output da query no array
+                //$queryresult2dup = mysql_searchquery($querystring2); //Criação de uma query duplicada para só verificar a primeira linha e se esta está vazia
+                //$row = mysqli_fetch_array($queryresult2dup, MYSQLI_NUM); //Guardar output da query no array
 
-                if (!$row) { //Verifica se linha esta vazia
+                if (isResultQueryEmpty($queryresult2)) { //Verifica se linha esta vazia
                     echo "<td colspan = '6' rowspan = '1'> Não há subitems especificados cujo tipo de valor seja enum. Especificar primeiro novo(s) item(s) e depois voltar a esta opção.</td>";
                     echo "</tr>";
                 } else { //Caso nao esteja vazio
@@ -101,7 +101,7 @@ else {
                     while ($rowTabela2 = mysqli_fetch_array($queryresult2, MYSQLI_NUM)) {
                         //Query: selcionar todos os atributos da tabela subitem_allowed_value; comparando com o subitem atual, ordenado por id
                         //Selecionar valores permitidos com o respetivo subitem! **a
-                        $queryNum = 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = ' . $rowTabela2[0] . ' ORDER BY subitem_allowed_value.id ASC ';
+                        $queryNum = 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = ' . $rowTabela2[0] . ' ORDER BY subitem_allowed_value.value ASC ';
                         $resultsQueryNum = mysql_searchquery($queryNum);//Executar a query
                         $rowCount = mysqli_num_rows($resultsQueryNum); //Quantos items associados a um tipo de item
 
@@ -130,6 +130,7 @@ else {
                         echo "<td rowspan ='" . $rowCount . "'><a href='" . $current_page . "?estado=introducao&subitem=" . $rowTabela2[0] . "'>" . $word . "</a></td>";
 
                         //Query **a
+                        /*
                         $querystring3 = 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = ' . $rowTabela2[0] . ' ORDER BY subitem_allowed_value.id ASC ';
                         $queryresult3 = mysql_searchquery($querystring3); //Executar query
                         $queryresult3dup = mysql_searchquery($querystring3); //Executar query duplicado
@@ -142,13 +143,13 @@ else {
                         {
                             $rowcount = 1;
                         }
-
-                        if (!$row) { //Verifica se está vazio
+                        */
+                        if (isResultQueryEmpty($resultsQueryNum)) { //Verifica se está vazio
                             echo "<td colspan = '4' rowspan = '1'>Não há valores permitidos definidos</td>";
                             echo "</tr>";
-                        } else { //Caso exista resultado
+                        } else {
                             //Caso exista resultado
-                            while ($rowTabela3 = mysqli_fetch_array($queryresult3, MYSQLI_NUM)) { //Implementação da tabela conforme pedido no enunciado
+                            while ($rowTabela3 = mysqli_fetch_array($resultsQueryNum, MYSQLI_NUM)) { //Implementação da tabela conforme pedido no enunciado
                                 echo "<td>" . $rowTabela3[0] . "</td>"; //id do subitem_allowed_value
                                 echo "<td>" . $rowTabela3[1] . "</td>"; //valor permitido
                                 echo "<td>" . $rowTabela3[2] . "</td>"; //Estado do subitem_allowed_value

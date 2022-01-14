@@ -8,8 +8,9 @@
 .mytable {
     border-collapse:separate !important;
     border:solid black 1px !important;
-    border-radius:5px !important;
+    border-radius:1px !important;
 }
+
 
 
 .mytable th {
@@ -31,6 +32,7 @@ tr:nth-child(even) {background: #CCC}
 {
     background-color: #FFF !important;
 }
+
 /*
 tr:nth-child(even) td:nth-last-child(1)
 {
@@ -47,7 +49,7 @@ tr:nth-child(even) td:nth-last-child(n)
 }
 tr:nth-child(odd) td:nth-last-child(n)
 {
-    background-color: blue;
+    background-color: red
 }
 
 tr:nth-child(even) td:nth-last-child(n)

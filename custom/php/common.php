@@ -27,9 +27,9 @@ function mysql_searchseveralquery($querystring)
 }
 
 //Dá como resultado true/false dependendo do resultado ser vazio ou não
-function isResultQueryEmpty($querystring)
+function isResultQueryEmpty($querytable)
 {
-    return !mysqli_fetch_array(mysql_searchquery($querystring), MYSQLI_NUM);
+    return mysqli_num_rows($querytable) == 0;
 }
 
 //Obter link a certo caminho da pagina
@@ -112,7 +112,7 @@ function listItemsAndItemTypes($url)
     echo '</ul>';
 }
 
-//Reutilização das colunas "ação" em componentes
+//Reutilização das colunas "ação" em componentes que tenham [editar] [(des)ativar]
 function colunaAcao($ifative, $id)
 {
     echo '<form method="GET" action="'.get_site_url().'/edicao-de-dados">';

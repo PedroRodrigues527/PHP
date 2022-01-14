@@ -133,9 +133,9 @@ else {
              ORDER BY name ASC';
         $query_child_result = mysql_searchquery($query_child_string);//Execução da query
 
-        if(isResultQueryEmpty($query_child_string)) { //Verifica se linha e consequentemente se tabela 'child' esta vazia
+        if(isResultQueryEmpty($query_child_result)) { //Verifica se tabela 'child' não tem registos
             echo "<p>Não há crianças</p>";
-        } else { //Linha não vazia, Tem tuplos
+        } else { //Tem tuplos
             //Preenchimento dos cabeçalhos
             echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
                <tbody>
@@ -187,35 +187,31 @@ else {
 
                     $query_subitem_result = mysql_searchquery($query_subitem_string);//Executar query
 
-                    if(!isResultQueryEmpty($query_subitem_string)) //Output da query não vazio
-                    {
-                        //Caso houver resultados da query
-                        while($rowTabelaSubitem = mysqli_fetch_array($query_subitem_result, MYSQLI_NUM)) {
-                            //Concatenua a string com informações dos subitens
-                            //subitem.nome [em negrito] ( value.value
-                            $resultValueString .= "<strong> " . $rowTabelaSubitem[0] . "</strong> (" . $rowTabelaSubitem[1];
+                    //Caso houver resultados da query
+                    while($rowTabelaSubitem = mysqli_fetch_array($query_subitem_result, MYSQLI_NUM)) {
+                        //Concatenua a string com informações dos subitens
+                        //subitem.nome [em negrito] ( value.value
+                        $resultValueString .= "<strong> " . $rowTabelaSubitem[0] . "</strong> (" . $rowTabelaSubitem[1];
 
-                            //Query: Ver tipo de unidade de subitem: cm,kg,...
-                            $query_subitemunitype_string = '
-                                SELECT subitem_unit_type.name, subitem_unit_type.id
-                                FROM subitem_unit_type, subitem
-                                WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.id = ' . $rowTabelaSubitem[2]; //subitem.id atual
-                            $query_subitemunitype_result = mysql_searchquery($query_subitemunitype_string);//Executar query
+                        //Query: Ver tipo de unidade de subitem: cm,kg,...
+                        $query_subitemunitype_string = '
+                            SELECT subitem_unit_type.name, subitem_unit_type.id
+                            FROM subitem_unit_type, subitem
+                            WHERE subitem_unit_type.id = subitem.unit_type_id AND subitem.id = ' . $rowTabelaSubitem[2]; //subitem.id atual
+                        $query_subitemunitype_result = mysql_searchquery($query_subitemunitype_string);//Executar query
 
-                            if(!isResultQueryEmpty($query_subitemunitype_string)) //Caso o output da query não seja vazio
-                            {
-                                //Percorrer array
-                                while($rowTabelaSubitemUnitType = mysqli_fetch_array($query_subitemunitype_result, MYSQLI_NUM)) {
-                                    //Adiciona à string o subitem_unit_type.name -> unidade
-                                    $resultValueString .= " " . $rowTabelaSubitemUnitType[0];
-                                }
-                            }
-                            $resultValueString .= "); "; //Fecha parenteses
+                        //Percorrer array
+                        while($rowTabelaSubitemUnitType = mysqli_fetch_array($query_subitemunitype_result, MYSQLI_NUM)) {
+                            //Adiciona à string o subitem_unit_type.name -> unidade
+                            $resultValueString .= " " . $rowTabelaSubitemUnitType[0];
                         }
-                        //Eliminha as duas ultimas posições para poder apagar a ultima virgula
-                        $resultValueString = substr_replace($resultValueString ,"", -2);
-                        $resultValueString .= "\n"; //Breakline
+
+                        $resultValueString .= "); "; //Fecha parenteses
                     }
+                    //Eliminha as duas ultimas posições para poder apagar a ultima virgula
+                    $resultValueString = substr_replace($resultValueString ,"", -2);
+                    $resultValueString .= "\n"; //Breakline
+
                 }
                 echo $resultValueString.'</form>';
                 //fecha linha
