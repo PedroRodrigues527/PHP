@@ -35,8 +35,13 @@ else {
             $noerrors = false;
         }
         //Verifica a inserção incorreta do formato pedido
-        else if (!preg_match('/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/', $_POST['dn_crianca'])) {
+        else if (!preg_match('/^\d{4}\-\d{2}\-\d{2}$/', $_POST['dn_crianca'])) {
             echo "<p>ERRO: O dado inserido no formulário da Data de nascimento foi inserida de forma incorreta (AAAA-MM-DD)!</p>";
+            $noerrors = false;
+        }
+        //Verifica a validação das datas inseridas
+        else if (!preg_match('/^(19|20)\d{2}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/', $_POST['dn_crianca'])) {
+            echo "<p>ERRO: O dado inserido no formulário da Data de nascimento contêm ano/mês/dia inexistente(s) ou impossível(is)!</p>";
             $noerrors = false;
         }
         //NOME COMPLETO DO ENC DE EDUCACAO
