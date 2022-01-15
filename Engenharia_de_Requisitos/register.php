@@ -96,9 +96,6 @@ if(empty($_REQUEST)){
 }else{
     if(preg_match('/^[a-zA-Z0-9_-]*$/',$_POST['username']) && preg_match('/^[a-zA-Z0-9_-]*$/',$_POST['password']) && filter_var($_POST['e-mail'], FILTER_VALIDATE_EMAIL)) //Inserção válida no formulário
     {
-        echo'<p>'.$_POST['username'] . ' - ' . $_POST['password'] . ' - ' . $_POST['e-mail']. '</p>';
-        //Ligação a base de dados;
-        $queryString = 'INSERT INTO user (username, password, email) VALUES ("'.$_POST['username'].'", "'.$_POST['password'].'", "'.$_POST['e-mail'].'");';
         $servername = "localhost";
         $username = "root";
         $password = "";
@@ -107,27 +104,41 @@ if(empty($_REQUEST)){
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
         }
-        $queryResult = mysqli_query($conn, $queryString);
-        mysqli_close($conn);
-        if($queryResult)
-        {
-            echo '<script>if(confirm("Foi registado com sucesso!")){
+
+        $queryStringUnique = 'SELECT id, name FROM user WHERE name ="'.$_POST['username'].'"';
+        $queryResult = mysqli_query($conn, $queryStringUnique);
+        if(mysqli_num_rows($queryResult) == 0) {
+            //Ligação a base de dados;
+            $queryString = 'INSERT INTO user (username, password, email) VALUES ("' . $_POST['username'] . '", "' . $_POST['password'] . '", "' . $_POST['e-mail'] . '");';
+            $queryResult = mysqli_query($conn, $queryString);
+            mysqli_close($conn);
+            if ($queryResult) {
+                echo '<script>if(confirm("Foi registado com sucesso!")){
                         window.location.replace("http://localhost/Engenharia_de_Requisitos/login.php");
               }
               else
                   {
                       window.location.replace("http://localhost/Engenharia_de_Requisitos/login.php");
                   }</script>';
-        }
-        else
-        {
-            echo '<script>if(confirm("Erro ao registar a conta!")){
+            } else {
+                echo '<script>if(confirm("Erro ao registar a conta!")){
                         window.location.replace("http://localhost/Engenharia_de_Requisitos/register.php");
               }
               else
                   {
                       window.location.replace("http://localhost/Engenharia_de_Requisitos/register.php");
                   }</script>';
+            }
+        }
+        else
+        {
+            echo '<script>if(confirm("O nome do usuário já foi usado. Por favor escolhe outro nome de usuário")){
+                window.location.replace("http://localhost/Engenharia_de_Requisitos/register.php");
+              }
+              else
+              {
+                window.location.replace("http://localhost/Engenharia_de_Requisitos/register.php");
+              }</script>';
         }
     }else{
 
