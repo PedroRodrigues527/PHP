@@ -48,11 +48,11 @@ else if(isset($_POST['preco'])){
                                 window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
                   }</script>';
             }else{
-                $datasub = mktime(0, 0, 0, date("m")  , date("d"), date("Y")+1);
-                $queryUpdate = 'UPDATE user SET is_pro = 1 AND data_pro = "'. $datasub .'" WHERE username ="'. $_SESSION['username'].'"';
+                $datasub = date("Y-m-d", strtotime("+1 year"));
+                $queryUpdate = 'UPDATE user SET is_pro = 1 , data_pro = "'. $datasub .'" WHERE username ="'. $_SESSION['username'].'"';
                 if(mysqli_query($conn, $queryUpdate)){
                         echo '<script>
-                                if(confirm("Pagamento com sucesso! Data de validade:' . $datasub .'")){
+                                if(confirm("Pagamento com sucesso! Data de validade: ' . $datasub .'")){
                                     window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
                               }
                               else{
