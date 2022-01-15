@@ -18,8 +18,52 @@ else if(isset($_POST['preco'])){
 
     $iduser = mysqli_fetch_array($queryResult);
     $queryString = 'SELECT * FROM credit_card WHERE number = "' . $_POST['card_num'] . '" AND month_val ="'.substr($_POST['validade'], 5).'" AND year_val = "'.substr($_POST['validade'], 0, -3).'" AND PIN ="' . $_POST['pin'] . '" AND user_id ="' . $iduser . '"';
+    $queryResult2 = mysqli_query($conn, $queryString);
+    if(mysqli_num_rows($queryResult2) > 0){
+        $rowCredit = mysqli_fetch_array($queryResult2);
+        if($rowCredit[6] < $_POST['preco']){
+            echo '<script>if(confirm("Saldo insuficiente!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+              }
+              else
+                  {
+                      window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+                  }</script>';
+        }
+        else{
+            $queryString = 'UPDATE credit_card SET saldo = saldo -"'. $_POST['preco'] .'" WHERE id = "'. $rowCredit[0] .'"';
+            if(!mysqli_query($conn, $queryString)){
+                echo '<script>if(confirm("Erro inesperado na ligação à base de dados!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+              }
+              else
+                  {
+                      window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+                  }</script>';
+            }else{
+                echo '<script>if(confirm("Pagamento com sucesso!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+              }
+              else
+                  {
+                      window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                  }</script>';
+            }
 
+        }
+
+
+    }else{
+        echo '<script>if(confirm("Dados de cartão de crédito inseridos estão inválidos!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+              }
+              else
+                  {
+                      window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+                  }</script>';
+    }
     mysqli_close($conn);
+
 
 }
 else{
