@@ -138,7 +138,7 @@ if(!empty($_SESSION)) {
     </body>
     </html>';
 }
-else
+else//teste
 {
     echo '<script>window.location.replace("http://localhost/Engenharia_de_Requisitos/index.html")</script>';
 }
