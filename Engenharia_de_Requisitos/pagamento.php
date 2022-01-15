@@ -1,7 +1,6 @@
 <?php
 session_start();
 if(!isset($_SESSION['username']) || empty($_SESSION['username']) && (!isset($_SESSION['paginaanterior']) || empty($_SESSION['paginaanterior']))){
-    //Ficheiro html
     echo '<script>window.location.replace("http://localhost/Engenharia_de_Requisitos/index.html)</script>';
 }
 else if(isset($_POST['preco'])){
@@ -16,8 +15,16 @@ else if(isset($_POST['preco'])){
     $queryCardUser = 'SELECT id FROM user WHERE username = "' . $_POST['username'] . '"';
     $queryResult = mysqli_query($conn, $queryCardUser);
 
-    $iduser = mysqli_fetch_array($queryResult);
-    $queryString = 'SELECT * FROM credit_card WHERE number = "' . $_POST['card_num'] . '" AND month_val ="'.substr($_POST['validade'], 5).'" AND year_val = "'.substr($_POST['validade'], 0, -3).'" AND PIN ="' . $_POST['pin'] . '" AND user_id ="' . $iduser . '"';
+    $mes = substr($_POST['validade'], 5);
+
+    if($mes < 10){
+        $mes = $mes % 10;
+    }
+
+
+    $iduser= mysqli_fetch_array($queryResult);
+    $queryString = 'SELECT * FROM credit_card WHERE number = "' . $_POST['card_num'] . '" AND month_val ="'.$mes.'" AND year_val = "'.substr($_POST['validade'], 0, -3).'" AND PIN ="' . $_POST['pin'] . '" AND user_id ="' . $iduser[0] . '"';
+    //echo $queryString;
     $queryResult2 = mysqli_query($conn, $queryString);
     if(mysqli_num_rows($queryResult2) > 0){
         $rowCredit = mysqli_fetch_array($queryResult2);
@@ -34,33 +41,34 @@ else if(isset($_POST['preco'])){
             $queryString = 'UPDATE credit_card SET saldo = saldo -"'. $_POST['preco'] .'" WHERE id = "'. $rowCredit[0] .'"';
             if(!mysqli_query($conn, $queryString)){
                 echo '<script>if(confirm("Erro inesperado na ligação à base de dados!")){
-                        window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-              }
-              else
-                  {
-                      window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
                   }</script>';
             }else{
-                echo '<script>if(confirm("Pagamento com sucesso!")){
-                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
-              }
-              else
-                  {
-                      window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
-                  }</script>';
+                $datasub = mktime(0, 0, 0, date("m")  , date("d"), date("Y")+1);
+                $queryUpdate = 'UPDATE user SET is_pro = 1 AND data_pro = "'. $datasub .'" WHERE username ="'. $_SESSION['username'].'"';
+                if(mysqli_query($conn, $queryUpdate)){
+                        echo '<script>
+                                if(confirm("Pagamento com sucesso! Data de validade:' . $datasub .'")){
+                                    window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                              }
+                              else{
+                                    window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                                  }</script>';
+                }
             }
-
         }
 
-
     }else{
-        echo '<script>if(confirm("Dados de cartão de crédito inseridos estão inválidos!")){
-                        window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-              }
-              else
-                  {
-                      window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-                  }</script>';
+        echo '<script>
+                        if(confirm("Dados de cartão de crédito inseridos estão inválidos!")){
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+                        }else{
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
+                        }</script>';
     }
     mysqli_close($conn);
 

@@ -84,7 +84,7 @@ if(!empty($_SESSION)) {
                     </div>
                 </form>
                 <br>
-                <form action="pagamento.php" method="post">
+                <form action="validate_sub.php" method="post">
                     <input type="hidden" name="username" value="'.$_SESSION['username'].'">
                     <input type="hidden" name="paginaanterior" value="subscricaoanual">
                     <div class="btn-login">
