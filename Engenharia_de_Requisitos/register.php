@@ -41,11 +41,15 @@ if(empty($_REQUEST)){
     
                 <div class="inputBox">
                     <label><b>Username: </b></label>
-                    <input type="text" placeholder="Enter Username" name="username" required>
+                    <input type="text" placeholder="Enter Username" name="username" maxlength="16" required>
                     <br> <br>
     
                     <label><b>Password: </b></label>
-                    <input type="password" placeholder="Enter Password" name="password" required>
+                    <input type="password" placeholder="Enter Password" id="password" name="password" maxlength="16" required>
+                    <br><br>
+                    
+                    <label><b>Confirmar Password: </b></label>
+                    <input type="password" placeholder="Confirm Password" id="confirmpassword" name="confirmpassword" maxlength="16" onchange="check_pass();" required>
                     <br><br>
     
                     <label><b>Email:     </b></label>
@@ -53,7 +57,17 @@ if(empty($_REQUEST)){
                     <br><br>
     
                     <div class="btn-login">
-                        <button type="submit">Register</button>
+                        <button id="submit" type="submit" >Register</button>
+                        <script>
+                        function check_pass() {
+                            if (document.getElementById("password").value ==
+                                    document.getElementById("confirmpassword").value) {
+                                confirm.setCustomValidity();
+                            } else {
+                                confirm.setCustomValidity("Passwords do not match");
+                            }
+                        }
+                        </script>
                     </div>
                 </div>
     

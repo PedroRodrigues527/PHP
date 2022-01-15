@@ -54,7 +54,45 @@ if(!empty($_SESSION)) {
     
             </form>
             -->
-            <h2 >Bem-vindo '.$_SESSION['username'].'!</h2>
+            <h2>Bem-vindo '.$_SESSION['username'].'!</h2>
+            <br><br>
+            <!-- para inserir links de outros ficheiros.php do menu principal -->
+            <div class="inputBox">
+                
+                <form action="fazer-reserva.php" method="post">
+                    <input type="hidden" name="username" value="'.$_SESSION['username'].'">
+                    <div class="btn-login">
+                        <button type="submit">Fazer Reserva</button>
+                    </div>
+                </form>
+                <form action="listar-reserva.php" method="post">
+                    <input type="hidden" name="username" value="'.$_SESSION['username'].'">
+                    <div class="btn-login">
+                        <button type="submit">Listar Reserva</button>
+                    </div>
+                </form>
+                <form action="modificar-reserva.php" method="post">
+                    <input type="hidden" name="username" value="'.$_SESSION['username'].'">
+                    <div class="btn-login">
+                        <button type="submit">Modificar Reserva</button>
+                    </div>
+                </form>
+                <form action="cancelar-reserva.php" method="post">
+                    <input type="hidden" name="username" value="'.$_SESSION['username'].'">
+                    <div class="btn-login">
+                        <button type="submit">Cancelar Reserva</button>
+                    </div>
+                </form>
+                <br>
+                <form action="pagamento.php" method="post">
+                    <input type="hidden" name="username" value="'.$_SESSION['username'].'">
+                    <input type="hidden" name="paginaanterior" value="subscricaoanual">
+                    <div class="btn-login">
+                        <button type="submit">Subscrição Anual</button>
+                    </div>
+                </form>
+                
+            </div>
     
         </div>
     </section>
