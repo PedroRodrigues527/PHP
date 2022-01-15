@@ -223,12 +223,25 @@ else {
             if(($value == "" || ctype_space($value)) && $key != 'unit_type_id')
             {
                 $isEmpty = true;
+                break;
+            }
+            if ($_POST['nometabela'] == 'value' && $key != 'nometabela' && $key != 'estado') {
+                $queryResultVerifyIntDouble = mysql_searchquery('SELECT value_type FROM subitem WHERE form_field_name = "' . $key . '"');
+                $rowIntDouble = mysqli_fetch_array($queryResultVerifyIntDouble);
+                if ($rowIntDouble[0] == 'int' || $rowIntDouble[0] == 'double') {
+                    if (!preg_match('/^[0-9]+$/', $value) && $rowIntDouble[0] == 'int') {
+                        $isEmpty = true;
+                        break;
+                    } else if ($rowIntDouble[0] == 'double' && !(preg_match('/^[0-9]+.[0-9]+$/', $value) || preg_match('/^[0-9]+$/', $value))) {
+                        $isEmpty = true;
+                        break;
+                    }
+                }
             }
         }
         if(!$isEmpty) {
             $queryUpdate = 'UPDATE ' . $_POST['nometabela'] . ' SET ';
             if ($_POST['nometabela'] != 'value') {
-                $queryUpdate = 'UPDATE ' . $_POST['nometabela'] . ' SET ';
                 foreach ($_POST as $key => $value) {
                     if ($key != 'nometabela' && $key != 'estado') {
                         $length = strlen($_POST['nometabela']);
@@ -271,7 +284,7 @@ else {
         }
         else
         {
-            echo "<p>Todos os dados do formulário devem ser preenchidos obrigatoriamente.</p>";
+            echo "<p>Todos os dados obrigatórios do formulário devem ser preenchidos e/ou os dados inseridos não foram corretamente inseridos (exemplo: inserir uma letra no campo onde só aceita números).</p>";
         }
         go_back_button();
 
