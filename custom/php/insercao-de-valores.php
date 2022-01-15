@@ -127,7 +127,7 @@ else {
     }
     else if ($_REQUEST["estado"] == "validar") {
         echo "<h3>Inserção de valores - " . $_SESSION['item_name'] . " - validar</h3>";
-        //HÁ UM ERRO NA DETEÇÃO/VERIFICAÇÃO DOS DADOS INSERIDOS DO TIPO RADIO, CHECKBOX E SELECTBOX!!
+        
         $SubItemFormName = NULL;
         foreach ($_POST as $key => $value) {
             if($value == "" || ctype_space($value))
@@ -135,13 +135,28 @@ else {
                 $SubItemFormName = $key;
                 break;
             }
+            $queryResultVerifyIntDouble = mysql_searchquery('SELECT value_type FROM subitem WHERE form_field_name = "'.$key.'"');
+            $rowIntDouble = mysqli_fetch_array($queryResultVerifyIntDouble);
+            if($rowIntDouble[0] == 'int' || $rowIntDouble[0] == 'double')
+            {
+                if(!preg_match('/^[0-9]+$/',$value) && $rowIntDouble[0] == 'int')
+                {
+                    $SubItemFormName = $key;
+                    break;
+                }
+                else if($rowIntDouble[0] == 'double' && !(preg_match('/^[0-9]+.[0-9]+$/',$value) || preg_match('/^[0-9]+$/',$value) ))
+                {
+                    $SubItemFormName = $key;
+                    break;
+                }
+            }
         }
         if($SubItemFormName != NULL)
         {
             $queryStringSubitemName = 'SELECT name FROM subitem WHERE form_field_name = "'.$SubItemFormName.'"';
             $queryResultSubitemName = mysql_searchquery($queryStringSubitemName);
             $rowSubitemName = mysqli_fetch_array($queryResultSubitemName, MYSQLI_NUM);
-            echo "<p>ERRO: Há um formulário no campo do subitem " . $rowSubitemName[0] . " que ainda não foi preenchido!</p>";
+            echo "<p>ERRO: Há um formulário no campo do subitem " . $rowSubitemName[0] . " que ainda não foi preenchido ou foi incorretamente preenchido (por exemplo, inserir letras num subitem do tipo inteiro/double)!</p>";
             go_back_button();
         }
         else
