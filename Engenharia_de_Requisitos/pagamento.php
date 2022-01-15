@@ -70,7 +70,7 @@ else if(isset($_POST['preco'])){
                                 window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
                         }</script>';
     }
-    mysqli_close($conn);//teste
+    mysqli_close($conn);//te
 
 
 }

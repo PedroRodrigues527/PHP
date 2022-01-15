@@ -6,7 +6,7 @@ if(empty($_POST)){
 }
 else{
     $_SESSION['paginaanterior'] = $_POST['paginaanterior'];
-    //teste
+    //tes
     echo '<script>window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php")</script>';
 }
 
