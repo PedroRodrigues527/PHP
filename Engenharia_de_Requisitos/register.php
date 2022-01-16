@@ -88,7 +88,7 @@ if(empty($_REQUEST)){
             <i class="fa fa-instagram"></i>
             <!--<i class="fa fa-linkedin"></i>-->
         </div>
-        <p>Made by Grupo 1 de ER</p>
+        <p>Feito por Grupo 1 de Engenharia de Requisitos (2021/2022)</p>
     </section>
     
     </body>
