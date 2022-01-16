@@ -59,9 +59,9 @@ if(!empty($_SESSION)) {
                 <!-- para inserir links de outros ficheiros.php do menu principal -->
                 <div class="inputBox">
                     
-                    <form action="" method="post">
+                    <form action="pagamento.php" method="post">
                     <label><b>Posto e número de bicicleta: </b></label>
-                    <select name="bikes" id="bikes">
+                    <select name="bikeid" id="bikes">
                     ';
         //Conexão à BD
         $servername = "localhost";
@@ -88,13 +88,13 @@ if(!empty($_SESSION)) {
                     
                     <label><b>Duração da Reserva: </b></label>
                     <select name="duracao" id="duracao">
-                        <option value="1hora">1 hora</option>
-                        <option value="2hora">2 horas</option>
-                        <option value="3hora">3 horas</option>
-                        <option value="4hora">4 horas</option>
+                        <option value="+1 hour">1 hora</option>
+                        <option value="+2 hour">2 horas</option>
+                        <option value="+3 hour">3 horas</option>
+                        <option value="+4 hour">4 horas</option>
                     </select>
                     <br><br>
-                    
+                    <input type="hidden" name="paginaanterior" value="Nova Reserva">
                     <div class="btn-login">
                         <button type="submit">Inserir reserva</button>
                     </div>
