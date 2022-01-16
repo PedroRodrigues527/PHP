@@ -74,11 +74,11 @@ else if(isset($_POST['preco'])){
                     else
                     {
                         echo '<script>if(confirm("Erro na inserção da reserva!")){
-                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/fazer-reserva.php");
                       }
                       else
                           {
-                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/fazer-reserva.php");
                           }</script>';
                     }
                 }
