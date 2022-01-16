@@ -70,7 +70,7 @@ if(!empty($_SESSION)){ //User autorizado
                 </tr>
               <thead>
               <tbody>';
-        while($resultReserve = mysqli_fetch_array($queryReservList)){
+        while($resultReserve = mysqli_fetch_array($queryResult)){
             $querylocalList = 'SELECT location FROM bicycle WHERE  id ="'. $resultReserve[4] .'"';
             $queryResultLocal = mysqli_query($conn, $querylocalList);
             $local = mysqli_fetch_array($queryResultLocal);
