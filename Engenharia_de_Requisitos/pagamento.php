@@ -249,27 +249,27 @@ else{
                     <br>
             
                     <form action="" method="post">
-                        <label><b>Número do cartão: </b></label>
-                        <input type="text" inputmode="numeric" placeholder="Número cartão crédito" name="card_num" maxlength="16" required>
-                        <br> <br>
-            
-                        <label><b>Validade: </b></label>
-                        <input id="month" type="month" name="validade" required>
-                        <br> <br>
-            
-                        <label><b>PIN: </b></label>
-                        <input type="password" inputmode="numeric" minlength="4" maxlength="4" placeholder="PIN" name="pin" required>
-                        <br><br>
-            
-                        <input type="hidden" value="'.$preco .'" name="preco">
-                        <input type="hidden" value="'.$_POST['paginaanterior'].'" name="paginaanterior">
-            
-                        <div class="btn-login">
-                            <button type="submit">Pagar</button>
+                        <div class="input-form">
+                            <label><b>Número do cartão: </b></label>
+                            <input type="text" inputmode="numeric" placeholder="Número cartão crédito" name="card_num" maxlength="16" required>
+                            <br> <br>
+                
+                            <label><b>PIN: </b></label>
+                            <input type="password" inputmode="numeric" minlength="4" maxlength="4" placeholder="PIN" name="pin" required>
+                            <br><br>
+                            
+                            <label><b>Validade: </b></label>
+                            <input id="month" type="month" name="validade" style="width: 25%;" required>
+                            <br> <br>
                         </div>
-            
+                            
+                            <input type="hidden" value="'.$preco .'" name="preco">
+                            <input type="hidden" value="'.$_POST['paginaanterior'].'" name="paginaanterior">
+                
+                            <div class="btn-login">
+                                <button type="submit">Pagar</button>
+                            </div>
                     </form>
-           
                 </div>
             </section>
             

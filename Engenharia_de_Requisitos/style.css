@@ -267,6 +267,17 @@ nav .fa{
 	box-sizing: border-box;
 }
 
+.input-form{
+	margin-bottom: 10px;
+}
+.input-form label {
+	display: inline-block;
+	width: 150px;
+	text-align: right;
+}
+
+
+
 /* to all .course-col information */
 .row{
 	margin-top: 5%;
