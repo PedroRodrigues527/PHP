@@ -27,7 +27,7 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
                 <i class="fa fa-window-close"></i>
                 <ul>
                     <!-- <li> <a href="#">HOME</a></li> -->
-                    <li> <a href="index.html">LOGOUT</a></li>
+                    <li> <a href="remover_sessao.php">LOGOUT</a></li>
                     <li> <a href="">AJUDA</a></li>
                 </ul>
             </div>
