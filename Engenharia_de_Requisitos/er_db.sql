@@ -35,33 +35,53 @@ CREATE TABLE IF NOT EXISTS `bicycle` (
   `state` tinyint(4) NOT NULL,
   `location` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `bicycle`
 --
 
 INSERT INTO `bicycle` (`id`, `state`, `location`) VALUES
-(1, 1, 'Edifício 2000'),
-(2, 1, 'Mercado dos Lavradores'),
-(3, 1, 'Universidade Madeira'),
-(4, 1, 'Avenida do Mar'),
+(1, 1, 'Avenida do Mar'),
+(2, 1, 'Avenida do Mar'),
+(3, 1, 'Avenida do Mar'),
+(4, 0, 'Avenida do Mar'),
 (5, 1, 'Edifício 2000'),
-(6, 1, 'Mercado dos Lavradores'),
-(7, 1, 'Universidade Madeira'),
-(8, 1, 'Avenida do Mar'),
-(9, 1, 'Edifício 2000'),
-(10, 1, 'Mercado dos Lavradores'),
-(11, 1, 'Universidade Madeira'),
-(12, 1, 'Avenida do Mar'),
-(13, 1, 'Edifício 2000'),
-(14, 1, 'Mercado dos Lavradores'),
-(15, 1, 'Universidade Madeira'),
-(16, 1, 'Avenida do Mar'),
-(17, 0, 'Edifício 2000'),
-(18, 0, 'Mercado dos Lavradores'),
-(19, 0, 'Universidade Madeira'),
-(20, 0, 'Avenida do Mar');
+(6, 1, 'Edifício 2000'),
+(7, 0, 'Edifício 2000'),
+(8, 1, 'Edifício 2000'),
+(9, 1, 'Avenida das Madalenas'),
+(10, 1, 'Avenida das Madalenas'),
+(11, 0, 'Avenida das Madalenas'),
+(12, 1, 'Avenida das Madalenas'),
+(13, 1, 'Universidade da Madeira'),
+(14, 1, 'Universidade da Madeira'),
+(15, 1, 'Universidade da Madeira'),
+(16, 1, 'Universidade da Madeira'),
+(17, 0, 'Mercado dos Lavradores'),
+(18, 1, 'Mercado dos Lavradores'),
+(19, 1, 'Mercado dos Lavradores'),
+(20, 1, 'Mercado dos Lavradores'),
+(21, 1, 'Centro Comercial Fórum Madeira'),
+(22, 1, 'Centro Comercial Fórum Madeira'),
+(23, 1, 'Centro Comercial Fórum Madeira'),
+(24, 1, 'Centro Comercial Fórum Madeira'),
+(25, 1, 'Centro Comercial Madeira Shopping'),
+(26, 0, 'Centro Comercial Madeira Shopping'),
+(27, 1, 'Centro Comercial Madeira Shopping'),
+(28, 1, 'Centro Comercial Madeira Shopping'),
+(29, 1, 'Centro Comercial Marina Shopping'),
+(30, 1, 'Centro Comercial Marina Shopping'),
+(31, 1, 'Centro Comercial Marina Shopping'),
+(32, 1, 'Centro Comercial Marina Shopping'),
+(33, 1, 'Miradouro das Neves'),
+(34, 0, 'Miradouro das Neves'),
+(35, 1, 'Miradouro das Neves'),
+(36, 1, 'Miradouro das Neves'),
+(37, 0, 'Monte'),
+(38, 1, 'Monte'),
+(39, 1, 'Monte'),
+(40, 0, 'Monte');
 
 -- --------------------------------------------------------
 
@@ -80,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `credit_card` (
   `saldo` decimal(20,2) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_credit_card_user_idx` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `credit_card`
@@ -88,9 +108,10 @@ CREATE TABLE IF NOT EXISTS `credit_card` (
 
 INSERT INTO `credit_card` (`id`, `number`, `month_val`, `year_val`, `PIN`, `user_id`, `saldo`) VALUES
 (1, 1, 11, 2032, 1234, 1, '900.01'),
-(2, 2, 10, 2026, 1234, 3, '999.99'),
-(3, 3, 9, 2028, 1234, 2, '853.09'),
-(4, 4, 11, 2030, 1234, 1, '1.00');
+(2, 3, 9, 2028, 1234, 2, '400.00'),
+(3, 2, 10, 2026, 1234, 3, '999.99'),
+(4, 4, 11, 2030, 1234, 1, '10.00'),
+(5, 5, 2, 2023, 1234, 5, '10.00');
 
 -- --------------------------------------------------------
 
@@ -108,19 +129,21 @@ CREATE TABLE IF NOT EXISTS `reserve` (
   PRIMARY KEY (`id`),
   KEY `fk_reserve_user1_idx` (`user_id`),
   KEY `fk_reserve_bicycle1_idx` (`bicycle_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `reserve`
 --
 
 INSERT INTO `reserve` (`id`, `inicial_date`, `end_date`, `user_id`, `bicycle_id`) VALUES
-(3, '2022-01-27 14:01:00', '2022-01-27 00:00:00', 2, 9),
-(4, '2022-01-29 12:12:00', '2022-01-29 00:00:00', 2, 11),
-(5, '2022-01-29 12:13:00', '2022-01-29 00:00:00', 2, 1),
-(6, '2022-01-31 12:29:00', '2022-01-31 13:29:00', 2, 3),
+(1, '2022-01-31 12:29:00', '2022-01-31 13:29:00', 2, 3),
+(2, '2022-01-31 20:29:00', '2022-01-31 22:29:00', 2, 21),
+(3, '2022-01-27 11:45:00', '2022-01-27 14:45:00', 2, 18),
+(4, '2022-01-25 16:18:00', '2022-01-25 18:18:00', 2, 9),
+(5, '2022-01-17 14:59:00', '2022-01-17 16:59:00', 2, 35),
+(6, '2022-01-17 18:26:00', '2022-01-17 20:26:00', 2, 5),
 (7, '2022-01-28 15:06:00', '2022-01-28 16:06:00', 4, 1),
-(10, '2022-01-16 18:19:00', '2022-01-16 19:19:00', 1, 4);
+(8, '2022-01-17 18:19:00', '2022-01-17 19:19:00', 1, 4);
 
 -- --------------------------------------------------------
 
@@ -137,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `is_pro` tinyint(4) NOT NULL,
   `data_pro` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `user`
@@ -148,8 +171,8 @@ INSERT INTO `user` (`id`, `username`, `password`, `email`, `is_pro`, `data_pro`)
 (2, 'abacate', '1234', 'email2@gmail.com', 0, NULL),
 (3, 'diogo', '123', 'email3@gmail.com', 0, NULL),
 (4, 'subsc', 'pass', 'email7@gmail.com', 1, '2023-01-15'),
-(10, 'outrouser', 'pass', 'outroemail@hotmail.com', 0, NULL),
-(11, 'userrr', 'dasd', 'asdas@gmail.com', 0, NULL);
+(5, 'outrouser', 'pass', 'outroemail@hotmail.com', 0, NULL),
+(6, 'userrr', 'dasd', 'asdas@gmail.com', 0, NULL);
 
 --
 -- Restrições para despejos de tabelas
