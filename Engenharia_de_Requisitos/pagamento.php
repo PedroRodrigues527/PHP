@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['username']) || empty($_SESSION['username']) && (!isset($_SESSION['paginaanterior']) || empty($_SESSION['paginaanterior']))){
+if(!isset($_SESSION['username']) || empty($_SESSION['username']) && (!isset($_POST['paginaanterior']) || empty($_POST['paginaanterior']))){
     echo '<script>window.location.replace("http://localhost/Engenharia_de_Requisitos/index.html)</script>';
 }
 else if(isset($_POST['preco'])){
@@ -77,7 +77,7 @@ else if(isset($_POST['preco'])){
 else{
     //Conectar BD
     $acederPag = 0;
-    if($_SESSION['paginaanterior'] == 'subscricaoanual') {
+    if($_POST['paginaanterior'] == 'Subscrição Anual') {
         $queryString = 'SELECT is_pro, data_pro FROM user WHERE username = "' . $_SESSION['username'] . '"';
         $servername = "localhost";
         $username = "root";
@@ -107,7 +107,7 @@ else{
             }
         }
     }
-    else if ($_SESSION['paginaanterior'] == 'reserva'){
+    else if ($_POST['paginaanterior'] == 'reserva'){
         //Reserva - pagamento
     }
     else if(false){ //Cancelamento reservar
@@ -141,7 +141,7 @@ else{
             <section class= "header">
                 </div>
                 <nav>
-                    <a href="index.html"><img src="img/logo.png" style="width:140px; height:100px;"></a>
+                    <img src="img/logo.png" style="width:140px; height:100px;">
                     <div class="nav-links" id="navLinks">
                         <i class="fa fa-window-close"></i>
                         <ul>
@@ -159,8 +159,8 @@ else{
             <section class="course" id="course">
                 <div class="input-box" >
             
-                    <p id="desc">Descrição pagamento:'.$_SESSION['paginaanterior'].' </p>
-                    <p id="val">Valor:'. $preco.' </p>
+                    <p id="desc">Descrição pagamento: '.$_POST['paginaanterior'].' </p>
+                    <p id="val">Valor: '. $preco.' &#128;</p>
                     <br>
             
                     <form action="" method="post">

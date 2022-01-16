@@ -22,7 +22,7 @@ if(!empty($_SESSION)) {
     <section class= "header">
         </div>
         <nav>
-            <a href="index.html"><img src="img/logo.png" style="width:140px; height:100px;"></a>
+            <img src="img/logo.png" style="width:140px; height:100px;">
             <div class="nav-links" id="navLinks">
                 <i class="fa fa-window-close"></i>
                 <ul>
@@ -60,33 +60,28 @@ if(!empty($_SESSION)) {
             <div class="inputBox">
                 
                 <form action="fazer-reserva.php" method="post">
-                    <input type="hidden" name="username" value="'.$_SESSION['username'].'">
                     <div class="btn-login">
                         <button type="submit">Fazer Reserva</button>
                     </div>
                 </form>
                 <form action="listar-reserva.php" method="post">
-                    <input type="hidden" name="username" value="'.$_SESSION['username'].'">
                     <div class="btn-login">
                         <button type="submit">Listar Reserva</button>
                     </div>
                 </form>
                 <form action="modificar-reserva.php" method="post">
-                    <input type="hidden" name="username" value="'.$_SESSION['username'].'">
                     <div class="btn-login">
                         <button type="submit">Modificar Reserva</button>
                     </div>
                 </form>
                 <form action="cancelar-reserva.php" method="post">
-                    <input type="hidden" name="username" value="'.$_SESSION['username'].'">
                     <div class="btn-login">
                         <button type="submit">Cancelar Reserva</button>
                     </div>
                 </form>
                 <br>
-                <form action="validate_sub.php" method="post">
-                    <input type="hidden" name="username" value="'.$_SESSION['username'].'">
-                    <input type="hidden" name="paginaanterior" value="subscricaoanual">
+                <form action="pagamento.php" method="post">
+                    <input type="hidden" name="paginaanterior" value="Subscrição Anual">
                     <div class="btn-login">
                         <button type="submit">Subscrição Anual</button>
                     </div>
