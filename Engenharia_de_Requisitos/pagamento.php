@@ -13,7 +13,7 @@ else if(isset($_POST['preco'])){
         die("Connection failed: " . mysqli_connect_error());
     }
 
-    $queryCardUser = 'SELECT id FROM user WHERE username = "' . $_POST['username'] . '"';
+    $queryCardUser = 'SELECT id FROM user WHERE username = "' . $_SESSION['username'] . '"';
     $queryResult = mysqli_query($conn, $queryCardUser);
 
     $mes = substr($_POST['validade'], 5);
@@ -57,8 +57,10 @@ else if(isset($_POST['preco'])){
                     }
                 }
                 else if($_POST['paginaanterior'] == 'Nova Reserva') {
+                    $endDate = strtotime($_SESSION['duracao'],strtotime($_SESSION['timebeg']));
                     $queryStringReserva = 'INSERT INTO reserve (inicial_date, end_date, user_id, bicycle_id) 
-                                        VALUES ("'.$_SESSION['timebeg'].'","'.date($_SESSION['timebeg'],strtotime($_SESSION['duracao'])).'","'.$iduser[0].'","'.$_SESSION['bikeid'].'")';
+                                        VALUES ("'.$_SESSION['timebeg'].'","'.date("Y-m-d H:i",$endDate).'","'.$iduser[0].'","'.$_SESSION['bikeid'].'")';
+
                     if(mysqli_query($conn,$queryStringReserva)) {
                         echo '<script>if(confirm("A reserva foi inserida com sucesso!")){
                         window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
@@ -68,6 +70,7 @@ else if(isset($_POST['preco'])){
                                 window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
                           }</script>';
                     }
+
                     else
                     {
                         echo '<script>if(confirm("Erro na inserção da reserva!")){
@@ -78,6 +81,7 @@ else if(isset($_POST['preco'])){
                                 window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
                           }</script>';
                     }
+
                 }
             }
         }
@@ -149,8 +153,9 @@ else{
                 //INSERIR RESERVA
                 $queryIdUser = mysqli_query($conn,'SELECT id FROM user WHERE username = "'.$_SESSION['username'].'"');
                 $UserID = mysqli_fetch_array($queryIdUser);
+                $endDate = strtotime($_SESSION['duracao'],strtotime($_SESSION['timebeg']));
                 $queryStringReserva = 'INSERT INTO reserve (inicial_date, end_date, user_id, bicycle_id) 
-                                        VALUES ("'.$_POST['timebeg'].'","'.date($_POST['timebeg'],strtotime($_POST['duracao'])).'","'.$UserID[0].'","'.$_POST['bikeid'].'")';
+                                        VALUES ("'.$_SESSION['timebeg'].'","'.date("Y-m-d H:i",$endDate).'","'.$UserID[0].'","'.$_SESSION['bikeid'].'")';
                 if(mysqli_query($conn,$queryStringReserva)) {
                     echo '<script>if(confirm("Ja possui subscrição anual, logo a reserva foi inserida com sucesso!")){
                         window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
@@ -190,13 +195,13 @@ else{
             $_SESSION['timebeg'] = $_POST['timebeg'];
             $_SESSION['duracao'] = $_POST['duracao'];
             $_SESSION['bikeid'] = $_POST['bikeid'];
-            if ($_POST['duracao'] == '+1 hour') {
+            if ($_POST['duracao'] == '+1 hours') {
                 $preco = 4.99;
-            } else if ($_POST['duracao'] == '+2 hour') {
+            } else if ($_POST['duracao'] == '+2 hours') {
                 $preco = 8.99;
-            } else if ($_POST['duracao'] == '+3 hour') {
+            } else if ($_POST['duracao'] == '+3 hours') {
                 $preco = 22.99;
-            } else if ($_POST['duracao'] == '+4 hour') {
+            } else if ($_POST['duracao'] == '+4 hours') {
                 $preco = 39.99;
             }
         }

@@ -88,10 +88,10 @@ if(!empty($_SESSION)) {
                     
                     <label><b>Duração da Reserva: </b></label>
                     <select name="duracao" id="duracao">
-                        <option value="+1 hour">1 hora</option>
-                        <option value="+2 hour">2 horas</option>
-                        <option value="+3 hour">3 horas</option>
-                        <option value="+4 hour">4 horas</option>
+                        <option value="+1 hours">1 hora</option>
+                        <option value="+2 hours">2 horas</option>
+                        <option value="+3 hours">3 horas</option>
+                        <option value="+4 hours">4 horas</option>
                     </select>
                     <br><br>
                     <input type="hidden" name="paginaanterior" value="Nova Reserva">
