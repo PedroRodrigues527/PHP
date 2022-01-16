@@ -222,8 +222,8 @@ else{
         $date2=date_create($rowReserva[1]);
 
         $interval = date_diff($date1, $date2);
-        $interval->format('%a days');
-        if($interval == '1 days' || $interval == '0 days')
+        //$interval->format('%a days');
+        if($interval->format('%a days') == '1 days' || $interval->format('%a days') == '0 days')
         {
             //pagar taxa extra 5 euros
             $acederPag = 3;
