@@ -59,7 +59,7 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
         echo '<p>Não tem registo de reservas pendentes</p>';
     }else{
         //Criar tabela
-        echo '<form method="POST" action="" name="cancelform"></form>
+        echo '<form method="POST" action="pagamento.php" name="cancelform"></form>
               <table>
               <thead>
                 <tr>
@@ -82,7 +82,7 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
             echo'<td>' . $local[0] . '</td>'; //localidade
             echo'<td>' . $resultReserve[1] . '</td>';
             echo'<td>' . $resultReserve[2] . '</td>';
-            echo'<td><input type="hidden" name="reservaid" value="'.$resultReserve[0].'" form="cancelform" /><button type="submit" form="cancelform">Cancelar</button></td>';
+            echo'<td><input type="hidden" name="reservaid" value="'.$resultReserve[0].'" form="cancelform" /><input type="hidden" name="paginaanterior" value="Cancelamento da Reserva" form="cancelform" /><button type="submit" form="cancelform">Cancelar</button></td>';
             echo'</tr>';
         }
         echo '</tbody>';

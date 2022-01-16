@@ -105,7 +105,7 @@ if(empty($_REQUEST)){
             die("Connection failed: " . mysqli_connect_error());
         }
 
-        $queryStringUnique = 'SELECT id, name FROM user WHERE name ="'.$_POST['username'].'"';
+        $queryStringUnique = 'SELECT id, username FROM user WHERE username ="'.$_POST['username'].'"';
         $queryResult = mysqli_query($conn, $queryStringUnique);
         if(mysqli_num_rows($queryResult) == 0) {
             //Ligação a base de dados;
