@@ -36,7 +36,10 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
             
             <!-- Course -->
             <section class="course" id="course">
-                <div class="input-box" >';
+                <div class="input-box" >
+                
+                <h2>Listar Reservas</h2>
+                <br><br>';
 
     $servername = "localhost";
     $username = "root";
