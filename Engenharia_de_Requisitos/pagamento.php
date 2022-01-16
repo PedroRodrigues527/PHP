@@ -109,7 +109,7 @@ else{
             die("Connection failed: " . mysqli_connect_error());
         }
         $queryResult = mysqli_query($conn, $queryString);
-        mysqli_close($conn);
+
         //query para verificar sub anual
         if (mysqli_num_rows($queryResult) > 0) {
             $row = mysqli_fetch_array($queryResult);
@@ -118,7 +118,11 @@ else{
                 $acederPag = 1;
             } else {
                 //Tem sub
-                echo '<script>if(confirm("Ainda possui subscrição anual!")){
+                $querySubData = 'SELECT data_pro FROM user WHERE username ="'. $_SESSION['username'] .'"';
+                $resultSubData = mysqli_query($conn, $querySubData);
+                $SubData = mysqli_fetch_array($resultSubData);
+
+                echo '<script>if(confirm("Ainda possui subscrição anual até '.$SubData[0].'")){
                         window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
               }
               else
@@ -127,6 +131,7 @@ else{
                   }</script>';
             }
         }
+        mysqli_close($conn);
     }
     else if ($_POST['paginaanterior'] == 'Nova Reserva'){
         //Reserva - pagamento
