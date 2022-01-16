@@ -85,11 +85,11 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
             echo'<td>' . $local[0] . '</td>'; //localidade
             echo'<td>' . $resultReserve[1] . '</td>';
             echo'<td>' . $resultReserve[2] . '</td>';
-            echo'<td>
+            echo'<td style="text-align: center">
                  <form method="POST" action="pagamento.php">
                  <input type="hidden" name="reservaid" value="'.$resultReserve[0].'"/>
                  <input type="hidden" name="paginaanterior" value="Cancelamento da Reserva"/>
-                 <button type="submit">Cancelar</button></form></td>';
+                 <button type="submit" style="padding-right: 55px; padding-left: 5px;">Cancelar</button></form></td>';
             echo'</tr>';
         }
         echo '</tbody>';
@@ -97,6 +97,8 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
     }
     echo '</div>
             </section>
+            <br><br>
+            <p style="text-align: center">Aviso: O cancelamento de uma reserva que possui menos de 24 horas para ser utilizada, implica uma taxa de valor de 5€</p>
             
             <!--Footer -->
             <section class="footer">
