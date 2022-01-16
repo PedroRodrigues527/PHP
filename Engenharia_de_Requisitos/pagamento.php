@@ -126,9 +126,9 @@ else{
                 //INSERIR RESERVA
                 $queryIdUser = mysqli_query($conn,'SELECT id FROM user WHERE username = "'.$_SESSION['username'].'"');
                 $UserID = mysqli_fetch_array($queryIdUser);
-                $endDate = strtotime($_SESSION['duracao'],strtotime($_SESSION['timebeg']));
+                $endDate = strtotime($_POST['duracao'],strtotime($_POST['timebeg']));
                 $queryStringReserva = 'INSERT INTO reserve (inicial_date, end_date, user_id, bicycle_id) 
-                                        VALUES ("'.$_SESSION['timebeg'].'","'.date("Y-m-d H:i",$endDate).'","'.$UserID[0].'","'.$_SESSION['bikeid'].'")';
+                                        VALUES ("'.$_POST['timebeg'].'","'.date("Y-m-d H:i",$endDate).'","'.$UserID[0].'","'.$_POST['bikeid'].'")';
                 if(mysqli_query($conn,$queryStringReserva)) {
                     echo '<script>if(confirm("Ja possui subscrição anual, logo a reserva foi inserida com sucesso!")){
                         window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
