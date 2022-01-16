@@ -43,6 +43,7 @@ button:hover {
 	opacity: 0.8;
 }
 
+/*
 input[type=text], input[type=password], input[type=email], input[inputmode=numeric] {
 	width: 25%;
 	padding: 12px 20px;
@@ -50,7 +51,7 @@ input[type=text], input[type=password], input[type=email], input[inputmode=numer
 	display: inline-block;
 	border: 1px solid #ccc;
 	box-sizing: border-box;
-}
+}*/
 
 input[type=email]{
 	margin-right: -25px;
@@ -255,6 +256,15 @@ nav .fa{
 	font-weight: 300;
 	line-height: 22px;
 	padding: 10px;
+}
+
+.course input[type=text], input[type=password], input[type=email], input[inputmode=numeric] {
+	width: 25%; /*Cumprimento*/
+	padding: 2px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
 }
 
 /* to all .course-col information */
