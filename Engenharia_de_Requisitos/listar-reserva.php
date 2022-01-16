@@ -26,7 +26,7 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
                         <ul>
                             <!-- <li> <a href="#">HOME</a></li> -->
                             <li> <a href="menuprincipal.php">PÁGINA PRINCIPAL</a></li>
-                            <li> <a href="">AJUDA</a></li>
+                            <li> <a href="ajuda.php">AJUDA</a></li>
                         </ul>
                     </div>
                     <i class="fa fa-ellipsis-v" onclick="showMenu()"></i>
