@@ -62,6 +62,7 @@ else if(isset($_POST['preco'])){
                                         VALUES ("'.$_SESSION['timebeg'].'","'.date("Y-m-d H:i",$endDate).'","'.$iduser[0].'","'.$_SESSION['bikeid'].'")';
 
                     if(mysqli_query($conn,$queryStringReserva)) {
+                        unset($_SESSION['timebeg'], $_SESSION['duracao'], $_SESSION['bikeid']);
                         echo '<script>if(confirm("A reserva foi inserida com sucesso!")){
                         window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
                       }
@@ -79,6 +80,29 @@ else if(isset($_POST['preco'])){
                       else
                           {
                                 window.location.replace("http://localhost/Engenharia_de_Requisitos/fazer-reserva.php");
+                          }</script>';
+                    }
+                }
+                else if($_POST['paginaanterior'] == 'Cancelamento da Reserva') {
+                    $queryStringDelReserva = 'DELETE FROM reserve WHERE id = "'.$_SESSION['reservaid'].'"';
+                    if(mysqli_query($conn,$queryStringDelReserva)) {
+                        unset($_SESSION['reservaid']);
+                        echo '<script>if(confirm("A reserva foi cancelada com sucesso!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                          }</script>';
+                    }
+                    else
+                    {
+                        echo '<script>if(confirm("Erro no cancelamento da reserva!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/cancelar-reserva.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/cancelar-reserva.php");
                           }</script>';
                     }
                 }
@@ -181,8 +205,55 @@ else{
         }
         mysqli_close($conn);
     }
-    else if(false){ //Cancelamento reservar
+    else if($_POST['paginaanterior'] == "Cancelamento da Reserva"){ //Cancelamento reservar
         //Verificar se paga taxa
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $db = "er_db";
+        $conn = mysqli_connect($servername, $username, $password, $db);
+        if (!$conn) {
+            die("Connection failed: " . mysqli_connect_error());
+        }
+        $queryStringDataReserva = mysqli_query($conn,'SELECT * FROM reserve WHERE id = "'.$_POST['reservaid'].'"');
+        $rowReserva = mysqli_fetch_array($queryStringDataReserva);
+
+        $date1=date_create(date("Y-m-d H:i:s"));
+        $date2=date_create($rowReserva[1]);
+
+        $interval = date_diff($date1, $date2);
+        $interval->format('%a days');
+        if($interval == '1 days' || $interval == '0 days')
+        {
+            //pagar taxa extra 5 euros
+            $acederPag = 3;
+        }
+        else
+        {
+            //cancelar a reserva
+            $queryStringDelReserva = 'DELETE FROM reserve WHERE id = "'.$_POST['reservaid'].'"';
+            if(mysqli_query($conn,$queryStringDelReserva)) {
+                echo '<script>if(confirm("A reserva foi cancelada com sucesso!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                          }</script>';
+            }
+            else
+            {
+                echo '<script>if(confirm("Erro no cancelamento da reserva!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/cancelar-reserva.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/cancelar-reserva.php");
+                          }</script>';
+            }
+        }
+
+        mysqli_close($conn);
     }
     else if(false){ //Modificação reservar
         //Verificar se paga taxa
@@ -206,6 +277,11 @@ else{
             } else if ($_POST['duracao'] == '+4 hours') {
                 $preco = 39.99;
             }
+        }
+        else if($acederPag == 3)
+        {
+            $preco=5.00;
+            $_SESSION['reservaid'] = $_POST['reservaid'];
         }
         echo'<!DOCTYPE html>
             <html>
@@ -249,21 +325,23 @@ else{
                     <br>
             
                     <form action="" method="post">
-                        <label><b>Número do cartão: </b></label>
-                        <input type="text" inputmode="numeric" placeholder="Número cartão crédito" name="card_num" maxlength="16" required>
-                        <br> <br>
-            
-                        <label><b>Validade: </b></label>
-                        <input id="month" type="month" name="validade" required>
-                        <br> <br>
-            
-                        <label><b>PIN: </b></label>
-                        <input type="password" inputmode="numeric" minlength="4" maxlength="4" placeholder="PIN" name="pin" required>
-                        <br><br>
+                        <div class="input-form">
+                            <label><b>Número do cartão: </b></label>
+                            <input type="text" inputmode="numeric" placeholder="Número cartão crédito" name="card_num" maxlength="16" required>
+                            <br> <br>
+                
+                            <label><b>PIN: </b></label>
+                            <input type="password" inputmode="numeric" minlength="4" maxlength="4" placeholder="PIN" name="pin" required>
+                            <br><br>
+                            
+                            <label><b>Validade: </b></label>
+                            <input id="month" type="month" name="validade" style="width: 25%;" required>
+                            <br> <br>
+                        </div>
             
                         <input type="hidden" value="'.$preco .'" name="preco">
                         <input type="hidden" value="'.$_POST['paginaanterior'].'" name="paginaanterior">
-            
+                
                         <div class="btn-login">
                             <button type="submit">Pagar</button>
                         </div>
