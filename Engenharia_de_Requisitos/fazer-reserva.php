@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!empty($_SESSION)) {
+if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
     if(empty($_POST)) {
         echo '
         <!DOCTYPE html>

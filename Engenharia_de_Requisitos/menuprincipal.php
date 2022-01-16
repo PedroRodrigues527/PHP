@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!empty($_SESSION)) {
+if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
     //CONTINUAR AQUI
     echo '
     <!DOCTYPE html>
@@ -69,7 +69,7 @@ if(!empty($_SESSION)) {
                         <button type="submit">Listar Reserva</button>
                     </div>
                 </form>
-                <form action="modificar-reserva.php" method="post">
+                <form action="" method="post">
                     <div class="btn-login">
                         <button type="submit">Modificar Reserva</button>
                     </div>

@@ -67,6 +67,7 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
                   <th>Localidade</th>
                   <th>Data Início</th>
                   <th>Data Final</th>
+                  <th>Ação</th>
                 </tr>
               <thead>
               <tbody>';
@@ -79,6 +80,7 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
             echo'<td>' . $resultReserve[4] . '</td>'; //id bike
             echo'<td>' . $local[0] . '</td>'; //localidade
             echo'<td>' . $resultReserve[1] . '</td>';
+            echo'<td>' . $resultReserve[2] . '</td>';
             echo'<td>' . $resultReserve[2] . '</td>';
             echo'</tr>';
         }

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['username']) || empty($_SESSION['username']) && (!isset($_POST['paginaanterior']) || empty($_POST['paginaanterior']))){
+if((!isset($_SESSION['username']) || empty($_SESSION['username'])) && (!isset($_POST['paginaanterior']) || empty($_POST['paginaanterior']))){
     echo '<script>window.location.replace("http://localhost/Engenharia_de_Requisitos/index.html)</script>';
 }
 else if(isset($_POST['preco'])){
@@ -25,23 +25,11 @@ else if(isset($_POST['preco'])){
     if (mysqli_num_rows($queryResult2) > 0) {
         $rowCredit = mysqli_fetch_array($queryResult2);
         if ($rowCredit[6] < $_POST['preco']) {
-            echo '<script>if(confirm("Saldo insuficiente!")){
-                    window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-          }
-          else
-              {
-                  window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-              }</script>';
+            echo '<script>alert("Saldo insuficiente!");</script>';
         } else {
             $queryString = 'UPDATE credit_card SET saldo = saldo -"' . $_POST['preco'] . '" WHERE id = "' . $rowCredit[0] . '"';
             if (!mysqli_query($conn, $queryString)) {
-                echo '<script>if(confirm("Erro inesperado na ligação à base de dados!")){
-                            window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-                  }
-                  else
-                      {
-                            window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-              }</script>';
+                echo '<script>alert("Erro inesperado na ligação à base de dados!");</script>';
             } else {
                 if($_POST['paginaanterior'] == 'Subscrição Anual') {
                     $datasub = date("Y-m-d", strtotime("+1 year"));
@@ -73,30 +61,15 @@ else if(isset($_POST['preco'])){
 
                     else
                     {
-                        echo '<script>if(confirm("Erro na inserção da reserva!")){
-                        window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-                      }
-                      else
-                          {
-                                window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-                          }</script>';
+                        echo '<script>alert("Erro na inserção da reserva!");</script>';
                     }
-
                 }
             }
         }
-
     } else {
-        echo '<script>
-                    if(confirm("Dados de cartão de crédito inseridos estão inválidos!")){
-                            window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-                    }else{
-                            window.location.replace("http://localhost/Engenharia_de_Requisitos/pagamento.php");
-                    }</script>';
+        echo '<script>alert("Dados de cartão de crédito inseridos estão inválidos!");</script>';
     }
-
     mysqli_close($conn);//te
-
 }
 else{
     //Conectar BD
@@ -121,7 +94,7 @@ else{
                 $acederPag = 1;
             } else {
                 //Tem sub
-                echo '<script>if(confirm("Ja possui subscrição anual!")){
+                echo '<script>if(confirm("Ainda possui subscrição anual!")){
                         window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
               }
               else
@@ -248,7 +221,7 @@ else{
             
                     <form action="" method="post">
                         <label><b>Número do cartão: </b></label>
-                        <input type="number" placeholder="Número cartão" name="card_num" required>
+                        <input type="text" inputmode="numeric" placeholder="Número cartão crédito" name="card_num" maxlength="16" required>
                         <br> <br>
             
                         <label><b>Validade: </b></label>
