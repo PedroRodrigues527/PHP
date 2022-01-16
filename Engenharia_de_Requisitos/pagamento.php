@@ -25,11 +25,23 @@ else if(isset($_POST['preco'])){
     if (mysqli_num_rows($queryResult2) > 0) {
         $rowCredit = mysqli_fetch_array($queryResult2);
         if ($rowCredit[6] < $_POST['preco']) {
-            echo '<script>alert("Saldo insuficiente!");</script>';
+            echo '<script>if(confirm("Saldo insuficiente!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                          }</script>';
         } else {
             $queryString = 'UPDATE credit_card SET saldo = saldo -"' . $_POST['preco'] . '" WHERE id = "' . $rowCredit[0] . '"';
             if (!mysqli_query($conn, $queryString)) {
-                echo '<script>alert("Erro inesperado na ligação à base de dados!");</script>';
+                echo '<script>if(confirm("Erro inesperado na ligação à base de dados!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                          }</script>';
             } else {
                 if($_POST['paginaanterior'] == 'Subscrição Anual') {
                     $datasub = date("Y-m-d", strtotime("+1 year"));
@@ -61,13 +73,25 @@ else if(isset($_POST['preco'])){
 
                     else
                     {
-                        echo '<script>alert("Erro na inserção da reserva!");</script>';
+                        echo '<script>if(confirm("Erro na inserção da reserva!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                          }</script>';
                     }
                 }
             }
         }
     } else {
-        echo '<script>alert("Dados de cartão de crédito inseridos estão inválidos!");</script>';
+        echo '<script>if(confirm("Dados de cartão de crédito inseridos estão inválidos!")){
+                        window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                      }
+                      else
+                          {
+                                window.location.replace("http://localhost/Engenharia_de_Requisitos/menuprincipal.php");
+                          }</script>';
     }
     mysqli_close($conn);//te
 }
