@@ -256,7 +256,7 @@ else{
                         <br> <br>
             
                         <label><b>PIN: </b></label>
-                        <input type="number" placeholder="PIN" name="pin" required>
+                        <input type="password" inputmode="numeric" minlength="4" maxlength="4" placeholder="PIN" name="pin" required>
                         <br><br>
             
                         <input type="hidden" value="'.$preco .'" name="preco">
