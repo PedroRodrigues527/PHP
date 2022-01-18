@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `credit_card` (
   `saldo` decimal(20,2) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_credit_card_user_idx` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
 -- Extraindo dados da tabela `credit_card`
@@ -111,7 +111,9 @@ INSERT INTO `credit_card` (`id`, `number`, `month_val`, `year_val`, `PIN`, `user
 (2, 3, 9, 2028, 1234, 2, '400.00'),
 (3, 2, 10, 2026, 1234, 3, '999.99'),
 (4, 4, 11, 2030, 1234, 1, '10.00'),
-(5, 5, 2, 2023, 1234, 5, '10.00');
+(5, 5, 2, 2023, 1234, 5, '10.00'),
+(6, 7, 6, 2024, 1234, 4, '100.00'),
+(7, 6, 5, 2025, 1234, 6, '100.00');
 
 -- --------------------------------------------------------
 
