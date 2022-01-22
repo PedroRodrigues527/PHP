@@ -20,7 +20,7 @@ else {
         //tabela atributos de child
         $queryResultChildAttributes = mysql_searchquery('SHOW COLUMNS FROM child');
         //Formulario
-        echo '<form action="" name="InsertForm" method="POST">';
+        echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">';
         echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
                <tbody>
                   <tr>
@@ -98,8 +98,9 @@ else {
         }
         echo "<h3>Pesquisa - escolher filtros</h3>";
         echo "<p>Irá ser realizada uma pesquisa que irá obter, como resultado, uma listagem de, para cada criança, dos seguintes dados pessoais escolhidos:</p>";
-        echo '<form action="" name="InsertForm" method="POST">';
+        echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">';
         echo "<ul>";
+        //Percorre todos os nomes no filtro do array dos atributos para depois inserir o operador(condição) e o valor a submeter
         foreach($_SESSION['filtroatr_name'] as $filtroatr) {
             echo "<li>".$filtroatr;
             echo "\n";
@@ -140,6 +141,7 @@ else {
         echo "</ul>";
         echo "<p>e do item: ".$_SESSION["item_name"]." uma listagem dos valores dos subitens:</p>";
         echo "<ul>";
+        //Verifica se o elemento(ao obter o filtro) está presente ou não no array de filtros de subitens
         foreach($_SESSION['filtrosub_name'] as $filtrosub) {
             echo "<li>".$filtrosub;
             echo "\n";
