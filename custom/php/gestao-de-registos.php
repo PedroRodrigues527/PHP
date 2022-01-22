@@ -16,7 +16,7 @@ else {
         //NOME COMPLETO DA CRIANCA
         if($_POST['nc_crianca'] == "" || ctype_space($_POST['nc_crianca']))
         {
-            //Mensagem de erro: Nome vazio ou todos os char sao vazios
+            //Mensagem de erro: Nome vazio ou todos os char são vazios
             echo "<p>ERRO: O dado inserido no formulário do Nome Completo está vazia!</p>";
             $noerrors = false;
         }
@@ -51,7 +51,7 @@ else {
             echo "<p>ERRO: O dado inserido no formulário do Nome Completo do Encarregado de Educação está vazia!</p>";
             $noerrors = false;
         }
-        //Verifica a inserção do nome do encarregado.
+        //Verifica a inserção do nome do encarregado de educação.
         //Verifica a existencia de carateres sem ser letras, acentos ou espaços
         else if(!preg_match('/^[a-zA-Z \p{L}]+$/ui', $_POST['nc_tutor']))
         {
@@ -120,7 +120,7 @@ else {
     {
         echo "<h3>Dados de registo - inserção</h3>";
 
-        //Query de inserção do nome, data de nascimento, nome, contacto e email do tutor
+        //Query de inserção do nome, data de nascimento, nome do tutor, contacto do tutor e email do tutor
         $insertQuery = "INSERT INTO child (name, birth_date, tutor_name, tutor_phone, tutor_email) 
                     VALUES('" . $_POST['nc_crianca_conf'] . "','" . $_POST['dn_crianca_conf'] . "','" . $_POST['nc_tutor_conf'] . "','" . $_POST['tf_tutor_conf'] . "','" . $_POST['email_tutor_conf'] . "')";
 
@@ -218,13 +218,14 @@ else {
                     $resultValueString .= "\n"; //Breakline
 
                 }
+                //Resultado da TABELA(hyperlinks)
                 echo $resultValueString.'</form>';
                 //fecha linha
                 echo "</td>";
                 echo "</tr>";
             }
             echo "</tbody></table>";//Fecha tabela
-
+            //Apresenta os dados
             echo "<h3>Dados de registo - introdução</h3>";
 
             echo "<p>Introduza os dados pessoais básicos da criança</p>";

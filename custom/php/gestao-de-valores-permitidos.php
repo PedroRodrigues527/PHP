@@ -99,13 +99,13 @@ else {
                 } else { //Caso nao esteja vazio
                     //Enquanto houver dados da query
                     while ($rowTabela2 = mysqli_fetch_array($queryresult2, MYSQLI_NUM)) {
-                        //Query: selcionar todos os atributos da tabela subitem_allowed_value; comparando com o subitem atual, ordenado por id
+                        //Query: selecionar todos os atributos da tabela subitem_allowed_value; comparando com o subitem atual, ordenado por id
                         //Selecionar valores permitidos com o respetivo subitem! **a
                         $queryNum = 'SELECT subitem_allowed_value.id, subitem_allowed_value.value, subitem_allowed_value.state FROM subitem_allowed_value, subitem WHERE subitem_allowed_value.subitem_id = subitem.id AND subitem.id = ' . $rowTabela2[0] . ' ORDER BY subitem_allowed_value.value ASC ';
                         $resultsQueryNum = mysql_searchquery($queryNum);//Executar a query
                         $rowCount = mysqli_num_rows($resultsQueryNum); //Quantos items associados a um tipo de item
 
-                        if ($rowCount == 0)//Caso nao exista resultado
+                        if ($rowCount == 0)//Caso não exista resultado
                         {
                             $rowCount = 1;
                         }
@@ -114,7 +114,7 @@ else {
                         echo "<td rowspan ='" . $rowCount . "'>" . $rowTabela2[0] . "</td>"; //Subitem.id
                         $word = '[' . $rowTabela2[1] . ']'; //[subitem.name]
 
-                        //Formulario para poder acessar os hrefs
+                        //Formulário para poder acessar os hrefs
                         echo "<form method='POST' action='" . $current_page . "'>";
                         /*
                          * A variavel $current_page é uma variavel global
