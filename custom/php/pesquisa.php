@@ -323,7 +323,7 @@ else {
                 $sheet->setCellValue('A1', substr($fraseQuery,3,-4));
 
                 $writer = new Xlsx($spreadsheet);
-                $stringFileName = 'exceltable.xlsx';
+                $stringFileName = 'exceltable_grupoE02.xlsx';
                 $writer->save($stringFileName);
 
                 echo '<a href="../../'.$stringFileName.'" download>';

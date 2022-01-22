@@ -251,7 +251,7 @@ else {
                 }
                 $queryUpdate = substr_replace($queryUpdate ,"", -2);
                 $queryUpdate .= ' WHERE id = ' . $_SESSION['idbefore'];
-                echo $queryUpdate; //TESTE
+
                 if(mysql_searchquery($queryUpdate))
                 {
                     echo "<p>Editou os dados do formulário com sucesso.</p>";
@@ -263,22 +263,25 @@ else {
             }
             else
             {
+                $queryUpdate = "";
                 foreach ($_POST as $key => $value) {
                     if ($key != 'nometabela' && $key != 'estado') {
                         $queryNameSubitem = mysql_searchquery('SELECT id, name FROM subitem WHERE form_field_name = "'.$key.'"');
                         $NameSubitem = mysqli_fetch_array($queryNameSubitem, MYSQLI_NUM);
-                        $queryUpdate = 'UPDATE ' . $_POST['nometabela'] . ' SET ';
-                        $queryUpdate .= 'value = "' . $value . '" WHERE child_id = ' . $_SESSION['childid'] . ' AND subitem_id = '. $NameSubitem[0];
-
-                        if(mysql_searchquery($queryUpdate))
-                        {
-                            echo "<p>Editou o dado do formulário ".$NameSubitem[1]." com sucesso.</p>";
-                        }
-                        else
-                        {
-                            echo "<p>Ocorreu um erro ao alterar o dado ".$NameSubitem[1]."</p>";
-                        }
+                        $queryUpdate .= 'UPDATE ' . $_POST['nometabela'] . ' SET ';
+                        $queryUpdate .= 'value = "' . $value . '" WHERE child_id = ' . $_SESSION['childid'] . ' AND subitem_id = '. $NameSubitem[0] .";\n";
                     }
+                }
+
+                if(mysql_searchseveralquery($queryUpdate))
+                {
+                    mysql_transacao(true);
+                    echo "<p>Editou os dados do formulário com sucesso.</p>";
+                }
+                else
+                {
+                    mysql_transacao(false);
+                    echo "<p>Ocorreu um erro ao alterar o(s) dado(s).</p>";
                 }
             }
         }
