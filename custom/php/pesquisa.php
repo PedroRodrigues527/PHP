@@ -19,6 +19,7 @@ else {
         echo "<h3>Pesquisa</h3>";
         //tabela atributos de child
         $queryResultChildAttributes = mysql_searchquery('SHOW COLUMNS FROM child');
+        //Formulario
         echo '<form action="" name="InsertForm" method="POST">';
         echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
                <tbody>
@@ -27,6 +28,7 @@ else {
                      <th>Obter</th>
                      <th>Filtro</th>
                   </tr>';
+        //Enquanto houver resultados
         while($rowChildAttribute = mysqli_fetch_array($queryResultChildAttributes, MYSQLI_NUM))
         {
             echo '<tr>';
@@ -45,6 +47,7 @@ else {
                      <th>Obter</th>
                      <th>Filtro</th>
                   </tr>';
+        //Enquanto houver resultados
         while($rowNameSubitem = mysqli_fetch_array($queryResultNameSubitems, MYSQLI_NUM))
         {
             echo '<tr>';
@@ -60,17 +63,23 @@ else {
     }
     else if ($_REQUEST["estado"] == "escolher_filtros") {
         $idattribute = 0;
+        //Todas as variaveis do request do obter atributo opçoes escolhidas do utilizador na
+        //escolha de obtenção de atributos vao ser todas passadas e guardadas numa variavel de sessão unica
         $_SESSION['obteratr_name'] = $_REQUEST['obteratr'];
         foreach($_REQUEST['obteratr'] as $obteratr){
             $_SESSION['obteratr_id'] = $idattribute;
             $idattribute++;
         }
         $idattribute = 0;
+        //Todas as variaveis do request do filtrar atributo opçoes escolhidas do utilizador na
+        //escolha de filtro de atributos vao ser todas passadas e guardadas numa variavel de sessão unica
         $_SESSION['filtroatr_name'] = $_REQUEST['filtroatr'];
         foreach($_REQUEST['filtroatr'] as $filtroatr){
             $_SESSION['filtroatr_id'] = $idattribute;
             $idattribute++;
         }
+        //Todas as variaveis do request do obter subitem opçoes escolhidas do utilizador na
+        //escolha de obtenção de subitens vao ser todas passadas e guardadas numa variavel de sessão unica
         $_SESSION['obtersub_name'] = $_REQUEST['obtersub'];
         foreach($_REQUEST['obtersub'] as $obtersub){
             $queryStringIdSubitem = 'SELECT id FROM subitem WHERE name = "'.$obtersub.'"';
@@ -78,6 +87,8 @@ else {
             $rowSubitemID = mysqli_fetch_array($queryResultIdSubitem, MYSQLI_NUM);
             $_SESSION['obtersub_id'] = $rowSubitemID[0];
         }
+        //Todas as variaveis do request do filtro de subitens opçoes escolhidas do utilizador na
+        //escolha de filtro de subitens vao ser todas passadas e guardadas numa variavel de sessão unica
         $_SESSION['filtrosub_name'] = $_REQUEST['filtrosub'];
         foreach($_REQUEST['filtrosub'] as $filtrosub){
             $queryStringIdSubitem = 'SELECT id FROM subitem WHERE name = "'.$filtrosub.'"';
@@ -119,6 +130,7 @@ else {
             echo "</li>";
         }
         foreach($_SESSION['obteratr_name'] as $obteratr) {
+            //Verifica se o elemento(ao obter o atributo) está presente ou não no array de filtros de atributos
             if(!in_array($obteratr, $_SESSION['filtroatr_name']))
             {
                 echo "<li>".$obteratr;
@@ -167,6 +179,7 @@ else {
             echo "</li>";
         }
         foreach($_SESSION['obtersub_name'] as $obtersub) {
+            //Verifica se o elemento(ao obter o subitem) está presente ou não no array de filtros de subitens
             if(!in_array($obtersub, $_SESSION['filtrosub_name']))
             {
                 echo "<li>".$obtersub;
@@ -180,11 +193,11 @@ else {
     }
     else if ($_REQUEST["estado"] == "execucao") {
         echo "<h3>Pesquisa - resultado</h3>";
-
+        //Verifica se a inserção de atributos está vazia
         if(empty($_SESSION['obteratr_name']))
         {
             echo "<p>Não é possível fazer a procura de crianças sem nenhum atributo da criança a obter</p>";
-            go_back_button();
+            go_back_button(); //botão de retorno
         }
         else {
 
