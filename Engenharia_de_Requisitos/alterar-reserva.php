@@ -40,12 +40,13 @@ if((isset($_SESSION['username']) || !empty($_SESSION['username']))) {
                 
                 <h2>Alterar Reserva</h2>
                 <br><br>';
-
+    //Variaveis e a sua definição
     $servername = "localhost";
     $username = "root";
     $password = "";
     $db = "er_db";
-    $conn = mysqli_connect($servername, $username, $password, $db);
+    $conn = mysqli_connect($servername, $username, $password, $db); //Ligação à base de dados pelo mysql em que tem as variáveis de cima
+    //Se n ocorrer a conexão à base de dados, retorna uma mensagem de Erro
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     }
