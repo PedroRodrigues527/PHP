@@ -26,6 +26,32 @@ function mysql_searchseveralquery($querystring)
     return $result;
 }
 
+//Dá como resultado a pesquisa de várias queries
+function mysql_transacao($iscommit)
+{
+    $link = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+    // Check connection
+    if (!$link) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    if($iscommit == true)
+    {
+        // Commit transaction
+        if (!mysqli_commit($link)) {
+            echo "Commit transaction failed";
+            exit();
+        }
+    }
+    else
+    {
+        // Rollback transaction
+        if (!mysqli_rollback($link)) {
+            echo "Rollback transaction failed";
+            exit();
+        }
+    }
+}
+
 //Dá como resultado true/false dependendo do resultado ser vazio ou não
 function isResultQueryEmpty($querytable)
 {

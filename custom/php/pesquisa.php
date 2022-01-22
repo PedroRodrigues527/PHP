@@ -324,9 +324,9 @@ else {
 
                 $writer = new Xlsx($spreadsheet);
                 $stringFileName = 'exceltable.xlsx';
-                $writer->save($stringFileName);
+                $writer->save('./custom/php/'.$stringFileName);
 
-                echo '<a href="../../'.$stringFileName.'" download>';
+                echo '<a href="'.$stringFileName.'" download>';
                 echo 'TRANSFERIR EXCEL';
                 echo '</a>';
             }

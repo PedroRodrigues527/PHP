@@ -201,6 +201,7 @@ else {
         }
         //para inserir vários tuplos
         if (mysql_searchseveralquery($insertQuery)) {
+            mysql_transacao(true);
             echo "<p>Inseriu o(s) valor(es) com sucesso.</p>";
             echo "<p>Clique em Voltar para voltar ao início da inserção de valores ou em Escolher item se quiser continuar a inserir valores associados a esta criança</p>";
             echo '<form action="' . $current_page . '" name="Voltar" method="POST">
@@ -209,6 +210,10 @@ else {
             echo '<form action="' . $current_page . '?estado=escolher_item&crianca=' . $_SESSION['child_id'] . '" name="EscolherItem" method="POST">
                   <input type="submit" value="Escolher item"/>
                   </form>';
+        }
+        else
+        {
+            mysql_transacao(false);
         }
     }
     else
