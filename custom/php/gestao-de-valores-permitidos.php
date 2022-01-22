@@ -13,7 +13,7 @@ else {
         $_SESSION['subitem_id'] = $_REQUEST["subitem"];
         //Formulário
         echo "<h3>Dados de registo - introdução</h3>";
-        echo '<form action="" name="InsertForm" method="POST">
+        echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">
                 Valor: <input type="text" name="valor_permitido"/> 
                 <input type="hidden" value="inserir" name="estado"/>
                 <input type="submit" value="Inserir valor permitido" />

@@ -145,7 +145,7 @@ else {
         $allactivetypes = get_enum_values("item", "state");
 
         //Formulário
-        echo '<form action="" name="InsertForm" method="POST">
+        echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">
             Nome: <input type="text" name="nome_item"/>
             <p>Tipo:</p>';
 

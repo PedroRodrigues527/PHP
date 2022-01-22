@@ -220,7 +220,7 @@ else { //Verifica se existe algum elemento/valor no POST
         $allformfieldtype = get_enum_values("subitem", "form_field_type");
 
         //Formulario
-        echo '<form action="" name="InsertForm" method="POST">
+        echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">
             Nome do subitem: <input type="text" name="nome_subitem"/>
             <p>Tipo de valor:</p>';
         foreach($allvaluetypes as $value) //Para cada tipo enum

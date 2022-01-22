@@ -105,7 +105,7 @@ else {
         echo "<h3>Gestão de unidades - introdução</h3>";
 
         //Construção do formulário
-        echo '<form action="" name="InsertForm" method="POST">
+        echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">
                 Nome da Unidade: <input type="text" name="nome_unidade"/> 
                 <input type="hidden" value="inserir" name="estado"/>
                 <input type="submit" value="Inserir tipo de unidade" />

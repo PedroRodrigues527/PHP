@@ -220,7 +220,7 @@ else {
     {
         echo '<h3>Inserção de valores - criança - procurar</h3>';
         echo '<p>Introduza um dos nomes da criança a encontrar e/ou a data de nascimento dela</p>';
-        echo '<form action="" name="InsertForm" method="POST">
+        echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">
                 Nome: <input type="text" name="nome_crianca"/> 
                 Data de nascimento (AAAA-MM-DD): <input type="text" name="data_crianca"/> 
                 <input type="hidden" value="escolher_crianca" name="estado"/>

@@ -231,7 +231,7 @@ else {
             echo "<p>Introduza os dados pessoais básicos da criança</p>";
 
             //Formulário
-            echo '<form action="" name="InsertForm" method="POST">
+            echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">
                 Nome Completo: <input type="text" name="nc_crianca"/> 
                 Data de nascimento (AAAA-MM-DD): <input type="text" name="dn_crianca"/> 
                 Nome completo do encarregado de educação: <input type="text" name="nc_tutor"/> 
