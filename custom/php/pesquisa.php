@@ -20,7 +20,7 @@ else {
         //tabela atributos de child
         $queryResultChildAttributes = mysql_searchquery('SHOW COLUMNS FROM child');
         //Formulario
-        echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">';
+        echo '<form action="" name="InsertForm" method="POST">';
         echo '<table class="mytable" style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
                <tbody>
                   <tr>
@@ -62,43 +62,37 @@ else {
         </form>';
     }
     else if ($_REQUEST["estado"] == "escolher_filtros") {
-        $idattribute = 0;
         //Todas as variaveis do request do obter atributo opçoes escolhidas do utilizador na
         //escolha de obtenção de atributos vao ser todas passadas e guardadas numa variavel de sessão unica
         $_SESSION['obteratr_name'] = $_REQUEST['obteratr'];
-        foreach($_REQUEST['obteratr'] as $obteratr){
-            $_SESSION['obteratr_id'] = $idattribute;
-            $idattribute++;
-        }
-        $idattribute = 0;
         //Todas as variaveis do request do filtrar atributo opçoes escolhidas do utilizador na
         //escolha de filtro de atributos vao ser todas passadas e guardadas numa variavel de sessão unica
         $_SESSION['filtroatr_name'] = $_REQUEST['filtroatr'];
-        foreach($_REQUEST['filtroatr'] as $filtroatr){
-            $_SESSION['filtroatr_id'] = $idattribute;
-            $idattribute++;
-        }
         //Todas as variaveis do request do obter subitem opçoes escolhidas do utilizador na
         //escolha de obtenção de subitens vao ser todas passadas e guardadas numa variavel de sessão unica
         $_SESSION['obtersub_name'] = $_REQUEST['obtersub'];
+        $_SESSION['obtersub_id'] = array();
         foreach($_REQUEST['obtersub'] as $obtersub){
             $queryStringIdSubitem = 'SELECT id FROM subitem WHERE name = "'.$obtersub.'"';
             $queryResultIdSubitem = mysql_searchquery($queryStringIdSubitem);
             $rowSubitemID = mysqli_fetch_array($queryResultIdSubitem, MYSQLI_NUM);
-            $_SESSION['obtersub_id'] = $rowSubitemID[0];
+            //$_SESSION['obtersub_id'] = $rowSubitemID[0];
+            array_push($_SESSION['obtersub_id'],$rowSubitemID[0]);
         }
         //Todas as variaveis do request do filtro de subitens opçoes escolhidas do utilizador na
         //escolha de filtro de subitens vao ser todas passadas e guardadas numa variavel de sessão unica
         $_SESSION['filtrosub_name'] = $_REQUEST['filtrosub'];
+        $_SESSION['filtrosub_id'] = array();
         foreach($_REQUEST['filtrosub'] as $filtrosub){
             $queryStringIdSubitem = 'SELECT id FROM subitem WHERE name = "'.$filtrosub.'"';
             $queryResultIdSubitem = mysql_searchquery($queryStringIdSubitem);
             $rowSubitemID = mysqli_fetch_array($queryResultIdSubitem, MYSQLI_NUM);
-            $_SESSION['filtrosub_id'] = $rowSubitemID[0];
+            //$_SESSION['filtrosub_id'] = $rowSubitemID[0];
+            array_push($_SESSION['filtrosub_id'],$rowSubitemID[0]);
         }
         echo "<h3>Pesquisa - escolher filtros</h3>";
         echo "<p>Irá ser realizada uma pesquisa que irá obter, como resultado, uma listagem de, para cada criança, dos seguintes dados pessoais escolhidos:</p>";
-        echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">';
+        echo '<form action="" name="InsertForm" method="POST">';
         echo "<ul>";
         //Percorre todos os nomes no filtro do array dos atributos para depois inserir o operador(condição) e o valor a submeter
         foreach($_SESSION['filtroatr_name'] as $filtroatr) {

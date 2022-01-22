@@ -36,7 +36,7 @@ else {
 
         $resultQuery = mysql_searchquery($queryString);
         echo "<h3>Edição de dados - editar</h3>";
-        echo '<form action="'.get_site_url().'/edicao-de-dados'.'" method="POST">';
+        echo '<form action="'.get_site_url().'/edicao-de-dados'.'" method="POST" id="InsertForm" onsubmit="return validateValues(this)">';
 
         if ($_GET["comp"] == 'gestao-de-registos')
         {
@@ -220,7 +220,7 @@ else {
         $isEmpty = false;
         foreach($_POST as $key => $value)
         {
-            if(($value == "" || ctype_space($value)) && $key != 'unit_type_id')
+            if(($value == "" || ctype_space($value)) && $key != 'subitem_unit_type_id')
             {
                 $isEmpty = true;
                 break;
@@ -246,12 +246,18 @@ else {
                     if ($key != 'nometabela' && $key != 'estado') {
                         $length = strlen($_POST['nometabela']);
                         $par = $_POST['nometabela'].'.'.substr($key,$length+1);
-                        $queryUpdate .= $par . ' = "' . $value . '", ';
+                        if ($value == "")
+                        {
+                            $queryUpdate .= $par . ' = NULL, ';
+                        }
+                        else {
+                            $queryUpdate .= $par . ' = "' . $value . '", ';
+                        }
                     }
                 }
                 $queryUpdate = substr_replace($queryUpdate ,"", -2);
                 $queryUpdate .= ' WHERE id = ' . $_SESSION['idbefore'];
-
+                echo $queryUpdate;
                 if(mysql_searchquery($queryUpdate))
                 {
                     echo "<p>Editou os dados do formulário com sucesso.</p>";

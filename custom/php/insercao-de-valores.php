@@ -51,7 +51,7 @@ else {
         $iddotipodeitem = mysqli_fetch_array(mysql_searchquery('SELECT item_type.id FROM item_type, item WHERE item.item_type_id = item_type.id AND item.id = ' . $_SESSION['item_id']), MYSQLI_NUM);
         $_SESSION['item_type_id'] = $iddotipodeitem[0];
         echo "<h3>Inserção de valores - " . $_SESSION['item_name'] . "</h3>";
-        echo '<form action="'.$current_page.'?estado=validar&item=' . $_SESSION['item_id'] . '" name="item_type_' . $_SESSION['item_type_id'] . '_item_' . $_SESSION['item_id'] . '" method="POST">';
+        echo '<form action="'.$current_page.'?estado=validar&item=' . $_SESSION['item_id'] . '" name="item_type_' . $_SESSION['item_type_id'] . '_item_' . $_SESSION['item_id'] . '" method="POST" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm">';
         $queryStringSubitemActive = 'SELECT subitem.* FROM subitem, item WHERE subitem.item_id = item.id AND item.id = ' . $_SESSION['item_id'] . ' AND subitem.state = "active" ORDER BY subitem.form_field_order ASC';
         $queryResultSubitemActive = mysql_searchquery($queryStringSubitemActive);
         while($rowTabelaSubitemActive = mysqli_fetch_array($queryResultSubitemActive, MYSQLI_NUM)) {
@@ -220,7 +220,7 @@ else {
     {
         echo '<h3>Inserção de valores - criança - procurar</h3>';
         echo '<p>Introduza um dos nomes da criança a encontrar e/ou a data de nascimento dela</p>';
-        echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">
+        echo '<form action="" name="InsertForm" method="POST">
                 Nome: <input type="text" name="nome_crianca"/> 
                 Data de nascimento (AAAA-MM-DD): <input type="text" name="data_crianca"/> 
                 <input type="hidden" value="escolher_crianca" name="estado"/>
