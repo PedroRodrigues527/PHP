@@ -116,9 +116,9 @@ function listItemsAndItemTypes($url)
     $queryresultTabelaItemType = mysql_searchquery($queryStringTabelaItemType);
     echo '<ul>';
     while($rowTabelaItemType = mysqli_fetch_array($queryresultTabelaItemType, MYSQLI_NUM)) {
-        echo '<li>' . $rowTabelaItemType[1];
+        echo '<li>' . $rowTabelaItemType[1]; //item_type.name
         echo '<ul>';
-        $queryStringTabelaItem = 'SELECT item.id, item.name FROM item INNER JOIN item_type ON item.item_type_id = item_type.id AND item_type.id = ' . $rowTabelaItemType[0] . ' ORDER BY id ASC';
+        $queryStringTabelaItem = 'SELECT item.id, item.name FROM item INNER JOIN item_type ON item.item_type_id = item_type.id AND item_type.id = ' . $rowTabelaItemType[0] . ' ORDER BY id ASC'; //id
         $queryresultTabelaItem = mysql_searchquery($queryStringTabelaItem);
         while($rowTabelaItem = mysqli_fetch_array($queryresultTabelaItem, MYSQLI_NUM)) {
             $queryVerifyItem = 'SELECT subitem.id FROM subitem INNER JOIN item ON subitem.item_id = item.id AND item.id = ' . $rowTabelaItem[0] . ' ORDER BY subitem.id ASC';

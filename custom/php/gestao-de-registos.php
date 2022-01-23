@@ -172,12 +172,13 @@ else {
                 $query_itemname_result = mysql_searchquery($query_itemname_string); //Executar query
                 $resultValueString = "";
 
-                echo "<td>";//Inicio linha
+                echo "<td>";//Inserção na coluna
 
                 //Procura dados enquanto houver resultado
                 while($rowTabelaItem = mysqli_fetch_array($query_itemname_result, MYSQLI_NUM)){
 
                     //strtoupper: chars in uppercase ;
+                    //Hyperlink: editar nome do subitem
                     echo '<form method="GET" action="'.get_site_url().'/edicao-de-dados">';
                     $resultValueString .= '<form method="GET" action="'.get_site_url().'/edicao-de-dados">';
                     $resultValueString .= '<a href="'.get_site_url().'/edicao-de-dados?estado=editar&comp='.basename(get_permalink()).'&childid='.$rowTabelaChild['id'].'&itemid='.$rowTabelaItem[1].'">';
@@ -196,7 +197,7 @@ else {
                     while($rowTabelaSubitem = mysqli_fetch_array($query_subitem_result, MYSQLI_NUM)) {
                         //Concatenua a string com informações dos subitens
                         //subitem.nome [em negrito] ( value.value
-                        $resultValueString .= "<strong> " . $rowTabelaSubitem[0] . "</strong> (" . $rowTabelaSubitem[1];
+                        $resultValueString .= "<strong> " . $rowTabelaSubitem[0] . "</strong> (" . $rowTabelaSubitem[1]; //Exemplo: em negrito: altura(1
 
                         //Query: Ver tipo de unidade de subitem: cm,kg,...
                         $query_subitemunitype_string = '
@@ -208,12 +209,12 @@ else {
                         //Percorrer array
                         while($rowTabelaSubitemUnitType = mysqli_fetch_array($query_subitemunitype_result, MYSQLI_NUM)) {
                             //Adiciona à string o subitem_unit_type.name -> unidade
-                            $resultValueString .= " " . $rowTabelaSubitemUnitType[0];
+                            $resultValueString .= " " . $rowTabelaSubitemUnitType[0]; // exemplo: cm
                         }
 
-                        $resultValueString .= "); "; //Fecha parenteses
+                        $resultValueString .= "); "; //Fecha parenteses; exemplo: );
                     }
-                    //Eliminha as duas ultimas posições para poder apagar a ultima virgula
+                    //Eliminha as duas ultimas posições para poder apagar a ultima virgula e espaço vazio
                     $resultValueString = substr_replace($resultValueString ,"", -2);
                     $resultValueString .= "\n"; //Breakline
 
@@ -225,6 +226,7 @@ else {
                 echo "</tr>";
             }
             echo "</tbody></table>";//Fecha tabela
+
             //Apresenta os dados
             echo "<h3>Dados de registo - introdução</h3>";
 
@@ -232,7 +234,7 @@ else {
 
             //Formulário
             echo '<form action="" id="InsertForm" onsubmit="return validateValues(this)" name="InsertForm" method="POST">
-                Nome Completo: <input type="text" name="nc_crianca"/> 
+                Nome Completo: <input type="text" name="nc_crianca"/>
                 Data de nascimento (AAAA-MM-DD): <input type="text" name="dn_crianca"/> 
                 Nome completo do encarregado de educação: <input type="text" name="nc_tutor"/> 
                 Telefone do encarregado de educação: <input type="text" name="tf_tutor"/> 
